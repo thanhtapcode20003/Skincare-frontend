@@ -5,6 +5,7 @@ import { ProfileLayout } from "../components/Layout";
 import Home from "../pages/Home";
 import Profile from "../pages/Profile";
 import Blog from "../pages/Blog";
+import Login from "../components/Layout/components/Login";
 
 //------------
 
@@ -13,6 +14,7 @@ const publicRoutes = [
 	{ path: "/", component: Home },
 	{ path: "/profile", component: Profile, layout: ProfileLayout },
 	{ path: "/blog", component: Blog },
+	{ path: "/login", component: Login },
 ];
 
 // Private Routes
