@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import Header from "../components/Header/Header";
+import Footer from "../components/Footer";
 
 function DefaultLayout({ children }) {
 	return (
@@ -8,6 +9,7 @@ function DefaultLayout({ children }) {
 			<div className="container">
 				<div className="content">{children}</div>
 			</div>
+			<Footer />
 		</div>
 	);
 }

@@ -16,3 +16,7 @@
 	@tailwind components;
 	@tailwind utilities;
 }
+
+.bg-global {
+	background-color: #326e51;
+}

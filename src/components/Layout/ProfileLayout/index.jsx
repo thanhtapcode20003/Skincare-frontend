@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import Header from "../components/Header/Header";
 import Sidebar from "./Sidebar";
+import Footer from "../components/Footer";
 
 function DefaultLayout({ children }) {
 	return (
@@ -10,6 +11,7 @@ function DefaultLayout({ children }) {
 				<Sidebar />
 				<div className="content">{children}</div>
 			</div>
+			<Footer />
 		</div>
 	);
 }

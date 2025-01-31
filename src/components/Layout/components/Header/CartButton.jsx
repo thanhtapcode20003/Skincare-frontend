@@ -4,7 +4,7 @@ export default function CartButton() {
 	const cartCount = 97;
 
 	return (
-		<div className="cart relative">
+		<div className="cart relative mt-2">
 			<button>
 				<IoCart className="min-w-10 min-h-9" />
 			</button>

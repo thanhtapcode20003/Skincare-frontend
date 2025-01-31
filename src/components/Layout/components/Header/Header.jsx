@@ -1,12 +1,12 @@
 import Logo from "./Logo";
 import Search from "./Search";
-import ProfileButton from "./ProfileButton";
+import ProfileButton from "./ProfileButton/ProfileButton";
 import CartButton from "./CartButton";
 
 function Header() {
 	return (
 		<div className="header-wrapper">
-			<div className="header px-10 py-2 bg-emerald-800">
+			<div className="header px-10 py-2 bg-global">
 				<div className="row ">
 					<div className="container flex flex-row justify-center gap-x-24">
 						{/* logo */}
