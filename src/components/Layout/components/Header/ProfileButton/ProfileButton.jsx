@@ -7,6 +7,7 @@ import { IoChevronDown } from "react-icons/io5";
 
 export default function ProfileButton() {
 	const [isHovered, setIsHovered] = useState(false);
+	const username = null;
 
 	return (
 		<div
@@ -20,7 +21,12 @@ export default function ProfileButton() {
 				</button>
 
 				<div className=" flex flex-col text-sm font-normal text-stone-100">
-					<span>Login/Register</span>
+					<span>
+						{"Hi, "}
+						<span className="font-bold text-white">
+							{username ? { username } : "{username}"}
+						</span>
+					</span>
 					<span className="flex items-center">
 						Accounts <IoChevronDown className="ml-1 text-sm" />
 					</span>
