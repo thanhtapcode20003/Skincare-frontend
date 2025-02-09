@@ -2,31 +2,39 @@ import { useEffect, useState } from "react";
 
 import Logo from "./Logo";
 import Search from "./Search";
-import ProfileButton from "./ProfileButton/ProfileButton";
+import ProfileButton from "./ProfileButton";
 import ProfileButtonNotSigned from "./ProfileButton/ProfileButtonNotSigned";
 import CartButton from "./CartButton";
+
+import Register from "../Register";
 import Login from "../Login";
 
 function Header() {
-	const [isLoginOpen, setIsLoginOpen] = useState(false);
+	const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+	const [authMode, setAuthMode] = useState("login");
 	const [isAuthenticated, setIsAuthenticated] = useState(
 		!!localStorage.getItem("token")
 	);
 
 	useEffect(() => {
 		if (localStorage.getItem("token")) {
-			setIsLoginOpen(false);
+			setIsAuthModalOpen(false);
 		}
 	}, []);
 
-	const toggleLogin = () => {
-		setIsLoginOpen((prev) => !prev);
+	const toggleAuthModal = (mode = "login") => {
+		setAuthMode(mode);
+		setIsAuthModalOpen(true);
 	};
 
 	const handleLoginSuccess = (token) => {
 		localStorage.setItem("token", token);
-		setIsAuthenticated(true); // Update state
-		setIsLoginOpen(false); // Close login modal
+		setIsAuthenticated(true);
+		setIsAuthModalOpen(false);
+	};
+
+	const handleRegisterSuccess = () => {
+		setAuthMode("login");
 	};
 
 	return (
@@ -47,11 +55,25 @@ function Header() {
 								<ProfileButton />
 							) : (
 								<div>
-									<ProfileButtonNotSigned onClick={toggleLogin} />
-									{isLoginOpen && <Login onLoginSuccess={handleLoginSuccess} />}
+									<ProfileButtonNotSigned
+										onClick={() => toggleAuthModal("login")}
+									/>
+									{isAuthModalOpen &&
+										(authMode === "login" ? (
+											<Login
+												onLoginSuccess={handleLoginSuccess}
+												onSignUpClick={() => toggleAuthModal("register")}
+												onClose={() => setIsAuthModalOpen(false)}
+											/>
+										) : (
+											<Register
+												onRegisterSuccess={handleRegisterSuccess}
+												onLoginClick={() => toggleAuthModal("login")}
+												onClose={() => setIsAuthModalOpen(false)}
+											/>
+										))}
 								</div>
 							)}
-
 							{/* Cart */}
 							<CartButton />
 						</div>

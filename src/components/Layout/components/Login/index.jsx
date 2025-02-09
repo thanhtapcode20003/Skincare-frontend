@@ -2,14 +2,15 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 
 import { Button } from "primereact/button";
+import { FloatLabel } from "primereact/floatlabel";
+import { InputText } from "primereact/inputtext";
 import "primeicons/primeicons.css";
 
-function Login({ onLoginSuccess }) {
+function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
-	const [isOpen, setIsOpen] = useState(true);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -17,13 +18,14 @@ function Login({ onLoginSuccess }) {
 		setSuccess("");
 
 		try {
-			const response = await fetch("https://reqres.in/api/login", {
+			const response = await fetch("https://localhost:7007/api/auth/login", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({ email, password }),
 			});
+			console.log(response);
 
 			if (response.ok) {
 				const data = await response.json();
@@ -39,12 +41,6 @@ function Login({ onLoginSuccess }) {
 		}
 	};
 
-	const handleClose = () => {
-		setIsOpen(false); // Hide the form when the X button is clicked
-	};
-
-	if (!isOpen) return null;
-
 	return (
 		<div className="fixed min-w-120 h-screen">
 			<section className="fixed inset-0 flex items-center justify-center m-100 z-100">
@@ -53,50 +49,49 @@ function Login({ onLoginSuccess }) {
 						<i
 							className="absolute top-2 right-2 p-2 pi pi-times cursor-pointer"
 							style={{ fontSize: "1.5rem", color: "black" }}
-							onClick={handleClose}
+							onClick={onClose}
 						></i>
 						<h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
 							Sign in to your account
 						</h1>
 						<form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+							{/* Email */}
 							<div>
-								<label
-									htmlFor="email"
-									className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-								>
-									Your email
-								</label>
-								<input
-									type="email"
-									name="email"
-									id="email"
-									className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-									placeholder="name@company.com"
-									value={email}
-									onChange={(e) => setEmail(e.target.value)}
-									required
-								/>
+								<FloatLabel>
+									<label htmlFor="email">Your email</label>
+									<InputText
+										type="email"
+										name="email"
+										id="email"
+										className="w-full"
+										value={email}
+										onChange={(e) => setEmail(e.target.value)}
+										required
+									/>
+								</FloatLabel>
 							</div>
+
+							{/* Password */}
 							<div>
-								<label
-									htmlFor="password"
-									className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-								>
-									Password
-								</label>
-								<input
-									type="password"
-									name="password"
-									id="password"
-									placeholder="••••••••"
-									className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-									value={password}
-									onChange={(e) => setPassword(e.target.value)}
-									required
-								/>
+								<FloatLabel>
+									<label htmlFor="password">Password</label>
+									<InputText
+										type="password"
+										name="password"
+										id="password"
+										className="w-full"
+										value={password}
+										onChange={(e) => setPassword(e.target.value)}
+										required
+									/>
+								</FloatLabel>
 							</div>
+
+							{/* Announce Status */}
 							{error && <p className="text-sm text-red-500">{error}</p>}
 							{success && <p className="text-sm text-green-500">{success}</p>}
+
+							{/* Remember and Forgot Password */}
 							<div className="flex items-center justify-between">
 								<div className="flex items-start">
 									<div className="flex items-center h-5">
@@ -118,13 +113,13 @@ function Login({ onLoginSuccess }) {
 								</div>
 								<a
 									href="#"
-									className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
+									className="text-gray-500 text-sm dark:text-gray-300"
 								>
 									Forgot password?
 								</a>
 							</div>
 							<div className="flex justify-center">
-								<Button label="Submit" type="submit" />
+								<Button className="bg-global" label="Submit" type="submit" />
 							</div>
 
 							<p className="text-sm font-light text-gray-500 dark:text-gray-400">
@@ -132,6 +127,7 @@ function Login({ onLoginSuccess }) {
 								<a
 									href="#"
 									className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+									onClick={onSignUpClick}
 								>
 									Sign up
 								</a>
@@ -147,5 +143,7 @@ function Login({ onLoginSuccess }) {
 export default Login;
 
 Login.propTypes = {
-	onLoginSuccess: PropTypes.func.isRequired, // Fixed prop validation
+	onLoginSuccess: PropTypes.func.isRequired,
+	onSignUpClick: PropTypes.func.isRequired,
+	onClose: PropTypes.func.isRequired,
 };
