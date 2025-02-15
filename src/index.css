@@ -17,8 +17,12 @@
 	@tailwind utilities;
 }
 
+/* GLOBAL COLOR */
 .bg-global {
 	background-color: #326e51;
+}
+.bg-global-dark {
+	background-color: #00390d;
 }
 
 .clr-global {

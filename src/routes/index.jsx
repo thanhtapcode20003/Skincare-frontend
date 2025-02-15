@@ -2,9 +2,9 @@
 import { ProfileLayout } from "../components/Layout";
 
 // Pages
-import Home from "../pages/Home";
-import Profile from "../pages/Profile";
-import Blog from "../pages/Blog";
+import Home from "../pages/UserPages/Home";
+import Profile from "../pages/UserPages/Profile";
+import Blog from "../pages/UserPages/Blog";
 
 //------------
 

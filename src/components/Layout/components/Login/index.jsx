@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 import { Button } from "primereact/button";
 import { FloatLabel } from "primereact/floatlabel";
@@ -124,13 +125,12 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 
 							<p className="text-sm font-light text-gray-500 dark:text-gray-400">
 								Don’t have an account yet?{" "}
-								<a
-									href="#"
+								<Link
 									className="font-medium text-primary-600 hover:underline dark:text-primary-500"
 									onClick={onSignUpClick}
 								>
 									Sign up
-								</a>
+								</Link>
 							</p>
 						</form>
 					</div>

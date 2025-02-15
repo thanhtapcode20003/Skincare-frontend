@@ -1,11 +1,15 @@
 import PropTypes from "prop-types";
 import Header from "../components/Header";
+import Container from "../components/container";
 import Footer from "../components/Footer";
 
 function DefaultLayout({ children }) {
 	return (
 		<div>
-			<Header />
+			<div className="main-header">
+				<Header />
+				<Container />
+			</div>
 			<div className="container">
 				<div className="content">{children}</div>
 			</div>

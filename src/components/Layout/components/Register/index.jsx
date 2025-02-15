@@ -3,30 +3,55 @@ import PropTypes from "prop-types";
 
 import { Button } from "primereact/button";
 import "primeicons/primeicons.css";
-
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Password } from "primereact/password";
 
+// REGEX
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/; // 8-24 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Email format
+const FULL_NAME_REGEX = /^[A-Za-zÀ-Ỹà-ỹ\s]{2,50}$/; // Allows letters & spaces, supports accents, 2-50 chars
+const PHONE_REGEX = /^\d{9,15}$/; // Allows only numbers, 9-15 digits (international format)
+const ADDRESS_REGEX = /^[A-Za-z0-9\s,.-]{5,100}$/; // Allows letters, numbers, spaces, comma, dot, and hyphen (5-100 chars)
+
 function Register({ onRegisterSuccess, onLoginClick, onClose }) {
-	const [userName, setUserName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
+	const [fullName, setFullName] = useState("");
 	const [phoneNumber, setPhoneNumber] = useState("");
 	const [address, setAddress] = useState("");
-	const [error, setError] = useState("");
-	const [success, setSuccess] = useState("");
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		setError("");
-		setSuccess("");
+	// Error and Success
+	const [errors, setErrors] = useState("");
 
-		if (password !== confirmPassword) {
-			setError("Passwords do not match.");
-			return;
-		}
+	// -----------------------------------------------------------------------------------
+
+	const validate = () => {
+		let newErrors = {};
+		if (!EMAIL_REGEX.test(email)) newErrors.email = "Invalid email format.";
+		if (!PWD_REGEX.test(password))
+			newErrors.password =
+				"8-24 words, 1 uppercase, lowercase, number, and special character.";
+		if (password !== confirmPassword)
+			newErrors.confirmPassword = "Passwords do not match.";
+		if (!FULL_NAME_REGEX.test(fullName))
+			newErrors.fullName =
+				"Full Name must contain only letters and spaces (2-50 characters).";
+		if (!PHONE_REGEX.test(phoneNumber))
+			newErrors.phoneNumber = "Phone Number must be 9-15 digits.";
+		if (!ADDRESS_REGEX.test(address))
+			newErrors.address = "Address must be 5-100 characters.";
+
+		setErrors(newErrors);
+		return Object.keys(newErrors).length === 0;
+	};
+
+	const handleSubmit = async (values) => {
+		console.log("submit");
+
+		values.preventDefault();
+		if (!validate()) return;
 
 		try {
 			const response = await fetch("https://localhost:7007/api/auth/register", {
@@ -35,9 +60,9 @@ function Register({ onRegisterSuccess, onLoginClick, onClose }) {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					userName,
 					email,
 					password,
+					fullName,
 					phoneNumber,
 					address,
 					roleName: "Customer",
@@ -46,15 +71,15 @@ function Register({ onRegisterSuccess, onLoginClick, onClose }) {
 			console.log(response.body);
 
 			if (response.ok) {
-				const data = await response.json();
-				setSuccess("Registration successful! You can now log in.", data);
 				onRegisterSuccess();
 			} else {
 				const errorData = await response.json();
-				setError(errorData.error || "Registration failed. Please try again.");
+				setErrors({
+					form: errorData.error || "Registration failed. Please try again.",
+				});
 			}
 		} catch (err) {
-			setError("Something went wrong. Please try again later.", err);
+			setErrors({ form: "Something went wrong. Please try again later.", err });
 		}
 	};
 
@@ -81,56 +106,75 @@ function Register({ onRegisterSuccess, onLoginClick, onClose }) {
 										type="email"
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
-										required
 									/>
 								</FloatLabel>
+								{errors.email && (
+									<p className="text-red-500 text-sm">{errors.email}</p>
+								)}
 							</div>
 
 							{/* Password */}
 							<div className="flex gap-4">
-								<FloatLabel className="w-1/2">
-									<Password
-										className="p-inputtext-sm"
-										inputId="password"
-										value={password}
-										onChange={(e) => setPassword(e.target.value)}
-										required
-										toggleMask
-									/>
-									<label htmlFor="password">Password</label>
-								</FloatLabel>
+								<div className="w-1/2">
+									<FloatLabel className="w-1/2">
+										<Password
+											className="p-inputtext-sm"
+											inputId="password"
+											value={password}
+											onChange={(e) => setPassword(e.target.value)}
+											toggleMask
+										/>
+										<label htmlFor="password">Password</label>
+									</FloatLabel>
+									{errors.password && (
+										<p className="text-red-500 text-sm">{errors.password}</p>
+									)}
+								</div>
 
 								{/* Confirm Password */}
-								<FloatLabel className="w-1/2">
-									<Password
-										className="p-inputtext-sm"
-										inputId="confirmPassword"
-										value={confirmPassword}
-										onChange={(e) => setConfirmPassword(e.target.value)}
-										required
-										toggleMask
-									/>
-									<label htmlFor="confirmPassword">Confirm Password</label>
-								</FloatLabel>
+								<div className="w-1/2">
+									<FloatLabel className="w-1/2">
+										<Password
+											className="p-inputtext-sm"
+											inputId="confirmPassword"
+											value={confirmPassword}
+											onChange={(e) => setConfirmPassword(e.target.value)}
+											toggleMask
+										/>
+										<label
+											className="whitespace-nowrap"
+											htmlFor="confirmPassword"
+										>
+											Confirm Password
+										</label>
+									</FloatLabel>
+									{errors.confirmPassword && (
+										<p className="text-red-500 text-sm">
+											{errors.confirmPassword}
+										</p>
+									)}
+								</div>
 							</div>
 
 							{/* Full Name */}
 							<div className="flex gap-4">
-								<div>
+								<div className="w-3/5">
 									<FloatLabel>
 										<label>Full Name</label>
 										<InputText
 											className="p-inputtext-sm w-full"
 											type="text"
-											value={userName}
-											onChange={(e) => setUserName(e.target.value)}
-											required
+											value={fullName}
+											onChange={(e) => setFullName(e.target.value)}
 										/>
 									</FloatLabel>
+									{errors.fullName && (
+										<p className="text-red-500 text-sm">{errors.fullName}</p>
+									)}
 								</div>
 
 								{/* Phone Number */}
-								<div>
+								<div className="w-2/5">
 									<FloatLabel>
 										<label>Phone Number</label>
 										<InputText
@@ -138,9 +182,11 @@ function Register({ onRegisterSuccess, onLoginClick, onClose }) {
 											type="text"
 											value={phoneNumber}
 											onChange={(e) => setPhoneNumber(e.target.value)}
-											required
 										/>
 									</FloatLabel>
+									{errors.phoneNumber && (
+										<p className="text-red-500 text-sm">{errors.phoneNumber}</p>
+									)}
 								</div>
 							</div>
 
@@ -153,12 +199,15 @@ function Register({ onRegisterSuccess, onLoginClick, onClose }) {
 										type="text"
 										value={address}
 										onChange={(e) => setAddress(e.target.value)}
-										required
 									/>
 								</FloatLabel>
+								{errors.address && (
+									<p className="text-red-500 text-sm">{errors.address}</p>
+								)}
 							</div>
-							{error && <p className="text-red-500">{error}</p>}
-							{success && <p className="text-green-500">{success}</p>}
+							{errors.form && (
+								<p className="text-red-500 text-sm">{errors.form}</p>
+							)}
 							<div className="flex justify-center">
 								<Button label="Register" type="submit" />
 							</div>
