@@ -10,13 +10,46 @@ import "primeicons/primeicons.css";
 function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [error, setError] = useState("");
+	const [error, setError] = useState({ email: "", password: "", general: "" });
 	const [success, setSuccess] = useState("");
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		setError("");
+	const validateFields = () => {
+		let valid = true;
+		const newErrors = { email: "", password: "", general: "" };
+
+		const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+		if (!email) {
+			newErrors.email = "Email is required.";
+			valid = false;
+		} else if (!emailRegex.test(email)) {
+			newErrors.email = "Please enter a valid email address.";
+			valid = false;
+		}
+
+		const passwordRegex =
+			/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+		if (!password) {
+			newErrors.password = "Password is required.";
+			valid = false;
+		} else if (!passwordRegex.test(password)) {
+			newErrors.password =
+				"Password must be at least 8 characters long and include 1 uppercase, 1 lowercase, 1 number, and 1 special character.";
+			valid = false;
+		}
+
+		setError(newErrors);
+		return valid;
+	};
+
+	// Handle form submission
+	const handleSubmit = async (values) => {
+		console.log("submit");
+
+		values.preventDefault();
+		setError({ email: "", password: "", general: "" });
 		setSuccess("");
+
+		if (!validateFields()) return;
 
 		try {
 			const response = await fetch("https://localhost:7007/api/auth/login", {
@@ -30,15 +63,22 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 
 			if (response.ok) {
 				const data = await response.json();
-				setSuccess("Login successful! Token: " + data.token);
+				setSuccess("Login successful!");
 				onLoginSuccess(data.token);
 				console.log(data);
 			} else {
 				const errorData = await response.json();
-				setError(errorData.error || "Login failed. Please try again.");
+				setError((prev) => ({
+					...prev,
+					general: errorData.error || "Login failed. Please try again.",
+				}));
 			}
 		} catch (err) {
-			setError("Something went wrong. Please try again later.", err);
+			setError((prev) => ({
+				...prev,
+				general: "Something went wrong. Please try again later.",
+				err,
+			}));
 		}
 	};
 
@@ -59,7 +99,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 							{/* Email */}
 							<div>
 								<FloatLabel>
-									<label htmlFor="email">Your email</label>
+									<label htmlFor="email">Email</label>
 									<InputText
 										type="email"
 										name="email"
@@ -67,9 +107,12 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 										className="w-full"
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
-										required
+										invalid={error.email}
 									/>
 								</FloatLabel>
+								{error.email && (
+									<p className="text-sm text-red-500">{error.email}</p>
+								)}
 							</div>
 
 							{/* Password */}
@@ -83,13 +126,18 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 										className="w-full"
 										value={password}
 										onChange={(e) => setPassword(e.target.value)}
-										required
+										invalid={error.password}
 									/>
 								</FloatLabel>
+								{error.password && (
+									<p className="text-sm text-red-500">{error.password}</p>
+								)}
 							</div>
 
 							{/* Announce Status */}
-							{error && <p className="text-sm text-red-500">{error}</p>}
+							{error.general && (
+								<p className="text-sm text-red-500">{error.general}</p>
+							)}
 							{success && <p className="text-sm text-green-500">{success}</p>}
 
 							{/* Remember and Forgot Password */}
