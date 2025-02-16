@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 import { Button } from "primereact/button";
 import { FloatLabel } from "primereact/floatlabel";
@@ -13,7 +14,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 	const [error, setError] = useState({ email: "", password: "", general: "" });
 	const [success, setSuccess] = useState("");
 
-	const validateFields = () => {
+	const validateFields = useCallback(() => {
 		let valid = true;
 		const newErrors = { email: "", password: "", general: "" };
 
@@ -27,7 +28,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 		}
 
 		const passwordRegex =
-			/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+			/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/;
 		if (!password) {
 			newErrors.password = "Password is required.";
 			valid = false;
@@ -39,7 +40,12 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 
 		setError(newErrors);
 		return valid;
-	};
+	}, [email, password]);
+
+	useEffect(() => {
+		validateFields();
+		console.log("mounted");
+	}, [email, password, validateFields]);
 
 	// Handle form submission
 	const handleSubmit = async (values) => {
@@ -52,33 +58,41 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 		if (!validateFields()) return;
 
 		try {
-			const response = await fetch("https://localhost:7007/api/auth/login", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ email, password }),
-			});
+			const response = await axios.post(
+				"https://localhost:7007/api/auth/login",
+				{
+					email,
+					password,
+				}
+			);
 			console.log(response);
 
-			if (response.ok) {
-				const data = await response.json();
+			if (response.status === 200) {
 				setSuccess("Login successful!");
-				onLoginSuccess(data.token);
-				console.log(data);
-			} else {
-				const errorData = await response.json();
+				onLoginSuccess(response.data.token);
+				console.log(response.status);
+			}
+		} catch (error) {
+			if (error.response) {
+				// Server responded with a status code other than 2xx
 				setError((prev) => ({
 					...prev,
-					general: errorData.error || "Login failed. Please try again.",
+					general:
+						error.response.data.error || "Login failed. Please try again.",
+				}));
+			} else if (error.request) {
+				// Request was made but no response received
+				setError((prev) => ({
+					...prev,
+					general: "No response from server. Please try again later.",
+				}));
+			} else {
+				// Something else happened
+				setError((prev) => ({
+					...prev,
+					general: "Something went wrong. Please try again later.",
 				}));
 			}
-		} catch (err) {
-			setError((prev) => ({
-				...prev,
-				general: "Something went wrong. Please try again later.",
-				err,
-			}));
 		}
 	};
 
@@ -101,13 +115,12 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 								<FloatLabel>
 									<label htmlFor="email">Email</label>
 									<InputText
-										type="email"
 										name="email"
 										id="email"
 										className="w-full"
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
-										invalid={error.email}
+										invalid={!!error.email}
 									/>
 								</FloatLabel>
 								{error.email && (
@@ -125,8 +138,8 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 										id="password"
 										className="w-full"
 										value={password}
-										onChange={(e) => setPassword(e.target.value)}
-										invalid={error.password}
+										onChange={(e) => setPassword(() => e.target.value)}
+										invalid={!!error.password}
 									/>
 								</FloatLabel>
 								{error.password && (

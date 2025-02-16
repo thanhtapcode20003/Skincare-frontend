@@ -2,6 +2,10 @@ import { TieredMenu } from "primereact/tieredmenu";
 import "primeicons/primeicons.css";
 
 export default function TieredMenuItems() {
+	const handleLogout = () => {
+		localStorage.removeItem("token"); // Remove authentication token
+		window.location.href = "/";
+	};
 	const items = [
 		{
 			label: "Your Accounts",
@@ -25,6 +29,7 @@ export default function TieredMenuItems() {
 		{
 			label: "Logout",
 			icon: "pi pi-sign-out",
+			command: handleLogout,
 		},
 	];
 
