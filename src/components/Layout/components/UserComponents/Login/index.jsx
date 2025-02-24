@@ -13,6 +13,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState({ email: "", password: "", general: "" });
 	const [success, setSuccess] = useState("");
+	const [touch, setTouch] = useState({ email: false, password: false });
 
 	const validateFields = useCallback(() => {
 		let valid = true;
@@ -120,10 +121,13 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 										className="w-full"
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
-										invalid={!!error.email}
+										onBlur={() =>
+											setTouch((prev) => ({ ...prev, email: true }))
+										}
+										invalid={touch.email && !!error.email}
 									/>
 								</FloatLabel>
-								{error.email && (
+								{touch.email && error.email && (
 									<p className="text-sm text-red-500">{error.email}</p>
 								)}
 							</div>
@@ -139,10 +143,13 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 										className="w-full"
 										value={password}
 										onChange={(e) => setPassword(() => e.target.value)}
-										invalid={!!error.password}
+										onBlur={() =>
+											setTouch((prev) => ({ ...prev, password: true }))
+										}
+										invalid={touch.password && !!error.password}
 									/>
 								</FloatLabel>
-								{error.password && (
+								{touch.password && error.password && (
 									<p className="text-sm text-red-500">{error.password}</p>
 								)}
 							</div>

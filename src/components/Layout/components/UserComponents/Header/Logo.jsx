@@ -1,4 +1,4 @@
-import logo from "../../../../images/Logo/logo.svg";
+import logo from "../../../../../images/Logo/logo.svg";
 import { Link } from "react-router-dom";
 
 export default function Logo() {

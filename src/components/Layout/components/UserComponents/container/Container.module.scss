@@ -1,0 +1,10 @@
+.navbarItems {
+	color: rgba(0, 0, 0, 0.7);
+	padding: 8px 10px;
+	border-radius: 30px;
+	transition: all 0.2s ease-in-out;
+}
+.navbarItem:hover {
+	background: #f0faff;
+	color: #2bbef9;
+}

@@ -1,27 +1,25 @@
 import PropTypes from "prop-types";
-import Header from "../components/UserComponents/Header";
-import Container from "../components/UserComponents/container";
-import Footer from "../components/UserComponents/Footer";
 
-function DefaultLayout({ children }) {
+export default function AdminLayout({ children }) {
 	return (
 		<div>
 			<div className="main-header">
-				<Header />
-				<Container />
+				{/* <Header /> */}
+				{/* <Container /> */}
 			</div>
 			<div className="container">
+				<div className="sidebar"></div>
 				<div className="content">{children}</div>
 			</div>
-			<Footer />
+			{/* <Footer /> */}
 		</div>
 	);
 }
 
 // Add prop-types validation
-DefaultLayout.propTypes = {
+AdminLayout.propTypes = {
 	children: PropTypes.node.isRequired,
 };
-export default DefaultLayout;
+AdminLayout;
 
 //Default Layout only have "header", and "container" comprise the "content"

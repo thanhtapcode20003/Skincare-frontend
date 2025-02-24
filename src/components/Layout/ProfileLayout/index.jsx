@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
-import Header from "../components/Header";
+import Header from "../components/UserComponents/Header";
 import Sidebar from "./Sidebar";
-import Footer from "../components/Footer";
+import Footer from "../components/UserComponents/Footer";
 
-function DefaultLayout({ children }) {
+function ProfileLayout({ children }) {
 	return (
 		<div>
 			<Header />
@@ -17,9 +17,9 @@ function DefaultLayout({ children }) {
 }
 
 // Add prop-types validation
-DefaultLayout.propTypes = {
+ProfileLayout.propTypes = {
 	children: PropTypes.node.isRequired,
 };
-export default DefaultLayout;
+export default ProfileLayout;
 
 //Profile Layout including "Header", "Sidebar" and "Content"
