@@ -2,19 +2,70 @@ import { PiList } from "react-icons/pi";
 import { IoHomeOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import styles from "./Container.module.scss";
+import Button from "@mui/material/Button";
+import { useState } from "react";
 
 function Container() {
+	const [isOpenCategories, setIsOpenCategories] = useState(true);
+
 	return (
-		<div className="container mt-18 px-40">
+		<div className={`${styles.container} `}>
 			<div className="flex items-center">
 				{/* CATEGORIES */}
-				<div className="w-1/4">
-					<button className="flex flex-row items-center space-x-2 bg-global text-white px-5 py-3 rounded-3xl cursor-pointer hover:brightness-90 transition-all duration-300">
+				<div className="w-1/4 relative">
+					<button
+						className="flex flex-row items-center space-x-2 bg-global text-white px-5 py-3 rounded-3xl cursor-pointer hover:brightness-90 transition-all duration-300"
+						onClick={() => setIsOpenCategories(!isOpenCategories)}
+					>
 						<span className="font-bold">
 							<PiList />
 						</span>
 						<span className="text-sm ">ALL CATEGORIES</span>
 					</button>
+					{/* Sub Categories */}
+					<div
+						className={`${styles.subCate} ${
+							isOpenCategories ? styles.open : ""
+						} shadow`}
+					>
+						<ul>
+							<li>
+								<Link to="/">
+									<Button>High-End Cosmetics</Button>
+								</Link>
+							</li>
+							<li>
+								<Link to="/">
+									<Button>Facial Care</Button>
+								</Link>
+							</li>
+							<li>
+								<Link to="/">
+									<Button>Makeup</Button>
+								</Link>
+							</li>
+							<li>
+								<Link to="/">
+									<Button>Hair and Scalp Care</Button>
+								</Link>
+							</li>
+							<li>
+								<Link to="/">
+									<Button>Body Care</Button>
+								</Link>
+							</li>
+							<li>
+								<Link to="/">
+									<Button>Perfume</Button>
+								</Link>
+							</li>
+							<li>
+								<Link to="/">
+									<Button>Functional Supplements</Button>
+								</Link>
+							</li>
+						</ul>
+					</div>
 				</div>
 
 				{/* ITEMS */}
@@ -22,7 +73,7 @@ function Container() {
 					<ul
 						className={`${styles.navbarItems} w-full flex flex-row justify-between content-center space-x-20`}
 					>
-						<li className="navbarItem flex items-center space-x-2">
+						<li className={`${styles.navbarItem} flex items-center space-x-2`}>
 							<span className="font-bold">
 								<IoHomeOutline />
 							</span>
@@ -30,7 +81,17 @@ function Container() {
 								<Link to="/">Home</Link>
 							</span>
 						</li>
-						<li className="navbarItem flex items-center space-x-2">
+						<li className={`${styles.navbarItem} flex items-center space-x-2`}>
+							<span className="font-bold">
+								<IoHomeOutline />
+							</span>
+							<span className="text-lg font-medium">
+								<p>
+									<Link to="/">Home</Link>
+								</p>
+							</span>
+						</li>
+						<li className={`${styles.navbarItem} flex items-center space-x-2`}>
 							<span className="font-bold">
 								<IoHomeOutline />
 							</span>
@@ -38,7 +99,7 @@ function Container() {
 								<Link to="/">Home</Link>
 							</span>
 						</li>
-						<li className="navbarItem flex items-center space-x-2">
+						<li className={`${styles.navbarItem} flex items-center space-x-2`}>
 							<span className="font-bold">
 								<IoHomeOutline />
 							</span>
@@ -46,15 +107,7 @@ function Container() {
 								<Link to="/">Home</Link>
 							</span>
 						</li>
-						<li className="navbarItem flex items-center space-x-2">
-							<span className="font-bold">
-								<IoHomeOutline />
-							</span>
-							<span className="text-lg font-medium">
-								<Link to="/">Home</Link>
-							</span>
-						</li>
-						<li className="navbarItem flex items-center space-x-2">
+						<li className={`${styles.navbarItem} flex items-center space-x-2`}>
 							<span className="font-bold">
 								<IoHomeOutline />
 							</span>
