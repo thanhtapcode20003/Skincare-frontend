@@ -18,18 +18,31 @@ function App() {
 						} else if (route.layout === null) {
 							Layout = Fragment;
 						}
-
-						return (
-							<Route
-								key={index}
-								path={route.path}
-								element={
-									<Layout>
-										<Page />
-									</Layout>
-								}
-							/>
-						);
+						if (route.Auth === "private") {
+							return (
+								<Route
+									key={index}
+									path={route.path}
+									element={
+										<Layout>
+											<Page />
+										</Layout>
+									}
+								/>
+							);
+						} else {
+							return (
+								<Route
+									key={index}
+									path={route.path}
+									element={
+										<Layout>
+											<Page />
+										</Layout>
+									}
+								/>
+							);
+						}
 					})}
 				</Routes>
 			</div>

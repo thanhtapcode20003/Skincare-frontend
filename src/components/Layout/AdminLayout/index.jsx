@@ -1,20 +1,21 @@
 import PropTypes from "prop-types";
-
-export default function AdminLayout({ children }) {
+import Topbar from "../../GlobalComponents/Topbar";
+import AdminSidebar from "../../GlobalComponents/AdminSidebar";
+function AdminLayout({ children }) {
 	return (
-		<div>
-			<div className="main-header">
-				{/* <Header /> */}
-				{/* <Container /> */}
+		<div className="flex h-screen overflow-hidden">
+			<AdminSidebar />
+			<div className="admin-header flex flex-col w-full">
+				<Topbar />
+				<div className="container">
+					<div className="content">{children}</div>
+				</div>
 			</div>
-			<div className="container">
-				<div className="sidebar"></div>
-				<div className="content">{children}</div>
-			</div>
-			{/* <Footer /> */}
 		</div>
 	);
 }
+
+export default AdminLayout;
 
 // Add prop-types validation
 AdminLayout.propTypes = {
