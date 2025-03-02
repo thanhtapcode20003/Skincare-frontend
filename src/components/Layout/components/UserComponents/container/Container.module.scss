@@ -1,7 +1,7 @@
 .container {
 	margin-top: 80px;
 	padding: 0 160px;
-	padding-bottom: 15px;
+	padding-bottom: 10px;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
 	.subCate {
@@ -9,12 +9,13 @@
 		height: 0px;
 		background-color: #fff;
 		position: absolute;
-		top: 135%;
+		top: 123%;
 		left: 0%;
 		border: 1px solid rgba(0, 0, 0, 0.1);
 		opacity: 0;
 		transition: all 0.2s ease-in-out;
 		visibility: hidden;
+		z-index: 100;
 
 		ul {
 			li {

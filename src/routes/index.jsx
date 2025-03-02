@@ -1,5 +1,6 @@
 // Layout
 import ProfileLayout from "../components/Layout/ProfileLayout";
+import HomeLayout from "../components/Layout/HomeLayout";
 import AdminLayout from "../components/Layout/AdminLayout";
 
 // User Pages
@@ -15,7 +16,7 @@ import ViewUser from "../pages/AdminPages/User/ViewUser";
 // Public Routes
 const publicRoutes = [
 	// User Routes
-	{ path: "/", component: Home },
+	{ path: "/", component: Home, layout: HomeLayout },
 	{ path: "/profile", component: Profile, layout: ProfileLayout },
 	{ path: "/blog", component: Blog },
 

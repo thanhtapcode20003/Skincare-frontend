@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 
 function Container() {
-	const [isOpenCategories, setIsOpenCategories] = useState(true);
+	const [isOpenCategories, setIsOpenCategories] = useState(false);
 
 	return (
 		<div className={`${styles.container} `}>

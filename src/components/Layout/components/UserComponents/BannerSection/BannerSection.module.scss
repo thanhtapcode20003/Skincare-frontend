@@ -1,0 +1,68 @@
+.bannerSection {
+	position: relative;
+	overflow: hidden;
+
+	// .slick-arrow {
+	// 	position: absolute;
+	// 	top: 45%;
+	// 	z-index: 100;
+	// 	display: flex;
+	// 	align-items: center;
+	// 	justify-content: center;
+	// 	width: 40px !important;
+	// 	height: 40px !important;
+	// 	background: #444444;
+	// 	border-radius: 100%;
+	// 	font-weight: bold;
+
+	// 	.slickNext {
+	// 		right: 25px !important;
+	// 	}
+
+	// 	.slick-next::before {
+	// 		color: #fff;
+	// 	}
+
+	// 	.slick-prev {
+	// 		left: 25px !important;
+	// 	}
+
+	// 	.slick-next::before {
+	// 		color: #fff;
+	// 	}
+	// }
+}
+.bannerSection * {
+	outline: none !important;
+}
+.slickNext,
+.slickPrev {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px !important;
+	height: 40px !important;
+	background: #444444;
+	border-radius: 50%;
+	color: white;
+	cursor: pointer;
+}
+
+.slickNext {
+	right: 25px !important;
+	font-size: 10px !important;
+}
+
+.slickPrev {
+	left: 25px !important;
+}
+
+.slickNext::before,
+.slickPrev::before {
+	font-size: 20px;
+	color: white;
+}

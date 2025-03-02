@@ -38,7 +38,7 @@ function Header() {
 	};
 
 	return (
-		<div className="header-wrapper fixed top-0 w-full z-50">
+		<div className="header-wrapper fixed top-0 w-full z-10000">
 			<div className="header px-10 py-2 bg-global ">
 				<div className="row ">
 					<div className="container flex flex-row justify-center gap-x-24">
