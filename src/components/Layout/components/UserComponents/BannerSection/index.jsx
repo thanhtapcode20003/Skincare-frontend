@@ -37,7 +37,7 @@ function BannerSection() {
 	};
 
 	return (
-		<div className={`${styles.bannerSection} w-full`}>
+		<div className={`${styles.bannerSection}`}>
 			<Slider {...settings}>
 				<div className={`${styles.item}`}>
 					<img

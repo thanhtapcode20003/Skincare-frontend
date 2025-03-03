@@ -18,13 +18,44 @@
 }
 
 /* GLOBAL COLOR */
+:root {
+	--clr-orange: #ff6600;
+	--clr-green: #326e51;
+}
+/* Background Colors */
 .bg-global {
 	background-color: #326e51;
 }
+
 .bg-global-dark {
 	background-color: #00390d;
 }
 
+.bg-orange {
+	background-color: #ff6600;
+}
+
+/* Text Colors */
 .clr-global {
 	color: #326e51;
+}
+
+.clr-orange {
+	color: #ff6600;
+}
+/* Hover Effects for Buttons or Links */
+.hover\:bg-global:hover {
+	background-color: #326e51;
+}
+
+.hover\:bg-orange:hover {
+	background-color: #ff6600;
+}
+
+.hover\:clr-global:hover {
+	color: #326e51;
+}
+
+.hover\:clr-orange:hover {
+	color: #ff6600;
 }

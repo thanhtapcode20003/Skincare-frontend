@@ -1,0 +1,47 @@
+.container {
+	display: flex;
+	justify-content: center; /* Center horizontally */
+	align-items: center; /* Center vertically */
+	width: 100%;
+	max-width: 1200px; /* Prevent it from expanding too much */
+	margin: 0 auto; /* Center the container */
+
+	.cateName {
+		margin-bottom: 10px;
+		font-size: 27px;
+		font-weight: 700;
+		color: #333;
+		text-transform: uppercase;
+	}
+	.homeProducts {
+		padding: 0;
+		width: 100%;
+		margin: 20px 0;
+
+		.productPrice {
+			font-size: 18px;
+			padding-left: 10px;
+			font-weight: 700;
+			color: var(--clr-orange);
+		}
+
+		.productName {
+			font-size: 14px;
+			color: var(--clr-green);
+			font-weight: 700;
+			padding: 0 10px;
+		}
+		.productRating {
+			padding: 10px; // Spacing above and below the stars
+			display: flex; // Align stars horizontally
+			align-items: center; // Center vertically
+			gap: 2px; // Space between stars
+
+			p {
+				margin-left: 5px; // Space between stars and the rating text
+				font-size: 14px; // Adjust text size
+				color: #333; // Text color
+			}
+		}
+	}
+}
