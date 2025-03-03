@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { registerUser } from "../../../../../api/authService";
 
 import { Button } from "primereact/button";
 import "primeicons/primeicons.css";
@@ -54,32 +55,32 @@ function Register({ onRegisterSuccess, onLoginClick, onClose }) {
 		if (!validate()) return;
 
 		try {
-			const response = await fetch("https://localhost:7007/api/auth/register", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					email,
-					password,
-					fullName,
-					phoneNumber,
-					address,
-					roleName: "Customer",
-				}),
-			});
-			console.log(response.body);
+			const userData = {
+				email,
+				password,
+				userName: fullName,
+				phoneNumber,
+				address,
+				roleName: "Customer",
+			};
+			console.log(userData);
 
-			if (response.ok) {
+			const response = await registerUser(userData);
+			if (response.status === 200) {
+				console.log(response);
+
 				onRegisterSuccess();
 			} else {
-				const errorData = await response.json();
+				const errorData = response.data || response; // Adjust based on response structure
 				setErrors({
 					form: errorData.error || "Registration failed. Please try again.",
 				});
 			}
 		} catch (err) {
-			setErrors({ form: "Something went wrong. Please try again later.", err });
+			setErrors({
+				form: "Something went wrong. Please try again later.",
+			});
+			console.error("Registration error:", err);
 		}
 	};
 

@@ -21,6 +21,7 @@
 :root {
 	--clr-orange: #ff6600;
 	--clr-green: #326e51;
+	--clr-text: #333;
 }
 /* Background Colors */
 .bg-global {
@@ -28,7 +29,7 @@
 }
 
 .bg-global-dark {
-	background-color: #00390d;
+	background-color: #333;
 }
 
 .bg-orange {

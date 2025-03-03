@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { loginUser } from "../../../../../api/authService";
 
 import { Button } from "primereact/button";
 import { FloatLabel } from "primereact/floatlabel";
@@ -49,23 +49,18 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 	}, [email, password, validateFields]);
 
 	// Handle form submission
-	const handleSubmit = async (values) => {
+	const handleSubmit = async (e) => {
 		console.log("submit");
 
-		values.preventDefault();
+		e.preventDefault();
 		setError({ email: "", password: "", general: "" });
 		setSuccess("");
 
 		if (!validateFields()) return;
 
 		try {
-			const response = await axios.post(
-				"https://localhost:7007/api/auth/login",
-				{
-					email,
-					password,
-				}
-			);
+			const loginData = { email, password };
+			const response = await loginUser(loginData);
 			console.log(response);
 
 			if (response.status === 200) {
