@@ -20,7 +20,7 @@ const publicRoutes = [
 	{ path: "/", component: Home, layout: HomeLayout },
 	{ path: "/profile", component: Profile, layout: ProfileLayout },
 	{ path: "/blog", component: Blog },
-	{ path: "/product", component: ProductDetail },
+	{ path: "/product/:productId", component: ProductDetail },
 
 	// Admin Routes
 	{

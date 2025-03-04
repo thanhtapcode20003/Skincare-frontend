@@ -35,16 +35,8 @@
 				padding: 0 10px;
 			}
 			.productRating {
-				padding: 10px; // Spacing above and below the stars
-				display: flex; // Align stars horizontally
-				align-items: center; // Center vertically
-				gap: 2px; // Space between stars
-
-				p {
-					margin-left: 5px; // Space between stars and the rating text
-					font-size: 14px; // Adjust text size
-					color: #333; // Text color
-				}
+				padding: 10px;
+				align-items: center;
 			}
 		}
 		.productItem:hover {

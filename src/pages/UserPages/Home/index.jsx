@@ -1,84 +1,110 @@
 import styles from "./Home.module.scss";
-import { FaStar } from "react-icons/fa";
+import { Rating } from "@mui/material";
+import { getProducts } from "../../../api/productService";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 function Home() {
-	const colorStars = {
-		orange: "#F2C265",
-		grey: "a9a9a9",
-	};
-	const stars = Array(5).fill(0);
-	const products = [
-		{
-			id: 1,
-			name: "Kem Chống Nắng La Roche-Posay",
-			price: "100.000 đ",
-			discount: "$79.99",
-			img: "https://media.hcdn.vn/catalog/product/p/r/promotions-auto-kem-chong-nang-la-roche-posay-kiem-soat-dau-spf50-50ml_GcC5XxafnFua2eRB.png",
-		},
-		{
-			id: 2,
-			name: "Kem Chống Nắng La Roche-Posay",
-			price: "100.000 ₫",
-			discount: "$29.00",
-			img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
-		},
-		{
-			id: 3,
-			name: "Kem Chống Nắng La Roche-Posay",
-			price: "100.000 ₫",
-			discount: "$20.00",
-			img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
-		},
-		{
-			id: 4,
-			name: "Kem Chống Nắng La Roche-Posay",
-			price: "100.000 ₫",
-			discount: "$9.35",
-			img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
-		},
-		{
-			id: 5,
-			name: "Kem Chống Nắng La Roche-Posay",
-			price: "100.000 ₫",
-			discount: "$9.35",
-			img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
-		},
-		{
-			id: 6,
-			name: "Kem Chống Nắng La Roche-Posay",
-			price: "100.000 ₫",
-			discount: "$9.35",
-			img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
-		},
-		{
-			id: 7,
-			name: "Kem Chống Nắng La Roche-Posay",
-			price: "100.000 ₫",
-			discount: "$9.35",
-			img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
-		},
-		{
-			id: 8,
-			name: "Kem Chống Nắng La Roche-Posay",
-			price: "100.000 ₫",
-			discount: "$9.35",
-			img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
-		},
-		{
-			id: 9,
-			name: "Kem Chống Nắng La Roche-Posay",
-			price: "100.000 ₫",
-			discount: "$9.35",
-			img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
-		},
-		{
-			id: 10,
-			name: "Kem Chống Nắng La Roche-Posay",
-			price: "100.000 ₫",
-			discount: "$9.35",
-			img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
-		},
-	];
+	const [products, setProducts] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
+
+	// Fetch products when the component mounts
+	useEffect(() => {
+		const fetchProducts = async () => {
+			try {
+				const data = await getProducts();
+				setProducts(data); // Set the products from the API response
+			} catch (err) {
+				setError("Failed to load products. Please try again later.");
+				console.error("Error fetching products:", err);
+			} finally {
+				setLoading(false); // Set loading to false whether success or failure
+			}
+		};
+
+		fetchProducts();
+	}, []); // Empty dependency array ensures this runs only once on mount
+
+	if (loading) {
+		return <div>Loading products...</div>;
+	}
+
+	if (error) {
+		return <div>{error}</div>;
+	}
+
+	// 	{
+	// 		id: 1,
+	// 		name: "Kem Chống Nắng La Roche-Posay",
+	// 		price: "100.000 đ",
+	// 		discount: "$79.99",
+	// 		img: "https://media.hcdn.vn/catalog/product/p/r/promotions-auto-kem-chong-nang-la-roche-posay-kiem-soat-dau-spf50-50ml_GcC5XxafnFua2eRB.png",
+	// 	},
+	// 	{
+	// 		id: 2,
+	// 		name: "Kem Chống Nắng La Roche-Posay",
+	// 		price: "100.000 ₫",
+	// 		discount: "$29.00",
+	// 		img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
+	// 	},
+	// 	{
+	// 		id: 3,
+	// 		name: "Kem Chống Nắng La Roche-Posay",
+	// 		price: "100.000 ₫",
+	// 		discount: "$20.00",
+	// 		img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
+	// 	},
+	// 	{
+	// 		id: 4,
+	// 		name: "Kem Chống Nắng La Roche-Posay",
+	// 		price: "100.000 ₫",
+	// 		discount: "$9.35",
+	// 		img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
+	// 	},
+	// 	{
+	// 		id: 5,
+	// 		name: "Kem Chống Nắng La Roche-Posay",
+	// 		price: "100.000 ₫",
+	// 		discount: "$9.35",
+	// 		img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
+	// 	},
+	// 	{
+	// 		id: 6,
+	// 		name: "Kem Chống Nắng La Roche-Posay",
+	// 		price: "100.000 ₫",
+	// 		discount: "$9.35",
+	// 		img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
+	// 	},
+	// 	{
+	// 		id: 7,
+	// 		name: "Kem Chống Nắng La Roche-Posay",
+	// 		price: "100.000 ₫",
+	// 		discount: "$9.35",
+	// 		img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
+	// 	},
+	// 	{
+	// 		id: 8,
+	// 		name: "Kem Chống Nắng La Roche-Posay",
+	// 		price: "100.000 ₫",
+	// 		discount: "$9.35",
+	// 		img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
+	// 	},
+	// 	{
+	// 		id: 9,
+	// 		name: "Kem Chống Nắng La Roche-Posay",
+	// 		price: "100.000 ₫",
+	// 		discount: "$9.35",
+	// 		img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
+	// 	},
+	// 	{
+	// 		id: 10,
+	// 		name: "Kem Chống Nắng La Roche-Posay",
+	// 		price: "100.000 ₫",
+	// 		discount: "$9.35",
+	// 		img: "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-tinh-chat-la-roche-posay-ho-tro-phuc-hoi-da-30ml-1716438988.jpg",
+	// 	},
+	// ];
 
 	return (
 		<div className={`${styles.container}`}>
@@ -89,34 +115,31 @@ function Home() {
 				</div>
 				<div className={`${styles.productGrid} grid grid-cols-5 gap-6`}>
 					{products.map((product) => (
-						<div
-							key={product.id}
-							className={`${styles.productItem} rounded-lg shadow-lg cursor-pointer`}
-						>
-							{/* Product Image */}
-							<img
-								src={product.img}
-								className={`${styles.productImg} w-full h-auto object-cover mb-1 rounded-lg`}
-							/>
-							{/* Product Price */}
-							<p className={`${styles.productPrice}`}>{product.price}</p>
-							{/* Product Price */}
-							<p className={`${styles.productName}`}>{product.name}</p>
-							<div className={`${styles.productRating}`}>
-								{stars.map((_, index) => (
-									<FaStar
-										key={index}
-										size={16}
-										color={
-											index < product.rating
-												? colorStars.orange
-												: colorStars.grey
-										}
+						<Link to={`/product/${product.productId}`} key={product.productId}>
+							<div
+								key={product.productId}
+								className={`${styles.productItem} rounded-lg shadow-lg cursor-pointer`}
+							>
+								{/* Product Image */}
+								<img
+									src={product.image}
+									className={`${styles.productImg} w-full h-auto object-cover mb-1 rounded-lg`}
+								/>
+								{/* Product Price */}
+								<p className={`${styles.productPrice}`}>{product.price} ₫</p>
+								{/* Product Price */}
+								<p className={`${styles.productName}`}>{product.productName}</p>
+								<div className={`${styles.productRating}`}>
+									<Rating
+										name="size-small"
+										precision={1}
+										defaultValue={product.ratingFeedback}
+										size="small"
+										readOnly
 									/>
-								))}
-								<p>({product.rating ? product.rating : "0"})</p>
+								</div>
 							</div>
-						</div>
+						</Link>
 					))}
 				</div>
 			</div>

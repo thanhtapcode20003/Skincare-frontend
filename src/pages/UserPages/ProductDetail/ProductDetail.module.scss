@@ -2,7 +2,8 @@
 	width: 100%;
 	max-width: 1600px;
 	margin: 0 auto !important;
-	padding: 0 200px;
+	padding: 50px 200px;
+	background-color: #f0f0f4;
 
 	// Responsive design to handle different screen sizes
 	@media (max-width: 768px) {
@@ -26,34 +27,6 @@
 		font-weight: 700;
 	}
 
-	.quantityDrop {
-		width: 150px;
-		gap: 20px;
-
-		.quantityButton {
-			min-width: 40px !important;
-			width: 40px !important;
-			height: 40px !important;
-			border-radius: 50%;
-			background-color: #edeef5;
-			// border: 1px solid rgba(0, 0, 0, 0.1) !important;
-			color: #000;
-			transition: background-color 0.3s ease, color 0.3s ease;
-			cursor: pointer;
-			display: flex !important; // Ensure flex is applied
-			justify-content: center !important; // Center horizontally
-			align-items: center !important; // Center vertically
-		}
-		.quantityButton:hover {
-			background-color: #d1d1d1; // Optional: Darker on hover
-		}
-		.quantityInput {
-			width: 30px;
-			border: 0;
-			background: transparent;
-			outline: none !important;
-		}
-	}
 	.addButton {
 		background-color: var(
 			--clr-green

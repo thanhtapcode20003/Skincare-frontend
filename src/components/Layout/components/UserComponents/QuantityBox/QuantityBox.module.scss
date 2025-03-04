@@ -1,0 +1,30 @@
+.quantityDrop {
+	width: 150px;
+	gap: 20px;
+
+	.quantityButton {
+		min-width: 40px !important;
+		width: 40px !important;
+		height: 40px !important;
+		border-radius: 50%;
+		background-color: #edeef5;
+		// border: 1px solid rgba(0, 0, 0, 0.1) !important;
+		color: #000;
+		transition: background-color 0.3s ease, color 0.3s ease;
+		cursor: pointer;
+		display: flex !important; // Ensure flex is applied
+		justify-content: center !important; // Center horizontally
+		align-items: center !important; // Center vertically
+	}
+	.quantityButton:hover {
+		background-color: #d1d1d1; // Optional: Darker on hover
+	}
+	.quantityInput {
+		text-align: center;
+		font-weight: bold;
+		width: 30px;
+		border: 0;
+		background: transparent;
+		outline: none !important;
+	}
+}

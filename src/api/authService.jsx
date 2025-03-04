@@ -2,19 +2,19 @@ import * as axiosClient from "../utils/axiosClient";
 
 export const loginUser = async (loginData) => {
 	try {
-		const res = await axiosClient.post("auth/login", loginData);
-		return res;
-	} catch (err) {
-		return err.res;
+		const response = await axiosClient.post("auth/login", loginData);
+		return response;
+	} catch (error) {
+		return error;
 	}
 };
 
 export const registerUser = async (userData) => {
 	try {
-		const res = await axiosClient.post("auth/register", userData);
-		return res;
-	} catch (err) {
-		console.log(err);
-		return err.response;
+		const response = await axiosClient.post("auth/register", userData);
+		return response;
+	} catch (error) {
+		console.log(error);
+		return error;
 	}
 };
