@@ -1,0 +1,101 @@
+.container {
+	width: 100%;
+	max-width: 1600px;
+	margin: 0 auto !important;
+	padding: 0 200px;
+
+	// Responsive design to handle different screen sizes
+	@media (max-width: 768px) {
+		padding: 10px; // Reduce padding on smaller screens
+	}
+
+	// Responsive adjustments
+	@media (max-width: 768px) {
+		width: 85%; // Slightly narrower on mobile
+		padding: 20px; // Less padding on smaller screens
+	}
+
+	@media (max-width: 480px) {
+		width: 80%; // Even narrower on very small screens
+		padding: 15px; // Minimal padding on tiny screens
+	}
+
+	.productPrice {
+		color: var(--clr-orange);
+		font-size: 1.5rem;
+		font-weight: 700;
+	}
+
+	.quantityDrop {
+		width: 150px;
+		gap: 20px;
+
+		.quantityButton {
+			min-width: 40px !important;
+			width: 40px !important;
+			height: 40px !important;
+			border-radius: 50%;
+			background-color: #edeef5;
+			// border: 1px solid rgba(0, 0, 0, 0.1) !important;
+			color: #000;
+			transition: background-color 0.3s ease, color 0.3s ease;
+			cursor: pointer;
+			display: flex !important; // Ensure flex is applied
+			justify-content: center !important; // Center horizontally
+			align-items: center !important; // Center vertically
+		}
+		.quantityButton:hover {
+			background-color: #d1d1d1; // Optional: Darker on hover
+		}
+		.quantityInput {
+			width: 30px;
+			border: 0;
+			background: transparent;
+			outline: none !important;
+		}
+	}
+	.addButton {
+		background-color: var(
+			--clr-green
+		); // Blue background (Tailwind bg-blue-500)
+		color: white;
+		padding: 15px 30px; // Matches px-4 py-2 (16px x 8px)
+		font-weight: 600;
+		font-size: 1rem; // Matches text-lg (18px)
+		border-radius: 9999px; // Fully rounded, matching rounded-full
+		margin-left: 1rem; // Matches ml-4 (16px)
+		cursor: pointer;
+		transition: background-color 0.3s ease, filter 0.3s ease; // Smooth transition for filter
+		&:hover {
+			filter: brightness(1.3);
+		}
+	}
+	// Ensure the h1 (or other content) scales appropriately
+	h1 {
+		font-size: 1.6rem; // Large heading, scalable
+		font-weight: 600;
+		color: var(--clr-text); // Dark color for readability
+		margin-bottom: 5px; // Space below the heading
+
+		@media (max-width: 768px) {
+			font-size: 2rem; // Smaller heading on tablets
+		}
+
+		@media (max-width: 480px) {
+			font-size: 1.5rem; // Even smaller on mobile
+		}
+	}
+
+	p {
+		font-size: 1rem; // Large heading, scalable
+		color: var(--clr-text); // Dark color for readability
+
+		@media (max-width: 768px) {
+			font-size: 0.8rem; // Smaller heading on tablets
+		}
+
+		@media (max-width: 480px) {
+			font-size: 0.6rem; // Even smaller on mobile
+		}
+	}
+}

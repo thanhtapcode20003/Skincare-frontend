@@ -7,6 +7,7 @@ import AdminLayout from "../components/Layout/AdminLayout";
 import Home from "../pages/UserPages/Home";
 import Profile from "../pages/UserPages/Profile";
 import Blog from "../pages/UserPages/Blog";
+import ProductDetail from "../pages/UserPages/ProductDetail";
 
 // Admin Pages
 import ViewUser from "../pages/AdminPages/User/ViewUser";
@@ -19,6 +20,7 @@ const publicRoutes = [
 	{ path: "/", component: Home, layout: HomeLayout },
 	{ path: "/profile", component: Profile, layout: ProfileLayout },
 	{ path: "/blog", component: Blog },
+	{ path: "/product", component: ProductDetail },
 
 	// Admin Routes
 	{
