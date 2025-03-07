@@ -56,49 +56,46 @@ function Header() {
 	};
 
 	return (
-		<div className="header-wrapper fixed top-0 w-full z-10000">
-			<div className="header px-10 py-2 bg-global ">
-				<div className="row ">
-					<div className="container flex flex-row justify-center gap-x-24">
-						{/* logo */}
+		<header className="header-wrapper fixed top-0 w-full z-50000 bg-global shadow-md">
+			<div className="container mx-auto px-4 py-2 flex items-center">
+				<div className="flex flex-row items-center justify-around w-full max-w-7xl gap-x-8 ">
+					<div className="flex items-center gap-x-4 mx-auto">
 						<Logo />
-
-						{/* search */}
 						<Search />
+					</div>
 
-						{/* right header */}
-						<div className="right-header w-80 flex flex-initial justify-center items-center gap-x-16 text-stone-100 ">
-							{/* Profile */}
-							{isAuthenticated ? (
-								<ProfileButton />
-							) : (
-								<div>
-									<ProfileButtonNotSigned
-										onClick={() => toggleAuthModal("login")}
-									/>
-									{isAuthModalOpen &&
-										(authMode === "login" ? (
-											<Login
-												onLoginSuccess={handleLoginSuccess}
-												onSignUpClick={() => toggleAuthModal("register")}
-												onClose={() => setIsAuthModalOpen(false)}
-											/>
-										) : (
-											<Register
-												onRegisterSuccess={handleRegisterSuccess}
-												onLoginClick={() => toggleAuthModal("login")}
-												onClose={() => setIsAuthModalOpen(false)}
-											/>
-										))}
-								</div>
-							)}
-							{/* Cart */}
-							<CartButton />
-						</div>
+					{/* right header */}
+					<div className="flex items-center gap-x-6 text-stone-100">
+						{/* Profile */}
+						{isAuthenticated ? (
+							<ProfileButton />
+						) : (
+							<div>
+								<ProfileButtonNotSigned
+									onClick={() => toggleAuthModal("login")}
+								/>
+								{isAuthModalOpen &&
+									(authMode === "login" ? (
+										<Login
+											onLoginSuccess={handleLoginSuccess}
+											onSignUpClick={() => toggleAuthModal("register")}
+											onClose={() => setIsAuthModalOpen(false)}
+										/>
+									) : (
+										<Register
+											onRegisterSuccess={handleRegisterSuccess}
+											onLoginClick={() => toggleAuthModal("login")}
+											onClose={() => setIsAuthModalOpen(false)}
+										/>
+									))}
+							</div>
+						)}
+						{/* Cart */}
+						<CartButton />
 					</div>
 				</div>
 			</div>
-		</div>
+		</header>
 	);
 }
 

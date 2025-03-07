@@ -1,4 +1,5 @@
 import { Rating } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton";
 import styles from "./ProductDetail.module.scss";
 import InnerImageZoom from "react-inner-image-zoom";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
@@ -10,13 +11,14 @@ import { useParams } from "react-router-dom";
 
 const ProductDetail = () => {
 	const { productId } = useParams(); // Get productId from the URL
-	const [product, setProduct] = useState(null); // State to store the product
-	const [loading, setLoading] = useState(true); // State for loading status
-	const [error, setError] = useState(null); // State for error handling
+	const [product, setProduct] = useState(null);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
 
 	useEffect(() => {
 		const fetchProduct = async () => {
 			try {
+				await new Promise((resolve) => setTimeout(resolve, 1000));
 				const data = await getProductById(productId);
 				setProduct(data); // Set the product from the API response
 			} catch (err) {
@@ -29,16 +31,60 @@ const ProductDetail = () => {
 		fetchProduct();
 	}, [productId]);
 
+	const renderSkeleton = () => (
+		<div className="flex flex-row mt-2 bg-white shadow-md rounded-lg p-4">
+			{/* Image Skeleton */}
+			<div className="md:w-5/12 w-full">
+				<Skeleton
+					variant="rectangular"
+					width="100%"
+					height={400} // Approximate height of the product image
+					sx={{ borderRadius: "8px" }}
+				/>
+			</div>
+			{/* Info Skeleton */}
+			<div className="md:w-7/12 w-full px-5">
+				{/* Product Name */}
+				<Skeleton variant="text" sx={{ fontSize: "2rem", width: "80%" }} />
+				{/* Rating */}
+				<Skeleton variant="text" sx={{ fontSize: "1rem", width: "150px" }} />
+				{/* Price and Stock */}
+				<div className="mt-3 flex flex-row items-center gap-10">
+					<Skeleton
+						variant="text"
+						sx={{ fontSize: "1.5rem", width: "100px" }}
+					/>
+					<Skeleton variant="text" sx={{ fontSize: "1rem", width: "80px" }} />
+				</div>
+				{/* Quantity and Add to Cart */}
+				<div className="mt-3 flex flex-row items-center gap-10">
+					<Skeleton variant="rectangular" width={100} height={40} />
+					<Skeleton variant="rectangular" width={150} height={40} />
+				</div>
+				{/* Description */}
+				<div className="mt-5">
+					<Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+					<Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+					<Skeleton variant="text" sx={{ fontSize: "1rem", width: "80%" }} />
+				</div>
+			</div>
+		</div>
+	);
+
+	useEffect(() => {
+		window.scrollTo(0, 0); // Scroll to the top of the page
+	}, []);
+
 	if (loading) {
-		return <div>Loading product details...</div>; // Show loading state while fetching
+		return <div className={styles.container}>{renderSkeleton()}</div>;
 	}
 
 	if (error) {
-		return <div>{error}</div>; // Show error message if fetching fails
+		return <div className={styles.container}>{error}</div>;
 	}
 
 	if (!product) {
-		return <div>Product not found.</div>; // Handle case where product is null
+		return <div className={styles.container}>Product not found.</div>;
 	}
 
 	return (

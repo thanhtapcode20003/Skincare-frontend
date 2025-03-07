@@ -70,10 +70,8 @@ function Container() {
 
 				{/* ITEMS */}
 				<div className="w-3/4 flex justify-between pr-10 pl-20">
-					<ul
-						className={`${styles.navbarItems} w-full flex flex-row justify-between content-center space-x-20`}
-					>
-						<li className={`${styles.navbarItem} flex items-center space-x-2`}>
+					<ul className={styles.navbarItems}>
+						<li className={styles.navbarItem}>
 							<span className="font-bold">
 								<IoHomeOutline />
 							</span>
@@ -81,7 +79,7 @@ function Container() {
 								<Link to="/">Home</Link>
 							</span>
 						</li>
-						<li className={`${styles.navbarItem} flex items-center space-x-2`}>
+						<li className={styles.navbarItem}>
 							<span className="font-bold">
 								<IoHomeOutline />
 							</span>
@@ -91,7 +89,7 @@ function Container() {
 								</p>
 							</span>
 						</li>
-						<li className={`${styles.navbarItem} flex items-center space-x-2`}>
+						<li className={styles.navbarItem}>
 							<span className="font-bold">
 								<IoHomeOutline />
 							</span>
@@ -99,7 +97,7 @@ function Container() {
 								<Link to="/">Home</Link>
 							</span>
 						</li>
-						<li className={`${styles.navbarItem} flex items-center space-x-2`}>
+						<li className={styles.navbarItem}>
 							<span className="font-bold">
 								<IoHomeOutline />
 							</span>
@@ -107,7 +105,7 @@ function Container() {
 								<Link to="/">Home</Link>
 							</span>
 						</li>
-						<li className={`${styles.navbarItem} flex items-center space-x-2`}>
+						<li className={styles.navbarItem}>
 							<span className="font-bold">
 								<IoHomeOutline />
 							</span>

@@ -114,7 +114,10 @@ const AdminSidebar = () => {
 								>
 									Hoang Thanh
 								</Typography>
-								<Typography variant="h6" color={colors.greenAccent[500]}>
+								<Typography
+									variant="h6"
+									sx={{ fontWeight: "bold", color: "var(--clr-orange)" }}
+								>
 									Manager
 								</Typography>
 							</Box>

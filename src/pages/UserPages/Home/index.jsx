@@ -3,6 +3,9 @@ import { Rating } from "@mui/material";
 import { getProducts } from "../../../api/productService";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import defaultImg from "../../../images/Default/default.jpg";
+import Skeleton from "@mui/material/Skeleton";
+// import Stack from "@mui/material/Stack";
 
 function Home() {
 	const [products, setProducts] = useState([]);
@@ -13,6 +16,7 @@ function Home() {
 	useEffect(() => {
 		const fetchProducts = async () => {
 			try {
+				await new Promise((resolve) => setTimeout(resolve, 1000));
 				const data = await getProducts();
 				setProducts(data); // Set the products from the API response
 			} catch (err) {
@@ -26,9 +30,22 @@ function Home() {
 		fetchProducts();
 	}, []); // Empty dependency array ensures this runs only once on mount
 
-	if (loading) {
-		return <div>Loading products...</div>;
-	}
+	// Skeleton placeholder for each product card
+	const renderSkeleton = () => (
+		<div className={`${styles.productItem}`}>
+			<div className={styles.imageContainer}>
+				<Skeleton
+					variant="rectangular"
+					width="100%"
+					height="100%"
+					sx={{ borderRadius: "8px" }}
+				/>
+			</div>
+			<Skeleton variant="text" sx={{ fontSize: "16px", margin: "8px 0" }} />
+			<Skeleton variant="text" sx={{ fontSize: "14px", height: "40px" }} />
+			<Skeleton variant="text" sx={{ fontSize: "14px", marginTop: "8px" }} />
+		</div>
+	);
 
 	if (error) {
 		return <div>{error}</div>;
@@ -111,36 +128,57 @@ function Home() {
 			<div className={`${styles.homeProducts}`}>
 				{/* Cate */}
 				<div className={`${styles.cateName}`}>
-					<h2>Sữa rửa mặt</h2>
+					{loading ? (
+						<Skeleton
+							variant="text"
+							sx={{ fontSize: "24px", width: "200px" }}
+						/>
+					) : (
+						<h2>Category Name</h2>
+					)}
 				</div>
-				<div className={`${styles.productGrid} grid grid-cols-5 gap-6`}>
-					{products.map((product) => (
-						<Link to={`/product/${product.productId}`} key={product.productId}>
-							<div
-								key={product.productId}
-								className={`${styles.productItem} rounded-lg shadow-lg cursor-pointer`}
-							>
-								{/* Product Image */}
-								<img
-									src={product.image}
-									className={`${styles.productImg} w-full h-auto object-cover mb-1 rounded-lg`}
-								/>
-								{/* Product Price */}
-								<p className={`${styles.productPrice}`}>{product.price} ₫</p>
-								{/* Product Price */}
-								<p className={`${styles.productName}`}>{product.productName}</p>
-								<div className={`${styles.productRating}`}>
-									<Rating
-										name="size-small"
-										precision={1}
-										defaultValue={product.ratingFeedback}
-										size="small"
-										readOnly
-									/>
-								</div>
-							</div>
-						</Link>
-					))}
+				<div className={`${styles.productGrid}`}>
+					{loading
+						? // Render 10 Skeleton cards to fill the grid (adjust number as needed)
+						  Array.from(new Array(10)).map((_, index) => (
+								<div key={index}>{renderSkeleton()}</div>
+						  ))
+						: // Render actual products when loaded
+						  products.map((product) => (
+								<Link
+									to={`/product/${product.productId}`}
+									key={product.productId}
+								>
+									<div className={`${styles.productItem}`}>
+										{/* Product Image with Fixed Height */}
+										<div className={styles.imageContainer}>
+											<img
+												src={product.image ? product.image : defaultImg}
+												alt={product.productName}
+												className={`${styles.productImg}`}
+												onError={(e) => (e.target.src = defaultImg)} // Fallback to defaultImg if the image fails to load
+											/>
+										</div>
+										{/* Product Price */}
+										<p className={`${styles.productPrice}`}>
+											{product.price} ₫
+										</p>
+										{/* Product Name with Fixed Height and Truncation */}
+										<p className={`${styles.productName}`}>
+											{product.productName}
+										</p>
+										<div className={`${styles.productRating}`}>
+											<Rating
+												name="size-small"
+												precision={1}
+												defaultValue={product.ratingFeedback}
+												size="small"
+												readOnly
+											/>
+										</div>
+									</div>
+								</Link>
+						  ))}
 				</div>
 			</div>
 		</div>
