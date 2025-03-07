@@ -13,14 +13,14 @@ export default function ProfileButton() {
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
-		console.log("Token from localStorage:", token); // Debug the token value
+		// console.log("Token from localStorage:", token); // Debug the token value
 
 		// Only decode if token exists and is a string
 		if (token && typeof token === "string" && token.trim().length > 0) {
 			try {
 				const decodedToken = decode(token);
 				setUsername(decodedToken.UserName);
-				console.log("Decoded Token:", decodedToken);
+				// console.log("Decoded Token:", decodedToken);
 			} catch (error) {
 				console.error("Error decoding token:", error);
 			}

@@ -7,7 +7,7 @@ import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 import QuantityBox from "../../../components/Layout/components/UserComponents/QuantityBox";
 import { useEffect, useState } from "react";
 import { getProductById } from "../../../api/productService";
-import { useParams } from "react-router-dom";
+import { useParams, Link as RouterLink } from "react-router-dom";
 
 const ProductDetail = () => {
 	const { productId } = useParams(); // Get productId from the URL
@@ -38,7 +38,7 @@ const ProductDetail = () => {
 				<Skeleton
 					variant="rectangular"
 					width="100%"
-					height={400} // Approximate height of the product image
+					height={400}
 					sx={{ borderRadius: "8px" }}
 				/>
 			</div>
@@ -72,7 +72,7 @@ const ProductDetail = () => {
 	);
 
 	useEffect(() => {
-		window.scrollTo(0, 0); // Scroll to the top of the page
+		window.scrollTo(0, 0);
 	}, []);
 
 	if (loading) {
@@ -87,8 +87,16 @@ const ProductDetail = () => {
 		return <div className={styles.container}>Product not found.</div>;
 	}
 
+	console.log(product);
+
 	return (
 		<div className={styles.container}>
+			{/* Breadcrumb */}
+			<div className={styles.breadcrumb}>
+				<RouterLink to="/">Home</RouterLink> {">"}
+				<span>{product.category.categoryName || "CategoryName"}</span> {">"}
+				<span>{product.productName}</span>
+			</div>
 			<div className="flex flex-row mt-2 bg-white shadow-md rounded-lg p-4">
 				{/* Img */}
 				<div className="md:w-5/12 w-full">

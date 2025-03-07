@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { publicRoutes } from "./routes";
 import { DefaultLayout } from "./components/Layout/";
 import ScrollToTop from "./components/GlobalComponents/ScrollToTop";
+import ProtectedRoute from "./components/GlobalComponents/ProtectedRoute";
 
 function App() {
 	return (
@@ -26,9 +27,11 @@ function App() {
 									key={index}
 									path={route.path}
 									element={
-										<Layout>
-											<Page />
-										</Layout>
+										<ProtectedRoute allowedRoles={["Staff", "Manager"]}>
+											<Layout>
+												<Page />
+											</Layout>
+										</ProtectedRoute>
 									}
 								/>
 							);

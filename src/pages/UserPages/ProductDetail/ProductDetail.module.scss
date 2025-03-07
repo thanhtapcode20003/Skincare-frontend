@@ -2,23 +2,53 @@
 	width: 100%;
 	max-width: 1600px;
 	margin: 0 auto !important;
-	padding: 50px 200px;
+	padding: 20px 165px;
 	background-color: #f0f0f4;
 
-	// Responsive design to handle different screen sizes
 	@media (max-width: 768px) {
-		padding: 10px; // Reduce padding on smaller screens
+		padding: 10px;
 	}
 
-	// Responsive adjustments
 	@media (max-width: 768px) {
-		width: 85%; // Slightly narrower on mobile
-		padding: 20px; // Less padding on smaller screens
+		width: 85%;
+		padding: 20px;
 	}
 
 	@media (max-width: 480px) {
-		width: 80%; // Even narrower on very small screens
-		padding: 15px; // Minimal padding on tiny screens
+		width: 80%;
+		padding: 15px;
+	}
+
+	.breadcrumb {
+		background-color: #eef2f7;
+		font-size: 0.9rem;
+		color: #6b7280;
+		margin-bottom: 20px;
+		border-radius: 4px;
+
+		a {
+			color: #6b7280;
+			text-decoration: none;
+			margin-right: 8px;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+
+		span {
+			margin: 0 8px;
+		}
+
+		@media (max-width: 768px) {
+			padding: 8px 10px;
+			font-size: 0.8rem;
+		}
+
+		@media (max-width: 480px) {
+			padding: 6px 8px;
+			font-size: 0.7rem;
+		}
 	}
 
 	.productPrice {
@@ -28,47 +58,44 @@
 	}
 
 	.addButton {
-		background-color: var(
-			--clr-green
-		); // Blue background (Tailwind bg-blue-500)
+		background-color: var(--clr-green);
 		color: white;
-		padding: 15px 30px; // Matches px-4 py-2 (16px x 8px)
+		padding: 15px 30px;
 		font-weight: 600;
-		font-size: 1rem; // Matches text-lg (18px)
-		border-radius: 9999px; // Fully rounded, matching rounded-full
-		margin-left: 1rem; // Matches ml-4 (16px)
+		font-size: 1rem;
+		border-radius: 50px;
+		margin-left: 1rem;
 		cursor: pointer;
 		transition: background-color 0.3s ease, filter 0.3s ease; // Smooth transition for filter
 		&:hover {
 			filter: brightness(1.3);
 		}
 	}
-	// Ensure the h1 (or other content) scales appropriately
 	h1 {
-		font-size: 1.6rem; // Large heading, scalable
+		font-size: 1.6rem;
 		font-weight: 600;
-		color: var(--clr-text); // Dark color for readability
-		margin-bottom: 5px; // Space below the heading
+		color: var(--clr-text);
+		margin-bottom: 5px;
 
 		@media (max-width: 768px) {
-			font-size: 2rem; // Smaller heading on tablets
+			font-size: 2rem;
 		}
 
 		@media (max-width: 480px) {
-			font-size: 1.5rem; // Even smaller on mobile
+			font-size: 1.5rem;
 		}
 	}
 
 	p {
-		font-size: 1rem; // Large heading, scalable
-		color: var(--clr-text); // Dark color for readability
+		font-size: 1rem;
+		color: var(--clr-text);
 
 		@media (max-width: 768px) {
-			font-size: 0.8rem; // Smaller heading on tablets
+			font-size: 0.8rem;
 		}
 
 		@media (max-width: 480px) {
-			font-size: 0.6rem; // Even smaller on mobile
+			font-size: 0.6rem;
 		}
 	}
 }
