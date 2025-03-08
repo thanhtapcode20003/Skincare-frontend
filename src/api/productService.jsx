@@ -19,3 +19,34 @@ export const getProductById = async (id) => {
 		return null;
 	}
 };
+
+export const createProduct = async (values) => {
+	try {
+		const response = await axiosClient.post("products/create", values);
+		return response;
+	} catch (error) {
+		return error;
+	}
+};
+
+export const updateProduct = async (id, values) => {
+	try {
+		const response = await axiosClient.put(`products/edit/${id}`, values);
+		return response;
+	} catch (error) {
+		console.log(error);
+		return error;
+	}
+};
+
+export const deleteProduct = async (id) => {
+	try {
+		const response = await axiosClient.remove(`products/delete/N${id}`);
+		return response;
+	} catch (error) {
+		console.log(error);
+		return error;
+	}
+};
+
+// Path: src/api/productService.jsx
