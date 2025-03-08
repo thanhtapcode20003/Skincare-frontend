@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../../../../api/authService";
+import { decode } from "../../../../../utils/axiosClient";
 
 import { Button } from "primereact/button";
 import { FloatLabel } from "primereact/floatlabel";
@@ -14,6 +15,8 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 	const [error, setError] = useState({ email: "", password: "", general: "" });
 	const [success, setSuccess] = useState("");
 	const [touch, setTouch] = useState({ email: false, password: false });
+
+	const navigate = useNavigate();
 
 	const validateFields = useCallback(() => {
 		let valid = true;
@@ -61,12 +64,26 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 		try {
 			const loginData = { email, password };
 			const response = await loginUser(loginData);
-			console.log(response);
 
 			if (response.status === 200) {
 				setSuccess("Login successful!");
 				onLoginSuccess(response.data.token);
 				console.log(response.status);
+
+				// Decode the token to get the roles
+				const token = response.data.token;
+				const decodeToken = decode(token);
+				const roleClaim =
+					decodeToken[
+						"http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+					];
+				const mappedRole =
+					roleClaim === "Manager" ? "Manager" : roleClaim || "Customer";
+
+				// Redirect based on role
+				if (mappedRole === "Manager" || mappedRole === "Staff") {
+					navigate("/home");
+				}
 			}
 		} catch (error) {
 			if (error.response) {

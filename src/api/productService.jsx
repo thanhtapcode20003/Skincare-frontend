@@ -41,7 +41,7 @@ export const updateProduct = async (id, values) => {
 
 export const deleteProduct = async (id) => {
 	try {
-		const response = await axiosClient.remove(`products/delete/N${id}`);
+		const response = await axiosClient.remove(`products/delete/${id}`);
 		return response;
 	} catch (error) {
 		console.log(error);

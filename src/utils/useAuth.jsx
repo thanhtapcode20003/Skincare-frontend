@@ -10,7 +10,7 @@ export const useAuth = () => {
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
-		console.log("Token from localStorage:", token);
+		// console.log("Token from localStorage:", token);
 
 		if (token && typeof token === "string" && token.trim().length > 0) {
 			try {
@@ -26,7 +26,7 @@ export const useAuth = () => {
 					roleClaim === "Manager" ? "Manager" : roleClaim || "Customer";
 				setRole(mappedRole);
 				setIsAuthenticated(true);
-				console.log("Decoded Token:", decodedToken);
+				// console.log("Decoded Token:", decodedToken);
 			} catch (error) {
 				console.error("Error decoding token:", error);
 				setIsAuthenticated(false);

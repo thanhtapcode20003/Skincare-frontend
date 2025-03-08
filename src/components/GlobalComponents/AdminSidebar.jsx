@@ -1,34 +1,40 @@
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { Button } from "primereact/button";
+import Button from "@mui/material/Button";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 // import { useEffect } from "react";
-import { Link } from "react-router-dom";
 // import { getUserById, logout, updateUser } from '~/api/userService';
 import { tokens } from "../../theme";
 // import { decode } from '~/utils/axiosClient';
-// import uploadFile from '~/utils/transferFile';
 
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useAuth } from "../../utils/useAuth";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
 	const theme = useTheme();
 	const colors = tokens(theme.palette.mode);
+	const navigate = useNavigate();
+
+	const handleClick = () => {
+		setSelected(title);
+		navigate(to);
+	};
+
 	return (
-		<Link to={to} style={{ textDecoration: "none", color: "inherit" }}>
-			<MenuItem
-				active={selected === title}
-				style={{
-					color: colors.grey[100],
-				}}
-				onClick={() => setSelected(title)}
-				icon={icon}
-			>
-				<Typography>{title}</Typography>
-			</MenuItem>
-		</Link>
+		<MenuItem
+			active={selected === title}
+			style={{
+				color: colors.grey[100],
+			}}
+			onClick={handleClick}
+			icon={icon}
+		>
+			<Typography>{title}</Typography>
+		</MenuItem>
 	);
 };
 
@@ -42,12 +48,8 @@ const AdminSidebar = () => {
 	const colors = tokens(theme.palette.mode);
 	const [isCollapsed, setIsCollapsed] = useState(false);
 	const [selected, setSelected] = useState("User");
-
-	// Logout
-	const handleLogout = () => {
-		localStorage.removeItem("token");
-		window.location = "/";
-	};
+	// const [role, setRole] = useState(null);
+	const { logout } = useAuth();
 
 	return (
 		<Box
@@ -140,15 +142,26 @@ const AdminSidebar = () => {
 							selected={selected}
 							setSelected={setSelected}
 						/>
-						<Button
-							onClick={handleLogout}
-							className="ml-4 bg-amber-400 border-0 my-5 px-6"
-							label="Log out"
-							icon="pi pi-sign-out"
-							size="small"
-						/>
 					</Box>
 				</Menu>
+				<Box
+					paddingLeft={isCollapsed ? undefined : "10%"}
+					sx={{ margin: "20px 0", textAlign: "center" }}
+				>
+					<Button
+						onClick={logout}
+						variant="contained"
+						startIcon={<LogoutIcon />}
+						sx={{
+							backgroundColor: "var(--clr-green)", // Use --clr-green
+							color: "white",
+							textTransform: "none", // Prevent uppercase text
+							padding: "8px 16px",
+						}}
+					>
+						Log out
+					</Button>
+				</Box>
 			</Sidebar>
 		</Box>
 	);

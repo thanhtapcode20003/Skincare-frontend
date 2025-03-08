@@ -1,16 +1,10 @@
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import { Box, Button, IconButton } from "@mui/material";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import { Box, Menu, MenuItem, IconButton } from "@mui/material";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useAuth } from "../../utils/useAuth";
 
 const Topbar = () => {
-	const handleLogout = () => {
-		localStorage.removeItem("token");
-		window.location = "/";
-	};
-
+	const { logout } = useAuth();
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
@@ -29,31 +23,18 @@ const Topbar = () => {
 			sx={{ width: "100%" }} // Ensures full width
 			className="topbar"
 		>
-			{/* SEARCH BAR */}
-			{/* <Box display="flex" backgroundColor={colors.primary[400]} borderRadius="3px">
-                <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
-                <IconButton type="button" sx={{ p: 1 }}>
-                    <SearchIcon />
-                </IconButton>
-            </Box> */}
 			{/* ICONS */}
 			<Box display="flex">
-				{/* <IconButton onClick={colorMode.toggleColorMode}>
-                    {theme.palette.mode === 'dark' ? <DarkModeOutlinedIcon /> : <LightModeOutlinedIcon />}
-                </IconButton> */}
-
 				<div>
-					<Button
+					<IconButton
 						id="basic-button"
 						aria-controls={open ? "basic-menu" : undefined}
 						aria-haspopup="true"
 						aria-expanded={open ? "true" : undefined}
 						onClick={handleClick}
 					>
-						<IconButton>
-							<PersonOutlinedIcon />
-						</IconButton>
-					</Button>
+						<PersonOutlinedIcon />
+					</IconButton>
 					<Menu
 						id="basic-menu"
 						anchorEl={anchorEl}
@@ -64,17 +45,14 @@ const Topbar = () => {
 								"aria-labelledby": "basic-button",
 							},
 						}}
-						// MenuListProps={{
-						// 	"aria-labelledby": "basic-button",
-						// }}
 					>
-						<Link
+						{/* <Link
 							to="/home/settings/profile"
 							style={{ textDecoration: "none", color: "inherit" }}
 						>
 							<MenuItem onClick={handleClose}>Edit Profile</MenuItem>
-						</Link>
-						<MenuItem onClick={handleLogout}>Logout</MenuItem>
+						</Link> */}
+						<MenuItem onClick={logout}>Logout</MenuItem>
 					</Menu>
 				</div>
 			</Box>
