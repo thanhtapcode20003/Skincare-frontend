@@ -12,6 +12,7 @@ import Cart from "../pages/UserPages/Cart";
 
 // Admin Pages
 import ViewUser from "../pages/AdminPages/User/ViewUser";
+import CreateUser from "../pages/AdminPages/User/CreateUser";
 
 //------------
 
@@ -26,8 +27,14 @@ const publicRoutes = [
 
 	// Admin Routes
 	{
-		path: "/home",
+		path: "/user",
 		component: ViewUser,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+	{
+		path: "/user/create",
+		component: CreateUser,
 		layout: AdminLayout,
 		Auth: "private",
 	},

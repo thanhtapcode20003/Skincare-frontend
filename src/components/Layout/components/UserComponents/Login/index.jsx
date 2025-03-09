@@ -82,7 +82,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 
 				// Redirect based on role
 				if (mappedRole === "Manager" || mappedRole === "Staff") {
-					navigate("/home");
+					navigate("/user");
 				}
 			}
 		} catch (error) {
