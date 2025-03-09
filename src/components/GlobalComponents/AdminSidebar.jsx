@@ -137,7 +137,7 @@ const AdminSidebar = () => {
 						</Typography>
 						<Item
 							title="Manage User"
-							to="/home"
+							to="/user"
 							icon={<PeopleOutlinedIcon />}
 							selected={selected}
 							setSelected={setSelected}

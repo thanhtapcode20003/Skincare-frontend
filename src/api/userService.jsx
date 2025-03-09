@@ -22,7 +22,7 @@ export const getUserById = async (id) => {
 
 export const updateUser = async (id, values) => {
 	try {
-		const response = await axiosClient.put(`users/${id}`, values);
+		const response = await axiosClient.put(`users/edit/${id}`, values);
 		return response;
 	} catch (error) {
 		console.log(error);
@@ -32,7 +32,7 @@ export const updateUser = async (id, values) => {
 
 export const deleteUser = async (id) => {
 	try {
-		const response = await axiosClient.remove(`users/${id}`);
+		const response = await axiosClient.remove(`users/delete/${id}`);
 		return response;
 	} catch (error) {
 		console.log(error);

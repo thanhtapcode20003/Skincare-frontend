@@ -2,14 +2,13 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Tag } from "primereact/tag";
 import { Button } from "primereact/button";
+import { Skeleton } from "primereact/skeleton";
 
 import { useEffect, useState } from "react";
 import { getUser } from "../../../api/userService";
 import { useNavigate } from "react-router-dom";
 
 function ViewUser() {
-	// const navigate = useNavigate();
-
 	const [users, setUsers] = useState([]);
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(true);
@@ -74,7 +73,7 @@ function ViewUser() {
 
 	const handleUpdate = (userId) => {
 		console.log("Update user:", userId);
-		// navigate(`/edit-user/${userId}`);
+		navigate(`/user/update/${userId}`);
 	};
 
 	const handleDelete = (userId) => {
@@ -139,8 +138,61 @@ function ViewUser() {
 		},
 	];
 
+	// Skeleton template for loading state
+	const skeletonRow = (
+		<div className="flex gap-2">
+			<Skeleton width="100%" height="2rem" />
+			<Skeleton width="100%" height="2rem" />
+			<Skeleton width="100%" height="2rem" />
+			<Skeleton width="100%" height="2rem" />
+			<Skeleton width="100%" height="2rem" />
+			<Skeleton width="100%" height="2rem" />
+			<div className="flex gap-2">
+				<Skeleton width="4rem" height="2rem" />
+				<Skeleton width="4rem" height="2rem" />
+			</div>
+		</div>
+	);
+
 	if (loading) {
-		return <div>Loading products...</div>;
+		return (
+			<div className="px-5">
+				<div className="flex items-center justify-between mb-4">
+					<h1 className="text-3xl text-900 font-bold m-0">Manage User</h1>
+					<Button
+						label="Create"
+						icon="pi pi-plus"
+						severity="success"
+						rounded
+						raised
+						className="p-button-md"
+						onClick={() => navigate("/user/create")}
+					/>
+				</div>
+				<div className="dataTable">
+					<DataTable
+						value={Array(5).fill()} // Simulate 5 rows
+						tableStyle={{ minWidth: "50rem" }}
+						scrollable
+						scrollHeight="72vh"
+					>
+						{columns.map((col, i) => (
+							<Column
+								key={col.field || i}
+								header={col.header}
+								body={() =>
+									col.field === "Actions" ? (
+										skeletonRow
+									) : (
+										<Skeleton width="100%" height="2rem" />
+									)
+								}
+							/>
+						))}
+					</DataTable>
+				</div>
+			</div>
+		);
 	}
 
 	if (error) {

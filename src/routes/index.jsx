@@ -13,11 +13,12 @@ import Cart from "../pages/UserPages/Cart";
 // Admin Pages
 import ViewUser from "../pages/AdminPages/User/ViewUser";
 import CreateUser from "../pages/AdminPages/User/CreateUser";
+import UpdateUser from "../pages/AdminPages/User/UpdateUser";
 
 //------------
 
 // Public Routes
-const publicRoutes = [
+const routes = [
 	// User Routes
 	{ path: "/", component: Home, layout: HomeLayout },
 	{ path: "/profile", component: Profile, layout: ProfileLayout },
@@ -38,9 +39,12 @@ const publicRoutes = [
 		layout: AdminLayout,
 		Auth: "private",
 	},
+	{
+		path: "/user/update/:userId",
+		component: UpdateUser,
+		layout: AdminLayout,
+		Auth: "private",
+	},
 ];
 
-// Private Routes
-const privateRoutes = [];
-
-export { publicRoutes, privateRoutes };
+export { routes };
