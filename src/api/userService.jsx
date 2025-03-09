@@ -26,7 +26,7 @@ export const updateUser = async (id, values) => {
 		return response;
 	} catch (error) {
 		console.log(error);
-		return error;
+		return error.response;
 	}
 };
 
@@ -36,6 +36,6 @@ export const deleteUser = async (id) => {
 		return response;
 	} catch (error) {
 		console.log(error);
-		return error;
+		return error.response;
 	}
 };

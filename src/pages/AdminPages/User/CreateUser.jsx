@@ -75,8 +75,8 @@ function CreateUser() {
 			} else {
 				toast.current.show({
 					severity: "error",
-					summary: "Error " + response.status,
-					detail: response.data.error,
+					summary: "Error ",
+					detail: response.status + ": " + response.data.message,
 					life: 3000,
 				});
 				console.error("Registration failed:", response);
@@ -103,7 +103,7 @@ function CreateUser() {
 	return (
 		<div className="card px-10">
 			<Toast ref={toast} />
-			<h1 className="text-3xl font-bold mb-8">Create New User</h1>
+			<h1 className="text-3xl font-bold mb-5">Create New User</h1>
 			<Formik
 				initialValues={initialValues}
 				validationSchema={userSchema}
@@ -119,7 +119,10 @@ function CreateUser() {
 				}) => (
 					<Form className="">
 						{/* Email and Username */}
-						<div className="flex gap-20 mb-5">
+						<div
+							className="flex gap-20 mb-2
+"
+						>
 							<div className="emailField flex flex-col gap-2 flex-1">
 								<label className="text-gray-700 font-medium text-lg">
 									Email
@@ -171,7 +174,10 @@ function CreateUser() {
 						</div>
 
 						{/* Password and Confirm Password */}
-						<div className="flex gap-20 mb-5">
+						<div
+							className="flex gap-20 mb-2
+"
+						>
 							<div className="passwordField flex flex-col gap-2 flex-1">
 								<label className="text-gray-700 font-medium text-lg">
 									Password
@@ -224,7 +230,10 @@ function CreateUser() {
 						</div>
 
 						{/* Phone Number and Role Name */}
-						<div className="flex gap-20 mb-5">
+						<div
+							className="flex gap-20 mb-2
+"
+						>
 							<div className="phoneNumberField flex flex-col gap-2 flex-1">
 								<label className="text-gray-700 font-medium text-lg">
 									Phone Number
@@ -312,6 +321,7 @@ function CreateUser() {
 								rounded
 								raised
 								className="p-button-lg"
+								type="button"
 								onClick={handleClose}
 							/>
 							<Button

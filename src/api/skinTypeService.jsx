@@ -25,7 +25,7 @@ export const createSkinType = async (values) => {
 		const response = await axiosClient.post("skin-types/create", values);
 		return response;
 	} catch (error) {
-		return error;
+		return error.response;
 	}
 };
 
@@ -35,7 +35,7 @@ export const updateSkinType = async (id, values) => {
 		return response;
 	} catch (error) {
 		console.log(error);
-		return error;
+		return error.response;
 	}
 };
 
@@ -45,7 +45,7 @@ export const deleteSkinType = async (id) => {
 		return response;
 	} catch (error) {
 		console.log(error);
-		return error;
+		return error.response;
 	}
 };
 

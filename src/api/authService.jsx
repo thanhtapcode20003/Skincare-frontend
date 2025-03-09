@@ -5,7 +5,7 @@ export const loginUser = async (loginData) => {
 		const response = await axiosClient.post("auth/login", loginData);
 		return response;
 	} catch (error) {
-		return error;
+		return error.response;
 	}
 };
 
@@ -15,6 +15,6 @@ export const registerUser = async (userData) => {
 		return response;
 	} catch (error) {
 		console.log(error);
-		return error;
+		return error.response;
 	}
 };

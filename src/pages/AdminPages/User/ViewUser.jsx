@@ -3,16 +3,21 @@ import { Column } from "primereact/column";
 import { Tag } from "primereact/tag";
 import { Button } from "primereact/button";
 import { Skeleton } from "primereact/skeleton";
+import { Toast } from "primereact/toast";
+import DeleteUser from "./DeleteUser";
 
-import { useEffect, useState } from "react";
-import { getUser } from "../../../api/userService";
+import { useEffect, useState, useRef } from "react";
+import { getUser, deleteUser } from "../../../api/userService";
 import { useNavigate } from "react-router-dom";
 
 function ViewUser() {
 	const [users, setUsers] = useState([]);
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(true);
+	const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+	const [selectedUserId, setSelectedUserId] = useState(null);
 	const navigate = useNavigate();
+	const toast = useRef(null);
 
 	// Custom function to format the createAt date
 	const formatDate = (dateString) => {
@@ -34,13 +39,10 @@ function ViewUser() {
 		switch (status) {
 			case "Manager":
 				return "danger";
-
 			case "Customer":
 				return "success";
-
 			case "Staff":
 				return "info";
-
 			default:
 				return "success";
 		}
@@ -77,18 +79,61 @@ function ViewUser() {
 	};
 
 	const handleDelete = (userId) => {
-		console.log("Delete user:", userId);
+		setSelectedUserId(userId);
+		setShowDeleteDialog(true);
+	};
+
+	const handleDeleteConfirm = async (userId) => {
+		if (!userId) return; // Safety check
+		try {
+			const response = await deleteUser(userId);
+			console.log(response);
+			if (response.status === 204) {
+				// Remove the deleted user from the state
+				console.log(response);
+
+				setUsers(users.filter((user) => user.userId !== userId));
+				toast.current.show({
+					severity: "success",
+					summary: "Success",
+					detail: "User deleted successfully",
+					life: 3000,
+				});
+			} else {
+				toast.current.show({
+					severity: "error",
+					summary: "Error",
+					detail: response.status + ": " + response.data.message,
+					life: 3000,
+				});
+			}
+		} catch (err) {
+			console.error("Delete error:", err);
+			toast.current.show({
+				severity: "error",
+				summary: "Error",
+				detail: err.message || "Failed to delete user",
+				life: 3000,
+			});
+		} finally {
+			setShowDeleteDialog(false);
+			setSelectedUserId(null);
+		}
+	};
+
+	const handleDeleteCancel = () => {
+		setShowDeleteDialog(false);
+		setSelectedUserId(null);
 	};
 
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {
 				const data = await getUser();
-				// Normalize the data: Flatten and standardize the structure
 				const normalizedUsers = data
 					.filter(
 						(item) => item && typeof item === "object" && "userId" in item
-					) // Filter out invalid entries
+					)
 					.map((user) => ({
 						userId: user.userId,
 						userName: user.userName,
@@ -154,86 +199,89 @@ function ViewUser() {
 		</div>
 	);
 
-	if (loading) {
-		return (
-			<div className="px-5">
-				<div className="flex items-center justify-between mb-4">
-					<h1 className="text-3xl text-900 font-bold m-0">Manage User</h1>
-					<Button
-						label="Create"
-						icon="pi pi-plus"
-						severity="success"
-						rounded
-						raised
-						className="p-button-md"
-						onClick={() => navigate("/user/create")}
-					/>
-				</div>
-				<div className="dataTable">
-					<DataTable
-						value={Array(5).fill()} // Simulate 5 rows
-						tableStyle={{ minWidth: "50rem" }}
-						scrollable
-						scrollHeight="72vh"
-					>
-						{columns.map((col, i) => (
-							<Column
-								key={col.field || i}
-								header={col.header}
-								body={() =>
-									col.field === "Actions" ? (
-										skeletonRow
-									) : (
-										<Skeleton width="100%" height="2rem" />
-									)
-								}
-							/>
-						))}
-					</DataTable>
-				</div>
-			</div>
-		);
-	}
-
-	if (error) {
-		return <div>{error}</div>;
-	}
-
-	console.log(users);
-
 	return (
 		<div className="px-5">
-			<div className="flex items-center justify-between mb-4">
-				<h1 className="text-3xl text-900 font-bold m-0">Manage User</h1>
-				<Button
-					label="Create"
-					icon="pi pi-plus"
-					severity="success"
-					rounded
-					raised
-					className="p-button-md"
-					onClick={() => navigate("/user/create")}
-				/>
-			</div>
-			<div className="dataTable">
-				<DataTable
-					value={users}
-					footer={footer}
-					tableStyle={{ minWidth: "50rem" }}
-					scrollable
-					scrollHeight="72vh"
-				>
-					{columns.map((col, i) => (
-						<Column
-							key={col.field || i}
-							field={col.field}
-							header={col.header}
-							body={col.body}
-							sortable={col.sortable}
+			<Toast ref={toast} /> {/* Render Toast in all cases */}
+			{loading ? (
+				<div>
+					<div className="flex items-center justify-between mb-4">
+						<h1 className="text-3xl text-900 font-bold m-0">Manage User</h1>
+						<Button
+							label="Create"
+							icon="pi pi-plus"
+							severity="success"
+							rounded
+							raised
+							className="p-button-md"
+							onClick={() => navigate("/user/create")}
 						/>
-					))}
-				</DataTable>
-			</div>
+					</div>
+					<div className="dataTable">
+						<DataTable
+							value={Array(5).fill()} // Simulate 5 rows
+							tableStyle={{ minWidth: "50rem" }}
+							scrollable
+							scrollHeight="72vh"
+						>
+							{columns.map((col, i) => (
+								<Column
+									key={col.field || i}
+									header={col.header}
+									body={() =>
+										col.field === "Actions" ? (
+											skeletonRow
+										) : (
+											<Skeleton width="100%" height="2rem" />
+										)
+									}
+								/>
+							))}
+						</DataTable>
+					</div>
+				</div>
+			) : error ? (
+				<div>{error}</div>
+			) : (
+				<div>
+					<div className="flex items-center justify-between mb-4">
+						<h1 className="text-3xl text-900 font-bold m-0">Manage User</h1>
+						<Button
+							label="Create"
+							icon="pi pi-plus"
+							severity="success"
+							rounded
+							raised
+							className="p-button-md"
+							onClick={() => navigate("/user/create")}
+						/>
+					</div>
+					<div className="dataTable">
+						<DataTable
+							value={users}
+							footer={footer}
+							tableStyle={{ minWidth: "50rem" }}
+							scrollable
+							scrollHeight="72vh"
+						>
+							{columns.map((col, i) => (
+								<Column
+									key={col.field || i}
+									field={col.field}
+									header={col.header}
+									body={col.body}
+									sortable={col.sortable}
+								/>
+							))}
+						</DataTable>
+					</div>
+				</div>
+			)}
+			<DeleteUser
+				visible={showDeleteDialog}
+				onHide={handleDeleteCancel}
+				onConfirm={handleDeleteConfirm}
+				userId={selectedUserId}
+			/>
 		</div>
 	);
 }

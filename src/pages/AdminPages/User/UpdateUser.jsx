@@ -100,7 +100,7 @@ function UpdateUser() {
 				toast.current.show({
 					severity: "error",
 					summary: "Error " + response.status,
-					detail: response.data?.error || "Failed to update user",
+					detail: response.status + ": " + response.data.message,
 					life: 3000,
 				});
 				console.error("Update failed:", response);

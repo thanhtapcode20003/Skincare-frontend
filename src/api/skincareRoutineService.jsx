@@ -28,7 +28,7 @@ export const createSkincareRoutine = async (values) => {
 		);
 		return response;
 	} catch (error) {
-		return error;
+		return error.response;
 	}
 };
 
@@ -41,7 +41,7 @@ export const updateSkincareRoutine = async (id, values) => {
 		return response;
 	} catch (error) {
 		console.log(error);
-		return error;
+		return error.response;
 	}
 };
 
@@ -53,7 +53,7 @@ export const deleteSkincareRoutine = async (id) => {
 		return response;
 	} catch (error) {
 		console.log(error);
-		return error;
+		return error.response;
 	}
 };
 
