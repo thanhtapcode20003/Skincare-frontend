@@ -81,8 +81,10 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 					roleClaim === "Manager" ? "Manager" : roleClaim || "Customer";
 
 				// Redirect based on role
-				if (mappedRole === "Manager" || mappedRole === "Staff") {
+				if (mappedRole === "Manager") {
 					navigate("/user");
+				} else if (mappedRole === "Staff") {
+					navigate("/product");
 				}
 			}
 		} catch (error) {

@@ -1,43 +1,28 @@
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Tag } from "primereact/tag";
 import { Button } from "primereact/button";
 import { Skeleton } from "primereact/skeleton";
 import { Toast } from "primereact/toast";
-import DeleteUser from "./DeleteUser";
 
 import { useEffect, useState, useRef } from "react";
-import { getUser, deleteUser } from "../../../api/userService";
+import { getProducts, deleteProduct } from "../../../api/productService";
+import DeleteProduct from "./DeleteProduct";
 import FormatDate from "../../../components/GlobalComponents/FormatDate";
+import MoneyFormat from "../../../components/GlobalComponents/MoneyFormat";
+import TruncateText from "../../../components/GlobalComponents/TruncateText";
 import { useNavigate } from "react-router-dom";
 
-function ViewUser() {
-	const [users, setUsers] = useState([]);
+function ViewProduct() {
+	const [products, setProducts] = useState([]);
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-	const [selectedUserId, setSelectedUserId] = useState(null);
+	const [selectedProductId, setSelectedProductId] = useState(null);
 	const navigate = useNavigate();
 	const toast = useRef(null);
 
-	// Roles
-	const getSeverity = (status) => {
-		switch (status) {
-			case "Manager":
-				return "danger";
-			case "Customer":
-				return "success";
-			case "Staff":
-				return "info";
-			default:
-				return "success";
-		}
-	};
-
-	const rolesTemplate = (rowData) => {
-		return (
-			<Tag value={rowData.roleName} severity={getSeverity(rowData.roleName)} />
-		);
+	const imgUrl = (rowData) => {
+		return <img src={rowData.image} alt={rowData.productName} width="150px" />;
 	};
 
 	const actionBodyTemplate = (rowData) => {
@@ -47,42 +32,42 @@ function ViewUser() {
 					label="Update"
 					size="small"
 					severity="warning"
-					onClick={() => handleUpdate(rowData.userId)}
+					onClick={() => handleUpdate(rowData.productId)}
 				/>
 				<Button
 					label="Delete"
 					size="small"
 					severity="danger"
-					onClick={() => handleDelete(rowData.userId)}
+					onClick={() => handleDelete(rowData.productId)}
 				/>
 			</div>
 		);
 	};
 
-	const handleUpdate = (userId) => {
-		console.log("Update user:", userId);
-		navigate(`/user/update/${userId}`);
+	const handleUpdate = (productId) => {
+		console.log("Update product:", productId);
+		navigate(`/product/update/${productId}`);
 	};
 
-	const handleDelete = (userId) => {
-		setSelectedUserId(userId);
+	const handleDelete = (productId) => {
+		setSelectedProductId(productId);
 		setShowDeleteDialog(true);
 	};
 
-	const handleDeleteConfirm = async (userId) => {
-		if (!userId) return; // Safety check
+	const handleDeleteConfirm = async (productId) => {
+		if (!productId) return;
 		try {
-			const response = await deleteUser(userId);
+			const response = await deleteProduct(productId);
 			console.log(response);
 			if (response.status === 204) {
-				// Remove the deleted user from the state
-				console.log(response);
-
-				setUsers(users.filter((user) => user.userId !== userId));
+				// console.log(response);
+				setProducts(
+					products.filter((product) => product.productId !== productId)
+				);
 				toast.current.show({
 					severity: "success",
 					summary: "Success",
-					detail: "User deleted successfully",
+					detail: "Product deleted successfully",
 					life: 3000,
 				});
 			} else {
@@ -98,70 +83,93 @@ function ViewUser() {
 			toast.current.show({
 				severity: "error",
 				summary: "Error",
-				detail: err.message || "Failed to delete user",
+				detail: err.message || "Failed to delete product",
 				life: 3000,
 			});
 		} finally {
 			setShowDeleteDialog(false);
-			setSelectedUserId(null);
+			setSelectedProductId(null);
 		}
 	};
 
 	const handleDeleteCancel = () => {
 		setShowDeleteDialog(false);
-		setSelectedUserId(null);
+		setSelectedProductId(null);
 	};
 
 	useEffect(() => {
-		const fetchUsers = async () => {
+		const fetchProducts = async () => {
 			try {
-				const data = await getUser();
+				const data = await getProducts();
 				console.log(data);
 
-				const normalizedUsers = data
+				const normalizedProducts = data
 					.filter(
-						(item) => item && typeof item === "object" && "userId" in item
+						(item) => item && typeof item === "object" && "productId" in item
 					)
-					.map((user) => ({
-						userId: user.userId,
-						userName: user.userName,
-						email: user.email,
-						roleId: user.roleId || (user.role && user.role.roleId) || null,
-						roleName: user.role?.roleName || "Unknown",
-						phoneNumber: user.phoneNumber || null,
-						address: user.address || null,
-						createAt: user.createAt || null,
+					.map((product) => ({
+						productId: product.productId,
+						productName: product.productName,
+						description: product.description,
+						price: product.price,
+						quantity: product.quantity,
+						image: product.image,
+						routine: product.routine.type,
+						skinType: product.skinType.skinTypeName,
+						category: product.category.categoryName,
+						createAt: product.createAt,
 					}));
-				setUsers(normalizedUsers);
+				setProducts(normalizedProducts);
+				// console.log(normalizedProducts);
 			} catch (err) {
-				setError("Failed to load users. Please try again later.");
-				console.error("Error fetching users:", err);
+				setError("Failed to load Products. Please try again later.");
+				console.error("Error fetching Products:", err);
 			} finally {
 				setLoading(false);
 			}
 		};
 
-		fetchUsers();
+		fetchProducts();
 	}, []);
 
 	// Table Data
-	const footer = `In total there are ${users ? users.length : 0} users.`;
+	const footer = `In total there are ${
+		products ? products.length : 0
+	} products.`;
 
 	const columns = [
-		{ field: "userId", header: "ID", sortable: true },
-		{ field: "userName", header: "Full Name", sortable: true },
-		{ field: "email", header: "Email", sortable: true },
-		{ field: "address", header: "Address", sortable: true },
+		{
+			field: "productId",
+			header: "ID",
+			sortable: true,
+		},
+		{
+			field: "productName",
+			header: "Product Name",
+			sortable: true,
+			body: (rowData) => TruncateText(rowData.productName, 30),
+		},
+		{ field: "category", header: "Category", sortable: true },
+		{ field: "skinType", header: "Skin Type", sortable: true },
+		{ field: "routine", header: "Routine", sortable: true },
+		{
+			field: "description",
+			header: "Description",
+			sortable: true,
+			body: (rowData) => TruncateText(rowData.description, 35),
+		},
+		{
+			field: "price",
+			header: "Price",
+			sortable: true,
+			body: (rowData) => MoneyFormat(rowData.price),
+		},
+		{ field: "quantity", header: "Quantity", sortable: true },
+		{ field: "image", header: "Image", body: imgUrl, sortable: false },
 		{
 			field: "createAt",
 			header: "Create At",
 			body: (rowData) => FormatDate(rowData.createAt),
-			sortable: true,
-		},
-		{
-			field: "roleName",
-			header: "Role",
-			body: rolesTemplate,
 			sortable: true,
 		},
 		{
@@ -189,11 +197,11 @@ function ViewUser() {
 
 	return (
 		<div className="px-5">
-			<Toast ref={toast} /> {/* Render Toast in all cases */}
+			<Toast ref={toast} />
 			{loading ? (
 				<div>
 					<div className="flex items-center justify-between mb-4">
-						<h1 className="text-3xl text-900 font-bold m-0">Manage User</h1>
+						<h1 className="text-3xl text-900 font-bold m-0">Manage Product</h1>
 						<Button
 							label="Create"
 							icon="pi pi-plus"
@@ -201,12 +209,12 @@ function ViewUser() {
 							rounded
 							raised
 							className="p-button-md"
-							onClick={() => navigate("/user/create")}
+							onClick={() => navigate("/product/create")}
 						/>
 					</div>
 					<div className="dataTable">
 						<DataTable
-							value={Array(5).fill()} // Simulate 5 rows
+							value={Array(5).fill()}
 							tableStyle={{ minWidth: "50rem" }}
 							scrollable
 							scrollHeight="72vh"
@@ -232,7 +240,7 @@ function ViewUser() {
 			) : (
 				<div>
 					<div className="flex items-center justify-between mb-4">
-						<h1 className="text-3xl text-900 font-bold m-0">Manage User</h1>
+						<h1 className="text-3xl text-900 font-bold m-0">Manage Product</h1>
 						<Button
 							label="Create"
 							icon="pi pi-plus"
@@ -240,16 +248,17 @@ function ViewUser() {
 							rounded
 							raised
 							className="p-button-md"
-							onClick={() => navigate("/user/create")}
+							onClick={() => navigate("/product/create")}
 						/>
 					</div>
 					<div className="dataTable">
 						<DataTable
-							value={users}
+							value={products}
 							footer={footer}
 							tableStyle={{ minWidth: "50rem" }}
 							scrollable
-							scrollHeight="72vh"
+							scrollHeight="75vh"
+							size="small"
 						>
 							{columns.map((col, i) => (
 								<Column
@@ -264,14 +273,14 @@ function ViewUser() {
 					</div>
 				</div>
 			)}
-			<DeleteUser
+			<DeleteProduct
 				visible={showDeleteDialog}
 				onHide={handleDeleteCancel}
 				onConfirm={handleDeleteConfirm}
-				userId={selectedUserId}
+				productId={selectedProductId}
 			/>
 		</div>
 	);
 }
 
-export default ViewUser;
+export default ViewProduct;

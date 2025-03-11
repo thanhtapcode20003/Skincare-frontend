@@ -15,6 +15,10 @@ import ViewUser from "../pages/AdminPages/User/ViewUser";
 import CreateUser from "../pages/AdminPages/User/CreateUser";
 import UpdateUser from "../pages/AdminPages/User/UpdateUser";
 
+import ViewProduct from "../pages/AdminPages/Product/ViewProduct";
+import CreateProduct from "../pages/AdminPages/Product/CreateProduct";
+import UpdateProduct from "../pages/AdminPages/Product/UpdateProduct";
+
 //------------
 
 // Public Routes
@@ -27,6 +31,7 @@ const routes = [
 	{ path: "/cart", component: Cart },
 
 	// Admin Routes
+	// User
 	{
 		path: "/user",
 		component: ViewUser,
@@ -42,6 +47,26 @@ const routes = [
 	{
 		path: "/user/update/:userId",
 		component: UpdateUser,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+
+	// Product
+	{
+		path: "/product",
+		component: ViewProduct,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+	{
+		path: "/product/create",
+		component: CreateProduct,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+	{
+		path: "/product/update/:productId",
+		component: UpdateProduct,
 		layout: AdminLayout,
 		Auth: "private",
 	},

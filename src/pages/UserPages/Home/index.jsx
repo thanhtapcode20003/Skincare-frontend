@@ -1,18 +1,21 @@
 import styles from "./Home.module.scss";
-import { Rating } from "@mui/material";
-import { getProducts } from "../../../api/productService";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import defaultImg from "../../../images/Default/default.jpg";
-import Skeleton from "@mui/material/Skeleton";
-// import Stack from "@mui/material/Stack";
+import { getProducts } from "../../../api/productService";
+import { getCategories } from "../../../api/categoryService";
+import MoneyFormat from "../../../components/GlobalComponents/MoneyFormat";
+
+import { Rating } from "@mui/material";
+import { Skeleton } from "primereact/skeleton";
 
 function Home() {
 	const [products, setProducts] = useState([]);
+	const [categories, setCategories] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
-	// Fetch products when the component mounts
+	// Fetch products
 	useEffect(() => {
 		const fetchProducts = async () => {
 			try {
@@ -28,86 +31,113 @@ function Home() {
 		};
 
 		fetchProducts();
-	}, []); // Empty dependency array ensures this runs only once on mount
+	}, []);
+
+	// Fetch Category
+	useEffect(() => {
+		const fetchCategories = async () => {
+			try {
+				await new Promise((resolve) => setTimeout(resolve, 1000));
+				const data = await getCategories();
+				setCategories(data);
+			} catch (err) {
+				setError("Failed to load categories. Please try again later.");
+				console.error("Error fetching categories:", err);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchCategories();
+	}, []);
 
 	// Skeleton placeholder for each product card
 	const renderSkeleton = () => (
 		<div className={`${styles.productItem}`}>
 			<div className={styles.imageContainer}>
-				<Skeleton
-					variant="rectangular"
-					width="100%"
-					height="100%"
-					sx={{ borderRadius: "8px" }}
-				/>
+				<Skeleton width="100%" height="100%" className="mb-2" />
 			</div>
-			<Skeleton variant="text" sx={{ fontSize: "16px", margin: "8px 0" }} />
-			<Skeleton variant="text" sx={{ fontSize: "14px", height: "40px" }} />
-			<Skeleton variant="text" sx={{ fontSize: "14px", marginTop: "8px" }} />
+			<Skeleton width="100%" height="16px" className="mb-2" />
+			<Skeleton width="100%" height="40px" className="mb-2" />
+			<Skeleton width="60%" height="14px" />
 		</div>
 	);
 
 	if (error) {
 		return <div>{error}</div>;
 	}
+
+	// console.log(categories);
+	// console.log(products);
+
 	return (
 		<div className={`${styles.container}`}>
-			<div className={`${styles.homeProducts}`}>
-				{/* Cate */}
-				<div className={`${styles.cateName}`}>
-					{loading ? (
-						<Skeleton
-							variant="text"
-							sx={{ fontSize: "24px", width: "200px" }}
-						/>
-					) : (
-						<h2>Category Name</h2>
-					)}
+			{loading ? (
+				<div className={`${styles.homeProducts}`}>
+					<div className={`${styles.cateName}`}>
+						<Skeleton width="200px" height="24px" />
+					</div>
+					<div className={`${styles.productGrid}`}>
+						{Array.from(new Array(10)).map((_, index) => (
+							<div key={index}>{renderSkeleton()}</div>
+						))}
+					</div>
 				</div>
-				<div className={`${styles.productGrid}`}>
-					{loading
-						? // Render 10 Skeleton cards to fill the grid (adjust number as needed)
-						  Array.from(new Array(10)).map((_, index) => (
-								<div key={index}>{renderSkeleton()}</div>
-						  ))
-						: // Render actual products when loaded
-						  products.map((product) => (
-								<Link
-									to={`/product/${product.productId}`}
-									key={product.productId}
-								>
-									<div className={`${styles.productItem}`}>
-										{/* Product Image with Fixed Height */}
-										<div className={styles.imageContainer}>
-											<img
-												src={product.image ? product.image : defaultImg}
-												alt={product.productName}
-												className={`${styles.productImg}`}
-												onError={(e) => (e.target.src = defaultImg)} // Fallback to defaultImg if the image fails to load
-											/>
+			) : (
+				categories.map((category) => {
+					// Filter products that belong to the current category
+					const categoryProducts = products.filter(
+						(product) => product.category.categoryName === category.categoryName
+					);
+
+					// Only render the category section if there are products for this category
+					if (categoryProducts.length === 0) return null;
+
+					return (
+						<div className={`${styles.homeProducts}`} key={category.categoryId}>
+							{/* Category Name */}
+							<div className={`${styles.cateName}`}>
+								<h2>{category.categoryName}</h2>
+							</div>
+							{/* Product Grid */}
+							<div className={`${styles.productGrid}`}>
+								{categoryProducts.map((product) => (
+									<Link
+										to={`/product/${product.productId}`}
+										key={product.productId}
+									>
+										<div className={`${styles.productItem}`}>
+											<div className={styles.imageContainer}>
+												<img
+													src={product.image ? product.image : defaultImg}
+													alt={product.productName}
+													className={`${styles.productImg}`}
+													onError={(e) => (e.target.src = defaultImg)}
+												/>
+											</div>
+											<p className={`${styles.productPrice}`}>
+												{MoneyFormat(product.price)}{" "}
+											</p>
+											<p className={`${styles.productName}`}>
+												{product.productName}
+											</p>
+											<div className={`${styles.productRating}`}>
+												<Rating
+													name="size-small"
+													precision={1}
+													defaultValue={product.ratingFeedback}
+													size="small"
+													readOnly
+												/>
+											</div>
 										</div>
-										{/* Product Price */}
-										<p className={`${styles.productPrice}`}>
-											{product.price} ₫
-										</p>
-										{/* Product Name with Fixed Height and Truncation */}
-										<p className={`${styles.productName}`}>
-											{product.productName}
-										</p>
-										<div className={`${styles.productRating}`}>
-											<Rating
-												name="size-small"
-												precision={1}
-												defaultValue={product.ratingFeedback}
-												size="small"
-												readOnly
-											/>
-										</div>
-									</div>
-								</Link>
-						  ))}
-				</div>
-			</div>
+									</Link>
+								))}
+							</div>
+						</div>
+					);
+				})
+			)}
 		</div>
 	);
 }
