@@ -1,11 +1,16 @@
 import { PiList } from "react-icons/pi";
 import { IoHomeOutline } from "react-icons/io5";
+import { FaWineBottle } from "react-icons/fa";
+import { FaBottleDroplet } from "react-icons/fa6";
+import { FaRegNewspaper } from "react-icons/fa6";
+import { LuContact } from "react-icons/lu";
+import Button from "@mui/material/Button";
+import { Skeleton } from "primereact/skeleton";
+
 import { Link } from "react-router-dom";
 import styles from "./Container.module.scss";
-import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
 import { getCategories } from "../../../../../api/categoryService";
-import { Skeleton } from "primereact/skeleton"; // Import Skeleton for loading state
 
 function Container() {
 	const [isOpenCategories, setIsOpenCategories] = useState(false);
@@ -87,36 +92,37 @@ function Container() {
 						</li>
 						<li className={styles.navbarItem}>
 							<span className="font-bold">
-								<IoHomeOutline />
+								<FaRegNewspaper />
+							</span>
+							<span className="text-lg font-medium">
+								<Link to="/blog">Blog</Link>
+							</span>
+						</li>
+						<li className={styles.navbarItem}>
+							<span className="font-bold">
+								<FaWineBottle />
 							</span>
 							<span className="text-lg font-medium">
 								<p>
-									<Link to="/">Home</Link>
+									<Link to="/">Cleanser</Link>
 								</p>
 							</span>
 						</li>
+
 						<li className={styles.navbarItem}>
 							<span className="font-bold">
-								<IoHomeOutline />
+								<FaBottleDroplet />
 							</span>
 							<span className="text-lg font-medium">
-								<Link to="/">Home</Link>
+								<Link to="/">Serum</Link>
 							</span>
 						</li>
 						<li className={styles.navbarItem}>
 							<span className="font-bold">
-								<IoHomeOutline />
+								<LuContact />
 							</span>
 							<span className="text-lg font-medium">
-								<Link to="/">Home</Link>
-							</span>
-						</li>
-						<li className={styles.navbarItem}>
-							<span className="font-bold">
-								<IoHomeOutline />
-							</span>
-							<span className="text-lg font-medium">
-								<Link to="/">Home</Link>
+								<Link to="/">Contact</Link>
 							</span>
 						</li>
 					</ul>
