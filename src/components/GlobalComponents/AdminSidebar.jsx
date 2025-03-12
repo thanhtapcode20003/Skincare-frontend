@@ -50,7 +50,7 @@ const AdminSidebar = () => {
 
 	return (
 		<Box>
-			<Sidebar collapsed={isCollapsed} className="h-full bg-white">
+			<Sidebar collapsed={isCollapsed} className="h-200 bg-white">
 				<Menu iconShape="square">
 					{/* LOGO AND MENU ICON */}
 					<MenuItem

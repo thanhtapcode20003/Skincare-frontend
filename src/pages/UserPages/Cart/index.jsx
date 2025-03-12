@@ -2,7 +2,33 @@ import { useState } from "react";
 import styles from "./Cart.module.scss";
 
 // Sample cart data (you can replace this with your actual data)
-const cartItems = []; // Initially empty to simulate no products
+const cartItems = [
+	{
+		id: 1,
+		name: "Intensive Moisture Care Makeup Cleansing Oil 150ml",
+		price: 365000, // Current price in VND
+		originalPrice: 450000, // Original price for discount display
+		quantity: 2,
+		image:
+			"https://medias.watsons.vn/publishing/WTCVN-212337-front-zoom.jpg?version=1730386819",
+		gift: "Tặng: Bộ Sản Phẩm Bioderma Mini",
+	},
+	{
+		id: 2,
+		name: "Hydrating Face Cream 50ml",
+		price: 250000,
+		originalPrice: 300000,
+		quantity: 1,
+		image: "https://example.com/hydrating-cream.jpg",
+	},
+	{
+		id: 3,
+		name: "Gentle Exfoliating Scrub 100g",
+		price: 180000,
+		quantity: 3,
+		image: "https://example.com/exfoliating-scrub.jpg",
+	},
+]; // Initially empty to simulate no products
 
 function Cart() {
 	const [items, setItems] = useState(cartItems);
@@ -54,10 +80,10 @@ function Cart() {
 						{/* Cart Items */}
 						<div className={styles.cartItems}>
 							<div className={styles.cartItemsHeader}>
-								<span>Sản phẩm</span>
-								<span>Giá tiền</span>
-								<span>Số lượng</span>
-								<span>Thành tiền</span>
+								<span>Product</span>
+								<span>Price</span>
+								<span>Quantity</span>
+								<span>Money</span>
 							</div>
 
 							{items.map((item) => (
@@ -133,24 +159,26 @@ function Cart() {
 								<span>Giảm giá:</span>
 								<span>0 đ</span>
 							</div>
-							<div className={styles.summaryItem}>
+							{/* <div className={styles.summaryItem}>
 								<span>Khuyến mãi giảm giá đặc biệt:</span>
 								<span>
 									Tặng: Bộ Sản Phẩm Bioderma 3 Món Làm Sạch & Dưỡng Ẩm Cho Da
 									Mụn (SL có hạn)
 								</span>
-							</div>
-							<div className={styles.summaryItem}>
+							</div> */}
+							{/* <div className={styles.summaryItem}>
 								<span>
 									Số lượng quà tặng còn lại, trả góp trước khi thanh toán:
 								</span>
 								<span>0</span>
-							</div>
+							</div> */}
 							<div className={styles.total}>
-								<span>Tổng cộng:</span>
-								<span>{totalPrice.toLocaleString()} đ (Đã bao gồm VAT)</span>
+								<span>Summary: </span>
+								<span>{totalPrice.toLocaleString()} đ (Including VAT)</span>
 							</div>
-							<button className={styles.checkoutBtn}>Tiến hành đặt hàng</button>
+							<button className={styles.checkoutBtn}>
+								Process to Checkout
+							</button>
 						</div>
 					</>
 				)}

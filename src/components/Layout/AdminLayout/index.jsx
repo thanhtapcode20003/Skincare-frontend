@@ -3,7 +3,7 @@ import Topbar from "../../GlobalComponents/Topbar";
 import AdminSidebar from "../../GlobalComponents/AdminSidebar";
 function AdminLayout({ children }) {
 	return (
-		<div className="flex h-screen overflow-hidden">
+		<div className="flex h-screen min-h-screen">
 			<AdminSidebar />
 			<div className="admin-header flex flex-col w-full">
 				<Topbar />

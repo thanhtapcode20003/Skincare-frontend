@@ -2,87 +2,129 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
-import { Password } from "primereact/password";
+import { InputTextarea } from "primereact/inputtextarea";
 
-import { registerUser } from "../../../api/authService";
+import { createProduct } from "../../../api/productService";
+import { getCategories } from "../../../api/categoryService";
+import { getSkinTypes } from "../../../api/skinTypeService";
+import { getSkincareRoutines } from "../../../api/skincareRoutineService";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function CreateProduct() {
 	const navigate = useNavigate();
 	const toast = useRef(null);
-	// initialValues
+
+	const [categories, setCategories] = useState([]);
+	const [skinTypes, setSkinTypes] = useState([]);
+	const [routines, setRoutines] = useState([]);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const [categoriesData, skinTypesData, routinesData] = await Promise.all(
+					[getCategories(), getSkinTypes(), getSkincareRoutines()]
+				);
+				setCategories(categoriesData);
+				setSkinTypes(skinTypesData);
+				setRoutines(routinesData);
+			} catch (err) {
+				console.error("Error fetching dropdown data:", err);
+			}
+		};
+		fetchData();
+	}, []);
+
 	const initialValues = {
-		userName: "",
-		email: "",
-		password: "",
-		confirmPassword: "",
-		phoneNumber: "",
-		address: "",
-		roleName: null,
+		productName: "",
+		description: "",
+		price: "",
+		quantity: "",
+		image: "",
+		skinType: null,
+		category: null,
+		routine: null,
 	};
 
 	// Validate by yup
-	const userSchema = yup.object().shape({
-		userName: yup
+	const productSchema = yup.object().shape({
+		productName: yup
 			.string()
-			.required("Username is required")
-			.min(3, "Username must be at least 3 characters")
-			.max(20, "Username must be at most 20 characters"),
-		email: yup
+			.required("Product Name is required")
+			.min(3, "Product Name must be at least 3 characters"),
+		description: yup
 			.string()
-			.email("Invalid email address")
-			.required("Email is required"),
-		password: yup
+			.required("Description is required")
+			.min(3, "Description must be at least 3 characters"),
+		price: yup
+			.number()
+			.typeError("Price must be a number")
+			.required("Price is required")
+			.min(0, "Price cannot be negative"),
+		quantity: yup
+			.number()
+			.typeError("Quantity must be a number")
+			.required("Quantity is required")
+			.min(0, "Quantity cannot be negative")
+			.integer("Quantity must be an integer"),
+		image: yup
 			.string()
-			.required("Password is required")
-			.min(8, "Password must be at least 8 characters"),
-		confirmPassword: yup
-			.string()
-			.required("Confirm Password is required")
-			.oneOf([yup.ref("password"), null], "Passwords must match"),
-		phoneNumber: yup.string().required("Phone Number is required"),
-		address: yup.string().required("Address is required"),
-		roleName: yup.string().required("Role is required"),
+			.required("Image URL is required")
+			.url("Image must be a valid URL"),
+		skinType: yup.string().required("Skin Type is required"),
+		category: yup.string().required("Category is required"),
+		routine: yup.string().required("Routine is required"),
 	});
 
 	const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+		console.log("submit");
+
 		setSubmitting(true);
 		try {
-			const userData = {
-				userName: values.userName,
-				email: values.email,
-				password: values.password,
-				phoneNumber: values.phoneNumber,
-				address: values.address,
-				roleName: values.roleName,
+			const productData = {
+				productName: values.productName,
+				description: values.description,
+				price: Number(values.price),
+				quantity: Number(values.quantity),
+				image: values.image,
+				skinTypeId: values.skinType,
+				categoryId: values.category,
+				routineId: values.routine,
 			};
-			console.log("Submitting user data:", userData);
+			// console.log("Submitting product data:", productData);
+			// console.log("skinType value:", values.skinType);
+			// console.log("category value:", values.category);
+			// console.log("routine value:", values.routine);
 
-			const response = await registerUser(userData);
+			const response = await createProduct(productData);
 			if (response.status === 200) {
 				toast.current.show({
 					severity: "success",
 					summary: "Successful",
-					detail: "Create User Successfully",
+					detail: "Product created successfully",
 					life: 3000,
 				});
-				console.log("Registration successful:", response);
+				console.log("Product creation successful:", response);
 				resetForm();
-				// navigate("/user"); // Navigate to user list on success
 			} else {
 				toast.current.show({
 					severity: "error",
-					summary: "Error ",
+					summary: "Error",
 					detail: response.status + ": " + response.data.message,
 					life: 3000,
 				});
-				console.error("Registration failed:", response);
+				console.error("Product creation failed:", response);
 			}
 		} catch (err) {
-			console.error("Registration error:", err);
+			console.error("Product creation error:", err);
+			toast.current.show({
+				severity: "error",
+				summary: "Error",
+				detail: err.message || "Failed to create product",
+				life: 3000,
+			});
 		} finally {
 			setSubmitting(false);
 		}
@@ -90,23 +132,16 @@ function CreateProduct() {
 
 	// Handle cancel button
 	const handleClose = () => {
-		navigate("/user");
+		navigate("/product");
 	};
 
-	// Role options for the dropdown
-	const roles = [
-		{ label: "Manager", value: "Manager" },
-		{ label: "Customer", value: "Customer" },
-		{ label: "Staff", value: "Staff" },
-	];
-
 	return (
-		<div className="card px-10">
+		<div className="card px-10 min-h-screen	">
 			<Toast ref={toast} />
-			<h1 className="text-3xl font-bold mb-5">Create New User</h1>
+			<h1 className="text-3xl font-bold mb-5">Create New Product</h1>
 			<Formik
 				initialValues={initialValues}
-				validationSchema={userSchema}
+				validationSchema={productSchema}
 				onSubmit={handleSubmit}
 			>
 				{({
@@ -118,194 +153,216 @@ function CreateProduct() {
 					isSubmitting,
 				}) => (
 					<Form className="">
-						{/* Email and Username */}
-						<div
-							className="flex gap-20 mb-2
-"
-						>
-							<div className="emailField flex flex-col gap-2 flex-1">
+						{/* Name and Category */}
+						<div className="flex gap-20 mb-2">
+							<div className="flex flex-col gap-2 flex-1">
 								<label className="text-gray-700 font-medium text-lg">
-									Email
+									Product Name
 								</label>
 								<InputText
 									type="text"
-									name="email"
-									placeholder="Enter your email"
-									value={values.email}
+									name="productName"
+									placeholder="Enter product name"
+									value={values.productName}
 									onChange={handleChange}
 									onBlur={handleBlur}
 									className={
 										("w-full",
 										{
-											"p-invalid": touched.email && errors.email,
+											"p-invalid": touched.productName && errors.productName,
 										})
 									}
 								/>
 								<ErrorMessage
-									name="email"
+									name="productName"
 									component="small"
 									className="p-error"
 								/>
 							</div>
-							<div className="usernameField flex flex-col gap-2 flex-1">
+							<div className="flex flex-col gap-2 flex-1">
 								<label className="text-gray-700 font-medium text-lg">
-									Username
-								</label>
-								<InputText
-									type="text"
-									name="userName"
-									placeholder="Enter your username"
-									value={values.userName}
-									onChange={handleChange}
-									onBlur={handleBlur}
-									className={
-										("w-full",
-										{
-											"p-invalid": touched.userName && errors.userName,
-										})
-									}
-								/>
-								<ErrorMessage
-									name="userName"
-									component="small"
-									className="p-error"
-								/>
-							</div>
-						</div>
-
-						{/* Password and Confirm Password */}
-						<div
-							className="flex gap-20 mb-2
-"
-						>
-							<div className="passwordField flex flex-col gap-2 flex-1">
-								<label className="text-gray-700 font-medium text-lg">
-									Password
-								</label>
-								<Password
-									name="password"
-									placeholder="Enter your password"
-									value={values.password}
-									onChange={handleChange}
-									onBlur={handleBlur}
-									className={
-										("w-full",
-										{
-											"p-invalid": touched.password && errors.password,
-										})
-									}
-									toggleMask
-								/>
-								<ErrorMessage
-									name="password"
-									component="small"
-									className="p-error"
-								/>
-							</div>
-							<div className="confirmPasswordField flex flex-col gap-2 flex-1">
-								<label className="text-gray-700 font-medium text-lg">
-									Confirm Password
-								</label>
-								<Password
-									name="confirmPassword"
-									placeholder="Enter Confirm Password"
-									value={values.confirmPassword}
-									onChange={handleChange}
-									onBlur={handleBlur}
-									className={
-										("w-full",
-										{
-											"p-invalid":
-												touched.confirmPassword && errors.confirmPassword,
-										})
-									}
-									toggleMask
-								/>
-								<ErrorMessage
-									name="confirmPassword"
-									component="small"
-									className="p-error"
-								/>
-							</div>
-						</div>
-
-						{/* Phone Number and Role Name */}
-						<div
-							className="flex gap-20 mb-2
-"
-						>
-							<div className="phoneNumberField flex flex-col gap-2 flex-1">
-								<label className="text-gray-700 font-medium text-lg">
-									Phone Number
-								</label>
-								<InputText
-									type="text"
-									name="phoneNumber"
-									placeholder="Enter your phone number"
-									value={values.phoneNumber}
-									onChange={handleChange}
-									onBlur={handleBlur}
-									className={
-										("w-full",
-										{
-											"p-invalid": touched.phoneNumber && errors.phoneNumber,
-										})
-									}
-								/>
-								<ErrorMessage
-									name="phoneNumber"
-									component="small"
-									className="p-error"
-								/>
-							</div>
-							<div className="roleNameField flex flex-col gap-2 flex-1">
-								<label className="text-gray-700 font-medium text-lg">
-									Role
+									Category
 								</label>
 								<Dropdown
-									name="roleName"
-									value={values.roleName}
-									options={roles}
+									name="category"
+									value={values.category}
+									options={categories}
+									optionLabel="categoryName"
+									optionValue="categoryId"
 									onChange={handleChange}
 									onBlur={handleBlur}
 									className={
 										("w-full",
 										{
-											"p-invalid": touched.roleName && errors.roleName,
+											"p-invalid": touched.category && errors.category,
 										})
 									}
-									placeholder="Select a Role"
+									placeholder="Select a Category"
 								/>
 								<ErrorMessage
-									name="roleName"
+									name="category"
 									component="small"
 									className="p-error"
 								/>
 							</div>
 						</div>
 
-						{/* Address Field */}
-						<div className="mb-5">
-							<div className="addressField flex flex-col gap-2">
+						{/* Skin Type and Routine */}
+						<div className="flex gap-20 mb-2">
+							<div className="flex flex-col gap-2 flex-1">
 								<label className="text-gray-700 font-medium text-lg">
-									Address
+									Skin Type
 								</label>
-								<InputText
-									type="text"
-									name="address"
-									placeholder="Enter your address"
-									value={values.address}
+								<Dropdown
+									name="skinType"
+									value={values.skinType}
+									options={skinTypes}
+									optionLabel="skinTypeName"
+									optionValue="skinTypeId"
 									onChange={handleChange}
 									onBlur={handleBlur}
 									className={
 										("w-full",
 										{
-											"p-invalid": touched.address && errors.address,
+											"p-invalid": touched.skinType && errors.skinType,
+										})
+									}
+									placeholder="Select a Skin Type"
+								/>
+								<ErrorMessage
+									name="skinType"
+									component="small"
+									className="p-error"
+								/>
+							</div>
+							<div className="flex flex-col gap-2 flex-1">
+								<label className="text-gray-700 font-medium text-lg">
+									Routine
+								</label>
+								<Dropdown
+									name="routine"
+									value={values.routine}
+									options={routines}
+									optionLabel="type"
+									optionValue="routineId"
+									onChange={handleChange}
+									onBlur={handleBlur}
+									className={
+										("w-full",
+										{
+											"p-invalid": touched.routine && errors.routine,
+										})
+									}
+									placeholder="Select a Routine"
+								/>
+								<ErrorMessage
+									name="routine"
+									component="small"
+									className="p-error"
+								/>
+							</div>
+						</div>
+
+						{/* Price and Quantity */}
+						<div className="flex gap-20 mb-2">
+							<div className="flex flex-col gap-2 flex-1">
+								<label className="text-gray-700 font-medium text-lg">
+									Price
+								</label>
+								<InputText
+									type="number"
+									name="price"
+									placeholder="Enter price"
+									value={values.price}
+									onChange={handleChange}
+									onBlur={handleBlur}
+									className={
+										("w-full",
+										{
+											"p-invalid": touched.price && errors.price,
 										})
 									}
 								/>
 								<ErrorMessage
-									name="address"
+									name="price"
+									component="small"
+									className="p-error"
+								/>
+							</div>
+							<div className="flex flex-col gap-2 flex-1">
+								<label className="text-gray-700 font-medium text-lg">
+									Quantity
+								</label>
+								<InputText
+									type="number"
+									name="quantity"
+									placeholder="Enter quantity"
+									value={values.quantity}
+									onChange={handleChange}
+									onBlur={handleBlur}
+									className={
+										("w-full",
+										{
+											"p-invalid": touched.quantity && errors.quantity,
+										})
+									}
+								/>
+								<ErrorMessage
+									name="quantity"
+									component="small"
+									className="p-error"
+								/>
+							</div>
+						</div>
+						{/* Description */}
+						<div className="flex gap-20 mb-2">
+							<div className="flex flex-col gap-2 flex-1">
+								<label className="text-gray-700 font-medium text-lg">
+									Description
+								</label>
+								<InputTextarea
+									name="description"
+									placeholder="Enter description"
+									value={values.description}
+									onChange={handleChange}
+									onBlur={handleBlur}
+									className={
+										("w-full",
+										{
+											"p-invalid": touched.description && errors.description,
+										})
+									}
+									rows={6}
+								/>
+								<ErrorMessage
+									name="description"
+									component="small"
+									className="p-error"
+								/>
+							</div>
+						</div>
+						{/* Image URL */}
+						<div className="mb-2">
+							<div className="flex flex-col gap-2">
+								<label className="text-gray-700 font-medium text-lg">
+									Image URL
+								</label>
+								<InputText
+									type="text"
+									name="image"
+									placeholder="Enter image URL"
+									value={values.image}
+									onChange={handleChange}
+									onBlur={handleBlur}
+									className={
+										("w-full",
+										{
+											"p-invalid": touched.image && errors.image,
+										})
+									}
+								/>
+								<ErrorMessage
+									name="image"
 									component="small"
 									className="p-error"
 								/>
@@ -313,7 +370,7 @@ function CreateProduct() {
 						</div>
 
 						{/* Buttons */}
-						<div className="flex justify-between">
+						<div className="flex justify-between mt-4">
 							<Button
 								label="Cancel"
 								icon="pi pi-times"
