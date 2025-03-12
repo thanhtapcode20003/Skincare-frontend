@@ -60,7 +60,7 @@ function ViewProduct() {
 			const response = await deleteProduct(productId);
 			console.log(response);
 			if (response.status === 204) {
-				// console.log(response);
+				console.log(response);
 				setProducts(
 					products.filter((product) => product.productId !== productId)
 				);

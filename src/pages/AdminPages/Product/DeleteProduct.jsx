@@ -2,13 +2,13 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import PropTypes from "prop-types";
 
-function DeleteProduct({ visible, onHide, onConfirm, userId }) {
+function DeleteProduct({ visible, onHide, onConfirm, productId }) {
 	return (
-		<div className="deleteUser">
+		<div className="deleteProduct">
 			<Dialog
 				visible={visible}
 				onHide={onHide}
-				header="Delete User"
+				header="Delete Product"
 				footer={
 					<div className="flex justify-between">
 						<Button
@@ -27,13 +27,13 @@ function DeleteProduct({ visible, onHide, onConfirm, userId }) {
 							rounded
 							raised
 							className="p-button-md"
-							onClick={() => onConfirm(userId)}
+							onClick={() => onConfirm(productId)}
 						/>
 					</div>
 				}
 				style={{ width: "30rem" }}
 			>
-				<p>Are you sure you want to delete this user?</p>
+				<p>Are you sure you want to delete this product?</p>
 			</Dialog>
 		</div>
 	);
@@ -42,7 +42,7 @@ DeleteProduct.propTypes = {
 	visible: PropTypes.bool.isRequired,
 	onHide: PropTypes.func.isRequired,
 	onConfirm: PropTypes.func.isRequired,
-	userId: PropTypes.string,
+	productId: PropTypes.string,
 };
 
 export default DeleteProduct;

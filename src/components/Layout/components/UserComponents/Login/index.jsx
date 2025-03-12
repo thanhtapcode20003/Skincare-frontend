@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../../../../api/authService";
@@ -8,6 +8,7 @@ import { Button } from "primereact/button";
 import { FloatLabel } from "primereact/floatlabel";
 import { InputText } from "primereact/inputtext";
 import "primeicons/primeicons.css";
+import { Toast } from "primereact/toast";
 
 function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 	const [email, setEmail] = useState("");
@@ -15,6 +16,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 	const [error, setError] = useState({ email: "", password: "", general: "" });
 	const [success, setSuccess] = useState("");
 	const [touch, setTouch] = useState({ email: false, password: false });
+	const toast = useRef(null);
 
 	const navigate = useNavigate();
 
@@ -66,6 +68,12 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 			const response = await loginUser(loginData);
 
 			if (response.status === 200) {
+				toast.current.show({
+					severity: "success",
+					summary: "Successful",
+					detail: "Login successfully",
+					life: 3000,
+				});
 				setSuccess("Login successful!");
 				onLoginSuccess(response.data.token);
 				console.log(response.status);
@@ -86,8 +94,17 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 				} else if (mappedRole === "Staff") {
 					navigate("/product");
 				}
+			} else {
+				toast.current.show({
+					severity: "error",
+					summary: "Error",
+					detail: response.status + ": " + response.data,
+					life: 3000,
+				});
 			}
 		} catch (error) {
+			console.log(error);
+
 			if (error.response) {
 				// Server responded with a status code other than 2xx
 				setError((prev) => ({
@@ -113,6 +130,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 
 	return (
 		<div className="fixed min-w-120 h-screen">
+			<Toast ref={toast} />
 			<section className="fixed inset-0 flex items-center justify-center m-100 z-100">
 				<div className="w-full min-w-[320px] bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
 					<div className="relative p-6 space-y-4 md:space-y-6 sm:p-8">
