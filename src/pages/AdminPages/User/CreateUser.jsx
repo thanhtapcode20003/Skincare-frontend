@@ -33,18 +33,30 @@ function CreateUser() {
 			.max(20, "Username must be at most 20 characters"),
 		email: yup
 			.string()
-			.email("Invalid email address")
+			.email("Invalid email format")
 			.required("Email is required"),
 		password: yup
 			.string()
 			.required("Password is required")
-			.min(8, "Password must be at least 8 characters"),
+			.matches(
+				/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/,
+				"8-24 characters, 1 uppercase, 1 lowercase, 1 number, and 1 special character."
+			),
 		confirmPassword: yup
 			.string()
 			.required("Confirm Password is required")
 			.oneOf([yup.ref("password"), null], "Passwords must match"),
-		phoneNumber: yup.string().required("Phone Number is required"),
-		address: yup.string().required("Address is required"),
+		phoneNumber: yup
+			.string()
+			.required("Phone Number is required.")
+			.matches(/^\d+$/, "Please input a valid Phone Number (digits only).")
+			.min(9, "Phone Number must be at least 9 characters")
+			.max(15, "Phone Number must be at most 15 characters"),
+		address: yup
+			.string()
+			.required("Address is required.")
+			.min(5, "Address must be at least 5 characters")
+			.max(100, "Address must be at most 100 characters"),
 		roleName: yup.string().required("Role is required"),
 	});
 

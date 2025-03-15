@@ -16,6 +16,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 	const [error, setError] = useState({ email: "", password: "", general: "" });
 	const [success, setSuccess] = useState("");
 	const [touch, setTouch] = useState({ email: false, password: false });
+	const [isSubmitting, setIsSubmitting] = useState(false); // New state for submission
 	const toast = useRef(null);
 
 	const navigate = useNavigate();
@@ -62,7 +63,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 		setSuccess("");
 
 		if (!validateFields()) return;
-
+		setIsSubmitting(true);
 		try {
 			const loginData = { email, password };
 			const response = await loginUser(loginData);
@@ -72,12 +73,17 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 					severity: "success",
 					summary: "Successful",
 					detail: "Login successfully",
-					life: 3000,
+					life: 2000,
 				});
+				await new Promise((resolve) => setTimeout(resolve, 2000));
 				setSuccess("Login successful!");
 				onLoginSuccess(response.data.token);
 				console.log(response.status);
-
+				setEmail("");
+				setPassword("");
+				setTouch({ email: false, password: false });
+				setError({ email: "", password: "", general: "" });
+				setSuccess("");
 				// Decode the token to get the roles
 				const token = response.data.token;
 				const decodeToken = decode(token);
@@ -220,7 +226,13 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 								</a>
 							</div>
 							<div className="flex justify-center">
-								<Button className="bg-global" label="Submit" type="submit" />
+								<Button
+									className="bg-global"
+									label="Submit"
+									type="submit"
+									loading={isSubmitting} // Show spinner when submitting
+									disabled={isSubmitting} // Disable button during submission
+								/>
 							</div>
 
 							<p className="text-sm font-light text-gray-500 dark:text-gray-400">
