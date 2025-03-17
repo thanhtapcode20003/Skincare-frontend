@@ -1,14 +1,23 @@
-import { useState, useEffect } from "react";
-import { getOrderDetails, deleteOrder } from "../../../api/orderService";
+import { useState, useEffect, useRef } from "react";
+import MoneyFormat from "../../../components/GlobalComponents/MoneyFormat";
+import {
+	getOrderDetails,
+	deleteOrder,
+	updateOrder,
+} from "../../../api/orderService";
 import { getProductById } from "../../../api/productService";
 import { Skeleton } from "primereact/skeleton";
-import LoadingSpinner from "../../../components/GlobalComponents/LoadingSpinner/LoadingSpinner"; // Import the new component
+import { Toast } from "primereact/toast"; // Import Toast component
+import LoadingSpinner from "../../../components/GlobalComponents/LoadingSpinner/LoadingSpinner";
 import styles from "./Cart.module.scss";
 
 function Cart() {
 	const [items, setItems] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [deletingItemId, setDeletingItemId] = useState(null);
+	const [updatingItemId, setUpdatingItemId] = useState(null);
+	const toast = useRef(null);
+
 	useEffect(() => {
 		const fetchCartData = async () => {
 			try {
@@ -69,15 +78,58 @@ function Cart() {
 		}
 	};
 
-	// Function to handle quantity change for a specific item
-	const handleQuantityChange = (id, delta) => {
-		setItems((prevItems) =>
-			prevItems.map((item) =>
-				item.id === id
-					? { ...item, quantity: Math.max(1, item.quantity + delta) }
-					: item
-			)
-		);
+	// Function to update quantity
+	const handleUpdateQuantity = async (id, delta) => {
+		setUpdatingItemId(id);
+		const itemToUpdate = items.find((item) => item.id === id);
+		try {
+			const newQuantity = Math.max(1, itemToUpdate.quantity + delta);
+			// console.log(id);
+			// console.log(newQuantity);
+
+			const response = await updateOrder(id, { quantityChange: delta });
+			await new Promise((resolve) => setTimeout(resolve, 500));
+			// console.log(response);
+
+			if (response.status === 200) {
+				toast.current.show({
+					severity: "success",
+					summary: "Success",
+					detail: `Quantity updated to ${newQuantity}`,
+					life: 2000,
+				});
+			} else {
+				console.warn("Update order failed with status:", response.status);
+				toast.current.show({
+					severity: "error",
+					summary: "Error",
+					detail: "Failed to update quantity",
+					life: 3000,
+				});
+			}
+
+			setItems((prevItems) =>
+				prevItems.map((item) =>
+					item.id === id ? { ...item, quantity: newQuantity } : item
+				)
+			);
+		} catch (error) {
+			console.error(`Error updating quantity for item ${id}:`, error);
+			toast.current.show({
+				severity: "error",
+				summary: "Error",
+				detail: "An error occurred while updating quantity",
+				life: 3000,
+			});
+			// Revert to previous quantity on failure
+			setItems((prevItems) =>
+				prevItems.map((item) =>
+					item.id === id ? { ...item, quantity: itemToUpdate.quantity } : item
+				)
+			);
+		} finally {
+			setUpdatingItemId(null);
+		}
 	};
 
 	// Calculate total price
@@ -142,17 +194,17 @@ function Cart() {
 		);
 	}
 
-	console.log("Cart Items:", items);
+	// console.log("Cart Items:", items);
 
 	return (
 		<div className={styles.cartContainer}>
-			{deletingItemId && <LoadingSpinner />}
+			<Toast ref={toast} />
+			{(deletingItemId || updatingItemId) && <LoadingSpinner />}
 			<div className={styles.cartHeader}>
 				<h1>
 					Cart ({items.length} {items.length <= 1 ? "product" : "products"})
 				</h1>
 			</div>
-
 			<div className={styles.cartContent}>
 				{items.length === 0 ? (
 					<div className={styles.emptyCart}>
@@ -203,11 +255,11 @@ function Cart() {
 									{/* Price */}
 									<div className={styles.price}>
 										<p className={styles.currentPrice}>
-											{(item.price || 0).toLocaleString()} VND
+											{MoneyFormat(item.price || 0)}
 										</p>
 										{item.originalPrice > item.price && (
 											<p className={styles.originalPrice}>
-												{(item.originalPrice || 0).toLocaleString()} VND
+												{MoneyFormat(item.originalPrice || 0)}
 											</p>
 										)}
 									</div>
@@ -215,23 +267,25 @@ function Cart() {
 									{/* Quantity */}
 									<div className={styles.quantity}>
 										<button
-											onClick={() => handleQuantityChange(item.id, -1)}
-											disabled={item.quantity <= 1}
+											onClick={() => handleUpdateQuantity(item.id, -1)}
+											disabled={
+												item.quantity <= 1 || updatingItemId === item.id
+											}
 										>
 											-
 										</button>
 										<span>{item.quantity || 1}</span>
-										<button onClick={() => handleQuantityChange(item.id, 1)}>
+										<button
+											onClick={() => handleUpdateQuantity(item.id, 1)}
+											disabled={updatingItemId === item.id}
+										>
 											+
 										</button>
 									</div>
 
 									{/* Subtotal */}
 									<div className={styles.subtotal}>
-										{(
-											(item.price || 0) * (item.quantity || 1)
-										).toLocaleString()}{" "}
-										VND
+										{MoneyFormat((item.price || 0) * (item.quantity || 1))}
 									</div>
 								</div>
 							))}
@@ -242,7 +296,7 @@ function Cart() {
 							<h3>Your Invoice</h3>
 							<div className={styles.summaryItem}>
 								<span>Subtotal:</span>
-								<span>{totalPrice.toLocaleString()} VND</span>
+								<span>{MoneyFormat(totalPrice)}</span>
 							</div>
 							<div className={styles.summaryItem}>
 								<span>Discount:</span>
@@ -250,7 +304,9 @@ function Cart() {
 							</div>
 							<div className={styles.total}>
 								<span>Total:</span>
-								<span>{totalPrice.toLocaleString()} VND (Including VAT)</span>
+								<span className={styles.totalPrice}>
+									{MoneyFormat(totalPrice)}
+								</span>
 							</div>
 							<button className={styles.checkoutBtn}>
 								Proceed to Checkout
