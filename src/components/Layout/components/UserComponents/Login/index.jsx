@@ -67,6 +67,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 		try {
 			const loginData = { email, password };
 			const response = await loginUser(loginData);
+			await new Promise((resolve) => setTimeout(resolve, 1000));
 
 			if (response.status === 200) {
 				toast.current.show({
@@ -75,7 +76,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 					detail: "Login successfully",
 					life: 2000,
 				});
-				await new Promise((resolve) => setTimeout(resolve, 2000));
+				await new Promise((resolve) => setTimeout(resolve, 1000));
 				setSuccess("Login successful!");
 				onLoginSuccess(response.data.token);
 				console.log(response.status);
@@ -100,6 +101,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 				} else if (mappedRole === "Staff") {
 					navigate("/product");
 				}
+				setIsSubmitting(false);
 			} else {
 				toast.current.show({
 					severity: "error",
@@ -107,6 +109,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 					detail: response.status + ": " + response.data,
 					life: 3000,
 				});
+				setIsSubmitting(false);
 			}
 		} catch (error) {
 			console.log(error);
@@ -228,7 +231,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 							<div className="flex justify-center">
 								<Button
 									className="bg-global"
-									label="Submit"
+									label="Login"
 									type="submit"
 									loading={isSubmitting} // Show spinner when submitting
 									disabled={isSubmitting} // Disable button during submission
