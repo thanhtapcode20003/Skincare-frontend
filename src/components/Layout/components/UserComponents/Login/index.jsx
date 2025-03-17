@@ -79,7 +79,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 				setSuccess("Login successful!");
 				onLoginSuccess(response.data.token);
-				console.log(response.status);
+				// console.log(response.status);
 				setEmail("");
 				setPassword("");
 				setTouch({ email: false, password: false });

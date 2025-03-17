@@ -1,20 +1,26 @@
 import { Rating } from "@mui/material";
-import { Skeleton } from "primereact/skeleton"; // Use PrimeReact Skeleton
+import { Skeleton } from "primereact/skeleton";
+import { Button } from "primereact/button";
+import { Toast } from "primereact/toast";
 import styles from "./ProductDetail.module.scss";
 import InnerImageZoom from "react-inner-image-zoom";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 
 import QuantityBox from "../../../components/Layout/components/UserComponents/QuantityBox";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getProductById } from "../../../api/productService";
-
+import MoneyFormat from "../../../components/GlobalComponents/MoneyFormat";
 import { useParams, Link as RouterLink } from "react-router-dom";
+import { addToCart } from "../../../api/orderService";
 
 const ProductDetail = () => {
 	const { productId } = useParams();
+	const toast = useRef(null);
+	const [quantity, setQuantity] = useState(1);
 	const [product, setProduct] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const [cartLoading, setCartLoading] = useState(false);
 
 	useEffect(() => {
 		const fetchProduct = async () => {
@@ -82,8 +88,48 @@ const ProductDetail = () => {
 
 	console.log(product);
 
+	// Handle Add to Cart
+	const handleAddToCart = async () => {
+		if (!product || cartLoading) return;
+
+		setCartLoading(true);
+		try {
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+
+			const cartData = {
+				productId: productId,
+				quantity: quantity,
+			};
+
+			const response = await addToCart(cartData);
+
+			if (response.status === 200) {
+				console.log("Product added to cart successfully:", response);
+				toast.current.show({
+					severity: "success",
+					summary: "Successful",
+					detail: "Product added to cart successfully",
+					life: 2000,
+				});
+			} else {
+				console.error("Failed to add to cart:", response);
+				toast.current.show({
+					severity: "error",
+					summary: "Error",
+					detail: response.status + ": " + response.data.message,
+					life: 3000,
+				});
+			}
+		} catch (err) {
+			console.error("Error adding to cart:", err);
+		} finally {
+			setCartLoading(false);
+		}
+	};
+
 	return (
 		<div className={styles.container}>
+			<Toast ref={toast} />
 			{/* Breadcrumb */}
 			<div className={styles.breadcrumb}>
 				<RouterLink to="/">Home</RouterLink> {">"}{" "}
@@ -122,14 +168,23 @@ const ProductDetail = () => {
 						{/* Hardcoded value */}
 					</div>
 					<div className="mt-3 flex flex-row items-center gap-10">
-						<span className={styles.productPrice}>{product.price} đ</span>
+						<span className={styles.productPrice}>
+							{MoneyFormat(product.price)}
+						</span>
 						<span className="bg-green-100 text-green-500 text-sm font-medium me-2 px-3 py-1 rounded-2xl">
 							IN STOCK
 						</span>
 					</div>
 					<div className="mt-3 flex flex-row items-center gap-10">
-						<QuantityBox />
-						<button className={styles.addButton}>Add to Cart</button>
+						<QuantityBox onQuantityChange={setQuantity} />{" "}
+						<Button
+							className="bg-global"
+							label="Add to Cart"
+							type="button"
+							size="large"
+							loading={cartLoading}
+							onClick={handleAddToCart}
+						/>
 					</div>
 
 					<div className="productDescription mt-5">

@@ -20,6 +20,7 @@ function Cart() {
 					cartItems.map(async (item) => {
 						try {
 							const productData = await getProductById(item.productId);
+							await new Promise((resolve) => setTimeout(resolve, 1000));
 							return {
 								...item,
 								id: item.orderDetailId,

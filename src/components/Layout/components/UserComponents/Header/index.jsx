@@ -56,7 +56,7 @@ function Header() {
 	};
 
 	return (
-		<header className="header-wrapper fixed top-0 w-full z-50000 bg-global shadow-md">
+		<header className="header-wrapper fixed top-0 w-full z-500 bg-global shadow-md">
 			<div className="container mx-auto px-4 py-2 flex items-center">
 				<div className="flex flex-row items-center justify-around w-full max-w-7xl gap-x-8 ">
 					<div className="flex items-center gap-x-4 mx-auto">
