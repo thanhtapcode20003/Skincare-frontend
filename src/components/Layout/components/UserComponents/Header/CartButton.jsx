@@ -45,7 +45,7 @@ export default function CartButton() {
 				className="absolute top-0 right-0 bg-orange text-white text-xs w-6 h-6 flex items-center justify-center rounded-full translate-x-2 -translate-y-2"
 				style={{ fontSize: "0.75rem", fontWeight: "bold" }}
 			>
-				{cartCount}
+				{cartCount > 99 ? "99+" : cartCount}{" "}
 			</span>
 		</div>
 	);
