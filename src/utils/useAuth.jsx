@@ -3,6 +3,7 @@ import { decode } from "./axiosClient";
 // import { redirect } from "react-router-dom";
 
 export const useAuth = () => {
+	const [userId, setUserId] = useState(null);
 	const [username, setUsername] = useState(null);
 	const [role, setRole] = useState(null);
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -16,6 +17,7 @@ export const useAuth = () => {
 			try {
 				const decodedToken = decode(token);
 				setUsername(decodedToken.UserName || decodedToken["UserName"]);
+				setUserId(decodedToken.UserId || decodedToken["UserId"]);
 				// Extract the role from the token
 				const roleClaim =
 					decodedToken[
@@ -47,5 +49,5 @@ export const useAuth = () => {
 		setLoading(false);
 	};
 
-	return { username, role, isAuthenticated, loading, logout };
+	return { userId, username, role, isAuthenticated, loading, logout };
 };

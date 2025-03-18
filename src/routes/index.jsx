@@ -9,6 +9,7 @@ import Profile from "../pages/UserPages/Profile";
 import Blog from "../pages/UserPages/Blog";
 import ProductDetail from "../pages/UserPages/ProductDetail";
 import Cart from "../pages/UserPages/Cart";
+import Checkout from "../pages/UserPages/Checkout";
 
 // Admin Pages
 import ViewUser from "../pages/AdminPages/User/ViewUser";
@@ -29,6 +30,7 @@ const routes = [
 	{ path: "/blog", component: Blog },
 	{ path: "/product/:productId", component: ProductDetail },
 	{ path: "/cart", component: Cart },
+	{ path: "/cart/checkout", component: Checkout },
 
 	// Admin Routes
 	// User
