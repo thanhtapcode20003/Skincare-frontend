@@ -16,7 +16,6 @@ import { useEffect, useRef, useState } from "react";
 function CreateProduct() {
 	const navigate = useNavigate();
 	const toast = useRef(null);
-
 	const [categories, setCategories] = useState([]);
 	const [skinTypes, setSkinTypes] = useState([]);
 	const [routines, setRoutines] = useState([]);
