@@ -1,6 +1,6 @@
 .checkoutContainer {
 	max-width: 1200px;
-	height: 600px;
+	// height: 800px;
 	margin: 0 auto;
 	padding: 20px;
 }
@@ -28,7 +28,7 @@
 	border: 1px solid #ddd;
 	border-radius: 5px;
 	background-color: #fff;
-	margin-bottom: 10px; // Add some spacing between sections in the stepper
+	margin-bottom: 10px;
 
 	h3 {
 		font-size: 16px;
@@ -44,7 +44,7 @@
 .changeBtn {
 	background: none;
 	border: none;
-	color: #007bff;
+	color: #326e51; // Updated to match previous color customization
 	cursor: pointer;
 	font-size: 14px;
 	margin-left: 10px;
@@ -75,6 +75,149 @@
 	justify-content: flex-end;
 }
 
+/* Customize PrimeReact Button colors */
+.p-button {
+	background-color: #326e51;
+	border-color: #326e51;
+	color: #fff;
+
+	&:hover {
+		background-color: #285d45;
+		border-color: #285d45;
+	}
+
+	&.p-button-secondary {
+		background-color: #f0f0f0;
+		border-color: #ddd;
+		color: #326e51;
+
+		&:hover {
+			background-color: #e0e0e0;
+			border-color: #ccc;
+		}
+	}
+}
+
+/* Customize PrimeReact RadioButton colors */
+.p-radiobutton .p-radiobutton-box {
+	border-color: #326e51;
+
+	&.p-highlight {
+		background-color: #326e51;
+		border-color: #326e51;
+
+		&:hover {
+			background-color: #285d45;
+		}
+	}
+}
+
+/* Customize PrimeReact Stepper colors */
+.p-stepper .p-stepper-header .p-stepper-number {
+	background-color: #326e51;
+	border-color: #326e51;
+}
+
+.p-stepper .p-stepper-header .p-stepper-title {
+	color: #326e51;
+}
+
+/* Skeleton Styles */
+.skeleton {
+	background-color: #e0e0e0; // Matches the gray color in the image
+	border-radius: 4px;
+	margin-bottom: 8px;
+}
+
+.stepperSkeleton {
+	width: 100%;
+}
+
+.summaryDetailsSkeleton {
+	margin: 15px 0;
+}
+
+/* Cart Items Styles (Simplified for Step 4) */
+.cartItems {
+	flex: 3;
+}
+
+.cartItem {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px 10px;
+	border-bottom: 1px solid #ddd;
+	gap: 10px;
+}
+
+.productInfo {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	flex: 2;
+}
+
+.productImage {
+	width: 60px;
+	height: 60px;
+	object-fit: cover;
+}
+
+.productDetails {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.productName {
+	font-size: 14px;
+	font-weight: 500;
+}
+
+.giftText {
+	font-size: 12px;
+	color: #666;
+}
+
+.price {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.currentPrice {
+	font-weight: bold;
+	font-size: 0.9rem;
+}
+
+.originalPrice {
+	text-decoration: line-through;
+	color: #999;
+	font-size: 12px;
+}
+
+.quantity {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+
+	span {
+		width: 30px;
+		text-align: center;
+	}
+}
+
+.subtotal {
+	flex: 1;
+	font-weight: bold;
+	font-size: 1rem;
+	text-align: right;
+}
+
 .orderSummary {
 	flex: 1;
 	padding: 15px;
@@ -88,6 +231,10 @@
 		font-weight: bold;
 		margin-bottom: 15px;
 	}
+}
+
+.orderSummarySkeleton {
+	width: 100%;
 }
 
 .orderItems {
@@ -161,4 +308,9 @@
 	font-size: 16px;
 	cursor: pointer;
 	margin-top: 0;
+
+	&:disabled {
+		background-color: #ccc;
+		cursor: not-allowed;
+	}
 }

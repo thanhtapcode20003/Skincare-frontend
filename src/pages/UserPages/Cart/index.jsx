@@ -6,10 +6,12 @@ import {
 	updateOrder,
 } from "../../../api/orderService";
 import { getProductById } from "../../../api/productService";
-import { Skeleton } from "primereact/skeleton";
-import { Toast } from "primereact/toast"; // Import Toast component
 import LoadingSpinner from "../../../components/GlobalComponents/LoadingSpinner/LoadingSpinner";
 import styles from "./Cart.module.scss";
+import { useNavigate } from "react-router-dom";
+
+import { Skeleton } from "primereact/skeleton";
+import { Toast } from "primereact/toast";
 
 function Cart() {
 	const [items, setItems] = useState([]);
@@ -17,6 +19,7 @@ function Cart() {
 	const [deletingItemId, setDeletingItemId] = useState(null);
 	const [updatingItemId, setUpdatingItemId] = useState(null);
 	const toast = useRef(null);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchCartData = async () => {
@@ -52,6 +55,7 @@ function Cart() {
 						}
 					})
 				);
+				console.log(productItems);
 
 				setItems(productItems);
 			} catch (error) {
@@ -308,7 +312,10 @@ function Cart() {
 									{MoneyFormat(totalPrice)}
 								</span>
 							</div>
-							<button className={styles.checkoutBtn}>
+							<button
+								className={styles.checkoutBtn}
+								onClick={() => navigate("/cart/checkout")}
+							>
 								Proceed to Checkout
 							</button>
 						</div>
