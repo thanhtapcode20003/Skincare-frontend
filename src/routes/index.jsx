@@ -51,19 +51,19 @@ const routes = [
 	// ------------------------------------------------Admin Routes-------------------------------------------------------
 	// User
 	{
-		path: "/user",
+		path: "/home/user",
 		component: ViewUser,
 		layout: AdminLayout,
 		Auth: "private",
 	},
 	{
-		path: "/user/create",
+		path: "/home/user/create",
 		component: CreateUser,
 		layout: AdminLayout,
 		Auth: "private",
 	},
 	{
-		path: "/user/update/:userId",
+		path: "/home/user/update/:userId",
 		component: UpdateUser,
 		layout: AdminLayout,
 		Auth: "private",
@@ -71,19 +71,19 @@ const routes = [
 
 	// Product
 	{
-		path: "/product",
+		path: "/home/product",
 		component: ViewProduct,
 		layout: AdminLayout,
 		Auth: "private",
 	},
 	{
-		path: "/product/create",
+		path: "/home/product/create",
 		component: CreateProduct,
 		layout: AdminLayout,
 		Auth: "private",
 	},
 	{
-		path: "/product/update/:productId",
+		path: "/home/product/update/:productId",
 		component: UpdateProduct,
 		layout: AdminLayout,
 		Auth: "private",
@@ -91,19 +91,19 @@ const routes = [
 
 	// Category
 	{
-		path: "/category",
+		path: "/home/category",
 		component: ViewCategory,
 		layout: AdminLayout,
 		Auth: "private",
 	},
 	{
-		path: "/category/create",
+		path: "/home/category/create",
 		component: CreateCategory,
 		layout: AdminLayout,
 		Auth: "private",
 	},
 	{
-		path: "/category/update/:categoryId",
+		path: "/home/category/update/:categoryId",
 		component: UpdateCategory,
 		layout: AdminLayout,
 		Auth: "private",
@@ -111,19 +111,19 @@ const routes = [
 
 	// SkinType
 	{
-		path: "/skin-type",
+		path: "/home/skin-type",
 		component: ViewSkinType,
 		layout: AdminLayout,
 		Auth: "private",
 	},
 	{
-		path: "/skin-type/create",
+		path: "/home/skin-type/create",
 		component: CreateSkinType,
 		layout: AdminLayout,
 		Auth: "private",
 	},
 	{
-		path: "/skin-type/update/:skinTypeId",
+		path: "/home/skin-type/update/:skinTypeId",
 		component: UpdateSkinType,
 		layout: AdminLayout,
 		Auth: "private",
@@ -131,19 +131,19 @@ const routes = [
 
 	// SkinTypeRoutine
 	{
-		path: "/skin-type-routine",
+		path: "/home/skin-type-routine",
 		component: ViewRoutine,
 		layout: AdminLayout,
 		Auth: "private",
 	},
 	{
-		path: "/skin-type-routine/create",
+		path: "/home/skin-type-routine/create",
 		component: CreateRoutine,
 		layout: AdminLayout,
 		Auth: "private",
 	},
 	{
-		path: "/skin-type-routine/update/:skinTypeRoutineId",
+		path: "/home/skin-type-routine/update/:skinTypeRoutineId",
 		component: UpdateRoutine,
 		layout: AdminLayout,
 		Auth: "private",
@@ -151,19 +151,19 @@ const routes = [
 
 	// Blog
 	{
-		path: "/blog",
+		path: "/home/blog",
 		component: ViewBlog,
 		layout: AdminLayout,
 		Auth: "private",
 	},
 	{
-		path: "/blog/create",
+		path: "/home/blog/create",
 		component: CreateBlog,
 		layout: AdminLayout,
 		Auth: "private",
 	},
 	{
-		path: "/blog/update/:blogId",
+		path: "/home/blog/update/:blogId",
 		component: UpdateBlog,
 		layout: AdminLayout,
 		Auth: "private",

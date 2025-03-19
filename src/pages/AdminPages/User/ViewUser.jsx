@@ -61,7 +61,7 @@ function ViewUser() {
 
 	const handleUpdate = (userId) => {
 		console.log("Update user:", userId);
-		navigate(`/user/update/${userId}`);
+		navigate(`/home/user/update/${userId}`);
 	};
 
 	const handleDelete = (userId) => {
@@ -201,7 +201,7 @@ function ViewUser() {
 							rounded
 							raised
 							className="p-button-md"
-							onClick={() => navigate("/user/create")}
+							onClick={() => navigate("/home/user/create")}
 						/>
 					</div>
 					<div className="dataTable">
@@ -240,7 +240,7 @@ function ViewUser() {
 							rounded
 							raised
 							className="p-button-md"
-							onClick={() => navigate("/user/create")}
+							onClick={() => navigate("/home/user/create")}
 						/>
 					</div>
 					<div className="dataTable">

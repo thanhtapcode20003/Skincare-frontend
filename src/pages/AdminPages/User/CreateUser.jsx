@@ -83,7 +83,7 @@ function CreateUser() {
 				});
 				console.log("Registration successful:", response);
 				resetForm();
-				// navigate("/user"); // Navigate to user list on success
+				// navigate("/home/user"); // Navigate to user list on success
 			} else {
 				toast.current.show({
 					severity: "error",
@@ -102,7 +102,7 @@ function CreateUser() {
 
 	// Handle cancel button
 	const handleClose = () => {
-		navigate("/user");
+		navigate("/home/user");
 	};
 
 	// Role options for the dropdown

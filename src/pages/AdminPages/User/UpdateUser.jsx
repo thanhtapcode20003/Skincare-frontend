@@ -94,7 +94,7 @@ function UpdateUser() {
 				});
 				console.log("Registration successful:", response);
 				setTimeout(() => {
-					navigate("/user");
+					navigate("/home/user");
 				}, 3000);
 			} else {
 				toast.current.show({
@@ -120,7 +120,7 @@ function UpdateUser() {
 
 	// Handle cancel button
 	const handleClose = () => {
-		navigate("/user");
+		navigate("/home/user");
 	};
 
 	if (loading) {

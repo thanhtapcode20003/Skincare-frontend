@@ -97,7 +97,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 
 				// Redirect based on role
 				if (mappedRole === "Manager") {
-					navigate("/user");
+					navigate("/home/user");
 				} else if (mappedRole === "Staff") {
 					navigate("/product");
 				}
