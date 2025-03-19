@@ -16,7 +16,7 @@ function Checkout() {
 	const [items, setItems] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [initialLoading, setInitialLoading] = useState(true);
-	const [paymentMethod, setPaymentMethod] = useState("vnpay");
+	const [paymentMethod, setPaymentMethod] = useState("payOnDelivery");
 	const stepperRef = useRef(null);
 	const { username, phoneNumber, address } = useAuth();
 

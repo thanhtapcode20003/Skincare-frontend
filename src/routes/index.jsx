@@ -20,9 +20,25 @@ import ViewProduct from "../pages/AdminPages/Product/ViewProduct";
 import CreateProduct from "../pages/AdminPages/Product/CreateProduct";
 import UpdateProduct from "../pages/AdminPages/Product/UpdateProduct";
 
+import ViewCategory from "../pages/AdminPages/Category/ViewCategory";
+import CreateCategory from "../pages/AdminPages/Category/CreateCategory";
+import UpdateCategory from "../pages/AdminPages/Category/UpdateCategory";
+
+import ViewSkinType from "../pages/AdminPages/SkinType/ViewSkinType";
+import CreateSkinType from "../pages/AdminPages/SkinType/CreateSkinType";
+import UpdateSkinType from "../pages/AdminPages/SkinType/UpdateSkinType";
+
+import ViewRoutine from "../pages/AdminPages/SkinTypeRoutine/ViewRoutine";
+import CreateRoutine from "../pages/AdminPages/SkinTypeRoutine/CreateRoutine";
+import UpdateRoutine from "../pages/AdminPages/SkinTypeRoutine/UpdateRoutine";
+
+import ViewBlog from "../pages/AdminPages/Blog/ViewBlog";
+import CreateBlog from "../pages/AdminPages/Blog/CreateBlog";
+import UpdateBlog from "../pages/AdminPages/Blog/UpdateBlog";
+
 //------------
 
-// Public Routes
+// --------------------------------------------------Public Routes------------------------------------------------------
 const routes = [
 	// User Routes
 	{ path: "/", component: Home, layout: HomeLayout },
@@ -32,7 +48,7 @@ const routes = [
 	{ path: "/cart", component: Cart },
 	{ path: "/cart/checkout", component: Checkout },
 
-	// Admin Routes
+	// ------------------------------------------------Admin Routes-------------------------------------------------------
 	// User
 	{
 		path: "/user",
@@ -69,6 +85,86 @@ const routes = [
 	{
 		path: "/product/update/:productId",
 		component: UpdateProduct,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+
+	// Category
+	{
+		path: "/category",
+		component: ViewCategory,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+	{
+		path: "/category/create",
+		component: CreateCategory,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+	{
+		path: "/category/update/:categoryId",
+		component: UpdateCategory,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+
+	// SkinType
+	{
+		path: "/skin-type",
+		component: ViewSkinType,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+	{
+		path: "/skin-type/create",
+		component: CreateSkinType,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+	{
+		path: "/skin-type/update/:skinTypeId",
+		component: UpdateSkinType,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+
+	// SkinTypeRoutine
+	{
+		path: "/skin-type-routine",
+		component: ViewRoutine,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+	{
+		path: "/skin-type-routine/create",
+		component: CreateRoutine,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+	{
+		path: "/skin-type-routine/update/:skinTypeRoutineId",
+		component: UpdateRoutine,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+
+	// Blog
+	{
+		path: "/blog",
+		component: ViewBlog,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+	{
+		path: "/blog/create",
+		component: CreateBlog,
+		layout: AdminLayout,
+		Auth: "private",
+	},
+	{
+		path: "/blog/update/:blogId",
+		component: UpdateBlog,
 		layout: AdminLayout,
 		Auth: "private",
 	},
