@@ -46,7 +46,7 @@ function ViewProduct() {
 
 	const handleUpdate = (productId) => {
 		console.log("Update product:", productId);
-		navigate(`/product/update/${productId}`);
+		navigate(`/home/product/update/${productId}`);
 	};
 
 	const handleDelete = (productId) => {
@@ -209,7 +209,7 @@ function ViewProduct() {
 							rounded
 							raised
 							className="p-button-md"
-							onClick={() => navigate("/product/create")}
+							onClick={() => navigate("/home/product/create")}
 						/>
 					</div>
 					<div className="dataTable">
@@ -248,7 +248,7 @@ function ViewProduct() {
 							rounded
 							raised
 							className="p-button-md"
-							onClick={() => navigate("/product/create")}
+							onClick={() => navigate("/home/product/create")}
 						/>
 					</div>
 					<div className="dataTable">

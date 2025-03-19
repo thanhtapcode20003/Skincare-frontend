@@ -10,6 +10,10 @@ import Button from "@mui/material/Button";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import SanitizerIcon from "@mui/icons-material/Sanitizer";
+import FeedIcon from "@mui/icons-material/Feed";
+import CategoryIcon from "@mui/icons-material/Category";
+import GroupWorkIcon from "@mui/icons-material/GroupWork";
+import LoopIcon from "@mui/icons-material/Loop";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -68,9 +72,6 @@ const AdminSidebar = () => {
 								alignItems="center"
 								ml="15px"
 							>
-								{/* <Typography variant="h6" color={colors.grey[100]}>
-									{role}
-								</Typography> */}
 								<IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
 									<MenuOutlinedIcon />
 								</IconButton>
@@ -104,6 +105,7 @@ const AdminSidebar = () => {
 					<Box paddingLeft={isCollapsed ? undefined : "10%"}>
 						{role === "Manager" && (
 							<>
+								{/* User */}
 								<Typography
 									variant="h6"
 									color={colors.grey[300]}
@@ -118,10 +120,59 @@ const AdminSidebar = () => {
 									selected={selected}
 									setSelected={setSelected}
 								/>
+
+								{/* Category */}
+								<Typography
+									variant="h6"
+									color={colors.grey[300]}
+									sx={{ m: "15px 0 5px 20px" }}
+								>
+									Category
+								</Typography>
+								<Item
+									title="Manage Category"
+									to="/home/category"
+									icon={<CategoryIcon />}
+									selected={selected}
+									setSelected={setSelected}
+								/>
+
+								{/* SkinType */}
+								<Typography
+									variant="h6"
+									color={colors.grey[300]}
+									sx={{ m: "15px 0 5px 20px" }}
+								>
+									Skin Type
+								</Typography>
+								<Item
+									title="Manage Skin Type"
+									to="/home/skin-type"
+									icon={<GroupWorkIcon />}
+									selected={selected}
+									setSelected={setSelected}
+								/>
+
+								{/* Routine */}
+								<Typography
+									variant="h6"
+									color={colors.grey[300]}
+									sx={{ m: "15px 0 5px 20px" }}
+								>
+									Skin Type Routine
+								</Typography>
+								<Item
+									title="Manage Routine"
+									to="/home/skin-type-routine"
+									icon={<LoopIcon />}
+									selected={selected}
+									setSelected={setSelected}
+								/>
 							</>
 						)}
 						{role === "Staff" && (
 							<>
+								{/* Product */}
 								<Typography
 									variant="h6"
 									color={colors.grey[300]}
@@ -131,8 +182,24 @@ const AdminSidebar = () => {
 								</Typography>
 								<Item
 									title="Manage Product"
-									to="/product"
+									to="/home/product"
 									icon={<SanitizerIcon />}
+									selected={selected}
+									setSelected={setSelected}
+								/>
+
+								{/* Blog */}
+								<Typography
+									variant="h6"
+									color={colors.grey[300]}
+									sx={{ m: "15px 0 5px 20px" }}
+								>
+									Blog
+								</Typography>
+								<Item
+									title="Manage Blog"
+									to="/home/blog"
+									icon={<FeedIcon />}
 									selected={selected}
 									setSelected={setSelected}
 								/>

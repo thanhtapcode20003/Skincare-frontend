@@ -139,7 +139,7 @@ function UpdateProduct() {
 				});
 				console.log("Product update successful:", response);
 				setTimeout(() => {
-					navigate("/product");
+					navigate("/home/product");
 				}, 3000);
 			} else {
 				toast.current.show({
@@ -164,7 +164,7 @@ function UpdateProduct() {
 	};
 
 	const handleClose = () => {
-		navigate("/product");
+		navigate("/home/product");
 	};
 
 	if (loading) {

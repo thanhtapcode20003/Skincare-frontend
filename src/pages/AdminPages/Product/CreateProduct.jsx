@@ -132,7 +132,7 @@ function CreateProduct() {
 
 	// Handle cancel button
 	const handleClose = () => {
-		navigate("/product");
+		navigate("/home/product");
 	};
 
 	return (
