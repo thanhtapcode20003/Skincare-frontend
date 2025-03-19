@@ -6,34 +6,19 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import PropTypes from "prop-types";
 
 const NextArrow = ({ onClick }) => {
-	// Ensure onClick is a function, or use a no-op function if undefined
-	const handleClick = onClick || (() => {});
-
-	return (
-		<FaChevronRight
-			className={`${styles.slickNext}`}
-			onClick={handleClick} // Use the safe handleClick
-		/>
-	);
+	return <FaChevronRight className={`${styles.slickNext}`} onClick={onClick} />;
 };
 
 const PrevArrow = ({ onClick }) => {
-	// Ensure onClick is a function, or use a no-op function if undefined
-	const handleClick = onClick || (() => {});
-
-	return (
-		<FaChevronLeft
-			className={styles.slickPrev}
-			onClick={handleClick} // Use the safe handleClick
-		/>
-	);
+	return <FaChevronLeft className={styles.slickPrev} onClick={onClick} />;
 };
+
 NextArrow.propTypes = {
-	onClick: PropTypes.func.isRequired, // `onClick` must be a function
+	onClick: PropTypes.func,
 };
 
 PrevArrow.propTypes = {
-	onClick: PropTypes.func.isRequired,
+	onClick: PropTypes.func,
 };
 
 const BannerSection = () => {
