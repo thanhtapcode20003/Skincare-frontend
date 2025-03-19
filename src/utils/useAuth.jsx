@@ -5,6 +5,8 @@ import { decode } from "./axiosClient";
 export const useAuth = () => {
 	const [userId, setUserId] = useState(null);
 	const [username, setUsername] = useState(null);
+	const [phoneNumber, setPhoneNumber] = useState(null);
+	const [address, setAddress] = useState(null);
 	const [role, setRole] = useState(null);
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [loading, setLoading] = useState(true);
@@ -18,6 +20,8 @@ export const useAuth = () => {
 				const decodedToken = decode(token);
 				setUsername(decodedToken.UserName || decodedToken["UserName"]);
 				setUserId(decodedToken.UserId || decodedToken["UserId"]);
+				setPhoneNumber(decodedToken.PhoneNumber || decodedToken["PhoneNumber"]);
+				setAddress(decodedToken.Address || decodedToken["Address"]);
 				// Extract the role from the token
 				const roleClaim =
 					decodedToken[
@@ -49,5 +53,14 @@ export const useAuth = () => {
 		setLoading(false);
 	};
 
-	return { userId, username, role, isAuthenticated, loading, logout };
+	return {
+		userId,
+		username,
+		phoneNumber,
+		address,
+		role,
+		isAuthenticated,
+		loading,
+		logout,
+	};
 };

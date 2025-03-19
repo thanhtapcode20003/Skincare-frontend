@@ -3,6 +3,7 @@ import styles from "./Checkout.module.scss";
 import { getOrders, getOrderDetails } from "../../../api/orderService";
 import { getProductById } from "../../../api/productService";
 import MoneyFormat from "../../../components/GlobalComponents/MoneyFormat";
+import { useAuth } from "../../../utils/useAuth";
 
 import { Button } from "primereact/button";
 import { RadioButton } from "primereact/radiobutton";
@@ -17,6 +18,7 @@ function Checkout() {
 	const [initialLoading, setInitialLoading] = useState(true);
 	const [paymentMethod, setPaymentMethod] = useState("vnpay");
 	const stepperRef = useRef(null);
+	const { username, phoneNumber, address } = useAuth();
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
@@ -117,12 +119,10 @@ function Checkout() {
 							<StepperPanel header="Shipping Address">
 								<div className={styles.section}>
 									<p>
-										<strong>Le Hoang Thien Ha</strong> - 0774378303
+										<strong>{username}</strong> - {phoneNumber}
 										<button className={styles.changeBtn}>Change</button>
 									</p>
-									<p>
-										120/6, d74/3A, Tan Dong Hiep Ward, Di An Town, Binh Duong
-									</p>
+									<p>{address}</p>
 								</div>
 								<div className={styles.stepperActions}>
 									<Button
@@ -140,22 +140,41 @@ function Checkout() {
 								<div className={styles.section}>
 									<div className={styles.paymentMethod}>
 										<RadioButton
+											inputId="payOnDelivery"
+											name="paymentMethod"
+											value="payOnDelivery"
+											onChange={(e) => setPaymentMethod(e.value)}
+											checked={paymentMethod === "payOnDelivery"}
+										/>
+										<img
+											src="https://cdn-icons-png.flaticon.com/512/5163/5163783.png"
+											alt="payOnDelivery"
+											className={styles.paymentLogo}
+										/>
+										<label
+											htmlFor="payOnDelivery"
+											className={styles.paymentLabel}
+										>
+											Pay On Delivery (COD)
+										</label>
+									</div>
+									<div className={styles.paymentMethod}>
+										<RadioButton
 											inputId="vnpay"
 											name="paymentMethod"
 											value="vnpay"
 											onChange={(e) => setPaymentMethod(e.value)}
 											checked={paymentMethod === "vnpay"}
 										/>
+										<img
+											src="https://vinadesign.vn/uploads/images/2023/05/vnpay-logo-vinadesign-25-12-57-55.jpg"
+											alt="VNPAY"
+											className={styles.paymentLogo}
+										/>
 										<label htmlFor="vnpay" className={styles.paymentLabel}>
 											Pay with VNPAY
-											<img
-												src="/vnpay-logo.png"
-												alt="VNPAY"
-												className={styles.paymentLogo}
-											/>
 										</label>
 									</div>
-									<button className={styles.changeBtn}>Change</button>
 								</div>
 								<div className={styles.stepperActions}>
 									<Button
@@ -177,14 +196,9 @@ function Checkout() {
 							{/* Step 3: Coupon and Discount Code */}
 							<StepperPanel header="Coupons & Discounts">
 								<div className={styles.section}>
-									<h3>Coupon</h3>
-									<p>Select a coupon</p>
-									<button className={styles.changeBtn}>Change</button>
-								</div>
-								<div className={styles.section}>
 									<h3>Discount Code</h3>
 									<p>Enter discount code</p>
-									<button className={styles.changeBtn}>Change</button>
+									<button className={styles.changeBtn}>Apply</button>
 								</div>
 								<div className={styles.stepperActions}>
 									<Button
