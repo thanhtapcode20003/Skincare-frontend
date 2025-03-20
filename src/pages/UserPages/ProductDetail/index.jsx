@@ -133,8 +133,10 @@ const ProductDetail = () => {
 			{/* Breadcrumb */}
 			<div className={styles.breadcrumb}>
 				<RouterLink to="/">Home</RouterLink> {">"}{" "}
-				<span>{product.category.categoryName || "CategoryName"}</span> {">"}{" "}
-				<span>{product.productName}</span>
+				<RouterLink to={`/${product.category.categoryId}`}>
+					{product.category.categoryName || "CategoryName"}
+				</RouterLink>{" "}
+				{">"} <span>{product.productName}</span>
 			</div>
 			<div className="flex flex-row mt-2 bg-white shadow-md rounded-lg p-4">
 				{/* Img */}

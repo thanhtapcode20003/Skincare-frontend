@@ -20,18 +20,37 @@
 		transition: all 0.2s ease-in-out;
 		visibility: hidden;
 		z-index: 100;
+		border-radius: 8px;
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+			0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
 		ul {
-			li {
+			li.categoryItem {
 				width: 100%;
 				list-style: none;
-				padding: 0px 15px;
+				transition: all 0.2s ease-in-out;
+
+				&:hover {
+					background-color: #f1fff0;
+
+					button {
+						color: #27bf27;
+					}
+				}
+
+				a {
+					text-decoration: none;
+					width: 100%;
+					display: block;
+				}
 
 				button {
 					width: 100%;
 					color: rgba(0, 0, 0, 0.7);
 					justify-content: flex-start;
 					text-transform: capitalize;
+					padding: 8px 16px;
+					transition: all 0.2s ease-in-out;
 				}
 			}
 		}

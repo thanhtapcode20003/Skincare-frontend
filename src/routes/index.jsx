@@ -10,6 +10,7 @@ import Blog from "../pages/UserPages/Blog";
 import ProductDetail from "../pages/UserPages/ProductDetail";
 import Cart from "../pages/UserPages/Cart";
 import Checkout from "../pages/UserPages/Checkout";
+import CategoryPage from "../pages/UserPages/CategoryPage";
 
 // Admin Pages
 import ViewUser from "../pages/AdminPages/User/ViewUser";
@@ -44,9 +45,10 @@ const routes = [
 	{ path: "/", component: Home, layout: HomeLayout },
 	{ path: "/profile", component: Profile, layout: ProfileLayout },
 	{ path: "/blog", component: Blog },
-	{ path: "/product/:productId", component: ProductDetail },
+	{ path: "/:categoryId/:productId", component: ProductDetail },
 	{ path: "/cart", component: Cart },
 	{ path: "/cart/checkout", component: Checkout },
+	{ path: "/:categoryId", component: CategoryPage },
 
 	// ------------------------------------------------Admin Routes-------------------------------------------------------
 	// User

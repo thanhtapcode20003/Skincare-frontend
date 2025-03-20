@@ -48,5 +48,4 @@ export const deleteProduct = async (id) => {
 		return error.response;
 	}
 };
-
 // Path: src/api/productService.jsx

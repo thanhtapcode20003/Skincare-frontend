@@ -103,7 +103,7 @@ function Home() {
 							<div className={`${styles.productGrid}`}>
 								{categoryProducts.map((product) => (
 									<Link
-										to={`/product/${product.productId}`}
+										to={`/${product.category.categoryId}/${product.productId}`}
 										key={product.productId}
 									>
 										<div className={`${styles.productItem}`}>

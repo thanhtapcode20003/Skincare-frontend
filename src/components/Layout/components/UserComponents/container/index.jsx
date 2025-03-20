@@ -66,9 +66,19 @@ function Container() {
 						) : (
 							<ul>
 								{categories.map((category) => (
-									<li key={category.categoryId}>
-										<Link to={`/category/${category.categoryId}`}>
-											<Button style={{ fontWeight: "bold" }}>
+									<li key={category.categoryId} className={styles.categoryItem}>
+										<Link
+											to={`/${category.categoryId}`}
+											className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+										>
+											<Button
+												style={{
+													fontWeight: "bold",
+													width: "100%",
+													justifyContent: "flex-start",
+													textTransform: "none",
+												}}
+											>
 												{category.categoryName}
 											</Button>
 										</Link>
