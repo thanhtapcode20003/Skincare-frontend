@@ -1,0 +1,18 @@
+.profileContainer {
+	max-width: 1200px;
+	margin: 2rem auto;
+	padding: 0 1rem;
+	display: flex;
+	gap: 1.5rem;
+}
+
+.profileContent {
+	flex: 1;
+	min-width: 0; /* Prevents flex items from overflowing */
+}
+
+@media (max-width: 768px) {
+	.profileContainer {
+		flex-direction: column;
+	}
+}

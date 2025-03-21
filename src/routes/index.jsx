@@ -11,6 +11,8 @@ import ProductDetail from "../pages/UserPages/ProductDetail";
 import Cart from "../pages/UserPages/Cart";
 import Checkout from "../pages/UserPages/Checkout";
 import CategoryPage from "../pages/UserPages/CategoryPage";
+import PaymentResult from "../pages/UserPages/PaymentResult";
+import Orders from "../pages/UserPages/Orders";
 
 // Admin Pages
 import ViewUser from "../pages/AdminPages/User/ViewUser";
@@ -49,6 +51,8 @@ const routes = [
 	{ path: "/cart", component: Cart },
 	{ path: "/cart/checkout", component: Checkout },
 	{ path: "/:categoryId", component: CategoryPage },
+	{ path: "/payment/result", component: PaymentResult },
+	{ path: "/orders", component: Orders, layout: ProfileLayout },
 
 	// ------------------------------------------------Admin Routes-------------------------------------------------------
 	// User

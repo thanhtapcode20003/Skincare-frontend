@@ -1,36 +1,10 @@
 import { IoCart } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../../../utils/useAuth";
-import { useEffect, useState } from "react";
-import { getOrderDetails } from "../../../../../api/orderService";
+import { useCart } from "../../../../../context/CartContext";
 
 export default function CartButton() {
-	const [cartCount, setCartCount] = useState(0);
+	const { cartCount } = useCart();
 	const navigate = useNavigate();
-	const { isAuthenticated, loading: authLoading } = useAuth();
-
-	useEffect(() => {
-		const fetchCartCount = async () => {
-			if (isAuthenticated && !authLoading) {
-				try {
-					const orderData = await getOrderDetails();
-					const cartItems = orderData.items || orderData || [];
-					const totalItems = cartItems.reduce(
-						(sum, item) => sum + (item.quantity || 1),
-						0
-					);
-					setCartCount(totalItems);
-				} catch (error) {
-					console.error("Error fetching cart details:", error);
-					setCartCount(0);
-				}
-			} else {
-				setCartCount(0);
-			}
-		};
-
-		fetchCartCount();
-	}, [isAuthenticated, authLoading]);
 
 	const handleCartClick = () => {
 		navigate("/cart");

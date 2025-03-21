@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Rating } from "@mui/material";
 import { Link } from "react-router-dom";
+import defaultImg from "../../../images/Default/default.jpg";
+
 import { Skeleton } from "primereact/skeleton";
 import { Dropdown } from "primereact/dropdown";
 import { Checkbox } from "primereact/checkbox";
+
 import styles from "./CategoryPage.module.scss";
 import MoneyFormat from "../../../components/GlobalComponents/MoneyFormat";
 import { getProducts } from "../../../api/productService";
@@ -21,8 +24,6 @@ function CategoryPage() {
 	const [skinTypes, setSkinTypes] = useState([]);
 	const [selectedSkinTypes, setSelectedSkinTypes] = useState([]);
 	const [sortOption, setSortOption] = useState("default"); // Store only the value, default to "default"
-	const defaultImg =
-		"https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg";
 
 	const sortOptions = [
 		{ label: "Default", value: "default" },

@@ -12,6 +12,7 @@ import { getProductById } from "../../../api/productService";
 import MoneyFormat from "../../../components/GlobalComponents/MoneyFormat";
 import { useParams, Link as RouterLink } from "react-router-dom";
 import { addToCart } from "../../../api/orderService";
+import { useCart } from "../../../context/CartContext";
 
 const ProductDetail = () => {
 	const { productId } = useParams();
@@ -21,6 +22,7 @@ const ProductDetail = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [cartLoading, setCartLoading] = useState(false);
+	const { updateCartCount } = useCart();
 
 	useEffect(() => {
 		const fetchProduct = async () => {
@@ -111,6 +113,8 @@ const ProductDetail = () => {
 					detail: "Product added to cart successfully",
 					life: 2000,
 				});
+				// Update cart count after successful addition
+				updateCartCount();
 			} else {
 				console.error("Failed to add to cart:", response);
 				toast.current.show({

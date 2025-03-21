@@ -9,6 +9,7 @@ import { getProductById } from "../../../api/productService";
 import LoadingSpinner from "../../../components/GlobalComponents/LoadingSpinner/LoadingSpinner";
 import styles from "./Cart.module.scss";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../../../context/CartContext";
 
 import { Skeleton } from "primereact/skeleton";
 import { Toast } from "primereact/toast";
@@ -20,6 +21,7 @@ function Cart() {
 	const [updatingItemId, setUpdatingItemId] = useState(null);
 	const toast = useRef(null);
 	const navigate = useNavigate();
+	const { updateCartCount } = useCart();
 
 	useEffect(() => {
 		const fetchCartData = async () => {
@@ -75,6 +77,7 @@ function Cart() {
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 			await deleteOrder(id);
 			setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+			updateCartCount();
 		} catch (error) {
 			console.error(`Error deleting item ${id}:`, error);
 		} finally {
@@ -102,6 +105,7 @@ function Cart() {
 					detail: `Quantity updated to ${newQuantity}`,
 					life: 2000,
 				});
+				updateCartCount();
 			} else {
 				console.warn("Update order failed with status:", response.status);
 				toast.current.show({

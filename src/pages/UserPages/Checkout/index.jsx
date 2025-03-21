@@ -1,9 +1,13 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./Checkout.module.scss";
 import { getOrders, getOrderDetails } from "../../../api/orderService";
 import { getProductById } from "../../../api/productService";
 import MoneyFormat from "../../../components/GlobalComponents/MoneyFormat";
 import { useAuth } from "../../../utils/useAuth";
+import defaultImg from "../../../images/Default/default.jpg";
+import Checkout_VNPAY from "../../../images/Payment/Checkout_VNPAY.jpg";
+import Checkout_COD from "../../../images/Payment/Checkout_COD.png";
 
 import { Button } from "primereact/button";
 import { RadioButton } from "primereact/radiobutton";
@@ -12,11 +16,13 @@ import { StepperPanel } from "primereact/stepperpanel";
 import { Skeleton } from "primereact/skeleton";
 
 function Checkout() {
+	const navigate = useNavigate();
 	const [order, setOrder] = useState(null);
 	const [items, setItems] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [initialLoading, setInitialLoading] = useState(true);
 	const [paymentMethod, setPaymentMethod] = useState("payOnDelivery");
+	const [isProcessing, setIsProcessing] = useState(false);
 	const stepperRef = useRef(null);
 	const { username, phoneNumber, address } = useAuth();
 
@@ -46,7 +52,7 @@ function Checkout() {
 									productData.productName ||
 									item.productName ||
 									"Unknown Product",
-								image: productData.image || "https://via.placeholder.com/150",
+								image: productData.image || defaultImg,
 								price: productData.price || item.price || 0,
 								quantity: item.quantity || 1,
 							};
@@ -55,7 +61,7 @@ function Checkout() {
 							return {
 								...item,
 								name: item.name || "Unknown Product",
-								image: item.image || "https://via.placeholder.com/150",
+								image: item.image || defaultImg,
 								price: item.price || 0,
 							};
 						}
@@ -76,6 +82,35 @@ function Checkout() {
 
 		return () => clearTimeout(timer); // Cleanup timer on unmount
 	}, []);
+
+	const handlePlaceOrder = () => {
+		setIsProcessing(true);
+
+		// Simulate payment processing
+		setTimeout(() => {
+			setIsProcessing(false);
+
+			// Navigate to payment result page with status based on payment method
+			if (paymentMethod === "vnpay") {
+				// For VNPAY, randomly simulate success or failure
+				const isSuccessful = Math.random() > 0.5;
+				navigate(
+					`/payment/result?status=${
+						isSuccessful ? "success" : "failed"
+					}&amount=${order.totalAmount + 10000}&orderId=${
+						order.orderId || "25032153111"
+					}`
+				);
+			} else {
+				// For COD, always successful
+				navigate(
+					`/payment/result?status=success&amount=${
+						order.totalAmount + 10000
+					}&orderId=${order.orderId || "25032153111"}`
+				);
+			}
+		}, 1500);
+	};
 
 	if (loading && !initialLoading) {
 		return <div>Loading...</div>;
@@ -147,7 +182,7 @@ function Checkout() {
 											checked={paymentMethod === "payOnDelivery"}
 										/>
 										<img
-											src="https://cdn-icons-png.flaticon.com/512/5163/5163783.png"
+											src={Checkout_COD}
 											alt="payOnDelivery"
 											className={styles.paymentLogo}
 										/>
@@ -167,7 +202,7 @@ function Checkout() {
 											checked={paymentMethod === "vnpay"}
 										/>
 										<img
-											src="https://vinadesign.vn/uploads/images/2023/05/vnpay-logo-vinadesign-25-12-57-55.jpg"
+											src={Checkout_VNPAY}
 											alt="VNPAY"
 											className={styles.paymentLogo}
 										/>
@@ -356,7 +391,13 @@ function Checkout() {
 								</p>
 							</div>
 							{/* Place Order Button */}
-							<button className={styles.placeOrderBtn}>Place Order</button>
+							<button
+								className={styles.placeOrderBtn}
+								onClick={handlePlaceOrder}
+								disabled={isProcessing}
+							>
+								{isProcessing ? "Processing..." : "Place Order"}
+							</button>
 						</>
 					)}
 				</div>

@@ -5,6 +5,8 @@ import { DefaultLayout } from "./components/Layout/";
 import ScrollToTop from "./components/GlobalComponents/ScrollToTop";
 import ProtectedRoute from "./components/GlobalComponents/ProtectedRoute";
 import LoadingSpinner from "./components/GlobalComponents/LoadingSpinner/LoadingSpinner";
+import { CartProvider } from "./context/CartContext";
+
 function App() {
 	const [isInitialLoading, setIsInitialLoading] = useState(true);
 
@@ -32,51 +34,53 @@ function App() {
 		return <LoadingSpinner />;
 	}
 	return (
-		<Router>
-			<div className="app">
-				<ScrollToTop />
-				<Routes>
-					{routes.map((route, index) => {
-						const Page = route.component;
+		<CartProvider>
+			<Router>
+				<div className="app">
+					<ScrollToTop />
+					<Routes>
+						{routes.map((route, index) => {
+							const Page = route.component;
 
-						let Layout = DefaultLayout;
+							let Layout = DefaultLayout;
 
-						if (route.layout) {
-							Layout = route.layout;
-						} else if (route.layout === null) {
-							Layout = Fragment;
-						}
-						if (route.Auth === "private") {
-							return (
-								<Route
-									key={index}
-									path={route.path}
-									element={
-										<ProtectedRoute allowedRoles={["Staff", "Manager"]}>
+							if (route.layout) {
+								Layout = route.layout;
+							} else if (route.layout === null) {
+								Layout = Fragment;
+							}
+							if (route.Auth === "private") {
+								return (
+									<Route
+										key={index}
+										path={route.path}
+										element={
+											<ProtectedRoute allowedRoles={["Staff", "Manager"]}>
+												<Layout>
+													<Page />
+												</Layout>
+											</ProtectedRoute>
+										}
+									/>
+								);
+							} else {
+								return (
+									<Route
+										key={index}
+										path={route.path}
+										element={
 											<Layout>
 												<Page />
 											</Layout>
-										</ProtectedRoute>
-									}
-								/>
-							);
-						} else {
-							return (
-								<Route
-									key={index}
-									path={route.path}
-									element={
-										<Layout>
-											<Page />
-										</Layout>
-									}
-								/>
-							);
-						}
-					})}
-				</Routes>
-			</div>
-		</Router>
+										}
+									/>
+								);
+							}
+						})}
+					</Routes>
+				</div>
+			</Router>
+		</CartProvider>
 	);
 }
 

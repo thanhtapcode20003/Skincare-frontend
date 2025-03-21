@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../../../../api/authService";
 import { decode } from "../../../../../utils/axiosClient";
+import { useCart } from "../../../../../context/CartContext";
 
 import { Button } from "primereact/button";
 import { FloatLabel } from "primereact/floatlabel";
@@ -18,7 +19,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 	const [touch, setTouch] = useState({ email: false, password: false });
 	const [isSubmitting, setIsSubmitting] = useState(false); // New state for submission
 	const toast = useRef(null);
-
+	const { updateCartCount } = useCart();
 	const navigate = useNavigate();
 
 	const validateFields = useCallback(() => {
@@ -79,12 +80,17 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 				setSuccess("Login successful!");
 				onLoginSuccess(response.data.token);
-				// console.log(response.status);
+
+				// Update cart count after successful login
+				updateCartCount();
+
+				// Reset form fields
 				setEmail("");
 				setPassword("");
 				setTouch({ email: false, password: false });
 				setError({ email: "", password: "", general: "" });
 				setSuccess("");
+
 				// Decode the token to get the roles
 				const token = response.data.token;
 				const decodeToken = decode(token);
@@ -134,6 +140,8 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 					general: "Something went wrong. Please try again later.",
 				}));
 			}
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
@@ -239,7 +247,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 							</div>
 
 							<p className="text-sm font-light text-gray-500 dark:text-gray-400">
-								Don’t have an account yet?{" "}
+								Don&apos;t have an account yet?{" "}
 								<Link
 									className="font-medium text-primary-600 hover:underline dark:text-primary-500"
 									onClick={onSignUpClick}
