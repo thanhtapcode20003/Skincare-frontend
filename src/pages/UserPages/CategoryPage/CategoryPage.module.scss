@@ -1,110 +1,185 @@
 .container {
 	max-width: 1200px;
-	margin: 100px auto 0;
-	padding: 20px;
+	margin: 2rem auto;
+	padding: 0 1rem;
 
 	.categoryHeader {
-		margin-bottom: 30px;
+		margin-bottom: 1.5rem;
 
 		h1 {
-			font-size: 32px;
-			font-weight: bold;
-			color: var(--clr-text);
-			margin-bottom: 10px;
+			font-size: 1.8rem;
+			font-weight: 600;
+			color: #333;
+			margin-bottom: 0.5rem;
 		}
 
 		p {
-			color: #666;
-			font-size: 16px;
+			color: #6b7280;
+			font-size: 0.9rem;
+		}
+	}
+
+	.filterContainer {
+		display: flex;
+		flex-wrap: wrap;
+		margin-bottom: 2rem;
+		gap: 2rem;
+		padding: 1.5rem;
+		background-color: #f9f9f9;
+		border-radius: 8px;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+		.sortingFilter {
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+			min-width: 250px;
+
+			label {
+				font-size: 0.9rem;
+				font-weight: 500;
+				color: #4b5563;
+			}
+
+			.sortDropdown {
+				flex: 1;
+				min-width: 180px;
+
+				:global(.p-dropdown-label) {
+					font-size: 0.9rem;
+				}
+			}
+		}
+
+		.skinTypeFilter {
+			flex: 1;
+			min-width: 250px;
+
+			h3 {
+				font-size: 1rem;
+				font-weight: 600;
+				color: #4b5563;
+				margin-bottom: 0.75rem;
+			}
+
+			.checkboxGroup {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.75rem;
+
+				.checkboxItem {
+					display: flex;
+					align-items: center;
+					gap: 0.5rem;
+					margin-right: 1rem;
+					margin-bottom: 0.5rem;
+
+					label {
+						font-size: 0.9rem;
+						color: #4b5563;
+						cursor: pointer;
+					}
+				}
+			}
+		}
+
+		@media (max-width: 768px) {
+			flex-direction: column;
+			gap: 1.5rem;
 		}
 	}
 
 	.productGrid {
 		display: grid;
-		grid-template-columns: repeat(5, 1fr);
-		gap: 24px;
+		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+		gap: 1.5rem;
 
 		.productItem {
-			background-color: #fff;
+			display: flex;
+			flex-direction: column;
+			background: #fff;
 			border-radius: 8px;
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-			padding: 10px;
-			cursor: pointer;
-			transition: transform 0.2s ease-in-out;
+			overflow: hidden;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+			transition: all 0.3s ease;
 			text-decoration: none;
+			color: inherit;
 
 			&:hover {
-				transform: scale(1.05);
+				transform: translateY(-5px);
+				box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+				.productImg {
+					transform: scale(1.05);
+				}
 			}
 
 			.imageContainer {
-				width: 100%;
 				height: 200px;
 				overflow: hidden;
-				border-radius: 8px;
 
 				.productImg {
 					width: 100%;
 					height: 100%;
 					object-fit: cover;
-					object-position: center;
+					transition: transform 0.3s ease;
 				}
 			}
 
 			.productPrice {
-				font-size: 18px;
-				padding-left: 10px;
-				font-weight: 700;
+				font-weight: 600;
+				font-size: 1.1rem;
 				color: var(--clr-orange);
-				margin: 10px 0;
+				margin: 0.75rem 0.75rem 0.25rem;
 			}
 
 			.productName {
-				font-size: 14px;
-				color: var(--clr-text);
-				font-weight: 600;
-				padding: 0 10px;
-				margin-bottom: 6px;
-				height: 35px;
-				line-height: 20px;
+				font-size: 0.9rem;
+				margin: 0.25rem 0.75rem 0.75rem;
+				line-height: 1.4;
 				overflow: hidden;
-				text-overflow: ellipsis;
 				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
 				display: box;
 				line-clamp: 2;
-				-webkit-line-clamp: 2;
-				box-orient: vertical;
-				-webkit-box-orient: vertical;
 			}
 
 			.productRating {
-				padding-left: 8px;
-				margin-top: 5px;
+				margin: 0 0.75rem 0.75rem;
 			}
 		}
-	}
 
-	@media (max-width: 1200px) {
-		.productGrid {
-			grid-template-columns: repeat(4, 1fr);
+		@media (max-width: 640px) {
+			grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
 		}
 	}
 
-	@media (max-width: 992px) {
-		.productGrid {
-			grid-template-columns: repeat(3, 1fr);
-		}
-	}
+	.noResults {
+		grid-column: 1 / -1;
+		text-align: center;
+		padding: 2rem;
+		background-color: #f8f8f8;
+		border-radius: 8px;
 
-	@media (max-width: 768px) {
-		.productGrid {
-			grid-template-columns: repeat(2, 1fr);
+		p {
+			color: #6b7280;
+			margin-bottom: 1rem;
 		}
-	}
 
-	@media (max-width: 480px) {
-		.productGrid {
-			grid-template-columns: 1fr;
+		.resetButton {
+			background-color: #326e51;
+			color: white;
+			border: none;
+			padding: 0.5rem 1rem;
+			border-radius: 4px;
+			font-size: 0.9rem;
+			cursor: pointer;
+			transition: background-color 0.2s;
+
+			&:hover {
+				background-color: #255740;
+			}
 		}
 	}
 }
