@@ -17,23 +17,6 @@ function Header() {
 		!!localStorage.getItem("token")
 	);
 
-	// useEffect(() => {
-	// 	const token = localStorage.getItem("token");
-	// 	console.log("Token from localStorage:", token); // Debug the token value
-
-	// 	// Only decode if token exists and is a string
-	// 	if (token && typeof token === "string" && token.trim().length > 0) {
-	// 		try {
-	// 			const decodedToken = decode(token);
-	// 			console.log("Decoded Token:", decodedToken);
-	// 		} catch (error) {
-	// 			console.error("Error decoding token:", error);
-	// 		}
-	// 	} else {
-	// 		console.log("No valid token found in localStorage");
-	// 	}
-	// }, [isAuthenticated]);
-
 	useEffect(() => {
 		if (localStorage.getItem("token")) {
 			setIsAuthModalOpen(false);

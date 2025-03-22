@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Checkout.module.scss";
-import { getOrders, getOrderDetails } from "../../../api/orderService";
+import {
+	getOrders,
+	getOrderDetails,
+	paymentVnPay,
+} from "../../../api/orderService";
 import { getProductById } from "../../../api/productService";
 import MoneyFormat from "../../../components/GlobalComponents/MoneyFormat";
 import { useAuth } from "../../../utils/useAuth";
@@ -39,7 +43,7 @@ function Checkout() {
 
 				const orderDetail = await getOrderDetails();
 				const cartItems = orderDetail.items || orderDetail;
-				console.log(cartItems);
+				// console.log(cartItems);
 
 				const productItems = await Promise.all(
 					cartItems.map(async (item) => {
@@ -67,10 +71,10 @@ function Checkout() {
 						}
 					})
 				);
-				console.log(productItems);
+				// console.log(productItems);
 
 				setItems(productItems);
-				console.log(productItems);
+				// console.log(productItems);
 			} catch (error) {
 				console.error("Error fetching orders:", error);
 			} finally {
@@ -83,33 +87,50 @@ function Checkout() {
 		return () => clearTimeout(timer); // Cleanup timer on unmount
 	}, []);
 
-	const handlePlaceOrder = () => {
+	const handlePlaceOrder = async () => {
 		setIsProcessing(true);
-
-		// Simulate payment processing
-		setTimeout(() => {
-			setIsProcessing(false);
-
-			// Navigate to payment result page with status based on payment method
+		console.log("click");
+		try {
 			if (paymentMethod === "vnpay") {
-				// For VNPAY, randomly simulate success or failure
-				const isSuccessful = Math.random() > 0.5;
-				navigate(
-					`/payment/result?status=${
-						isSuccessful ? "success" : "failed"
-					}&amount=${order.totalAmount + 10000}&orderId=${
-						order.orderId || "25032153111"
-					}`
-				);
+				// For VNPAY, use the payment API
+				console.log("vnpay");
+
+				const response = await paymentVnPay(order.orderId);
+				console.log(response);
+
+				if (response.status === 200 && response.data.paymentUrl) {
+					// Redirect to VNPAY payment gateway
+					window.location.href = response.data.paymentUrl;
+				} else {
+					// Handle error (redirect to failure page)
+					console.error("Failed to create VNPAY payment", response);
+					navigate(
+						`/payment/result?status=failed&amount=${
+							order.totalAmount + 10000
+						}&orderId=${order.orderId || "25032153111"}`
+					);
+				}
 			} else {
 				// For COD, always successful
-				navigate(
-					`/payment/result?status=success&amount=${
-						order.totalAmount + 10000
-					}&orderId=${order.orderId || "25032153111"}`
-				);
+				setTimeout(() => {
+					setIsProcessing(false);
+					navigate(
+						`/payment/result?status=success&amount=${
+							order.totalAmount + 10000
+						}&orderId=${order.orderId || "25032153111"}`
+					);
+				}, 1500);
 			}
-		}, 1500);
+		} catch (error) {
+			console.error("Payment error:", error);
+			setIsProcessing(false);
+			// Navigate to error page
+			navigate(
+				`/payment/result?status=failed&amount=${
+					order.totalAmount + 10000
+				}&orderId=${order.orderId || "25032153111"}`
+			);
+		}
 	};
 
 	if (loading && !initialLoading) {

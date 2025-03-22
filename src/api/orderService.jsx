@@ -51,3 +51,14 @@ export const deleteOrder = async (orderDetailId) => {
 		return error.response;
 	}
 };
+
+export const paymentVnPay = async (orderId) => {
+	try {
+		const response = await axiosClient.post(
+			`orders/${orderId}/create-vnpay-payment`
+		);
+		return response;
+	} catch (error) {
+		return error.response;
+	}
+};

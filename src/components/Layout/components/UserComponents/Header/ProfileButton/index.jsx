@@ -1,33 +1,13 @@
 import { useState } from "react";
-import { decode } from "../../../../../../utils/axiosClient";
-
+import { useAuth } from "../../../../../../utils/useAuth";
 import TieredMenuItems from "./TieredMenuItems";
 
 import { CgProfile } from "react-icons/cg";
 import { IoChevronDown } from "react-icons/io5";
-import { useEffect } from "react";
 
 export default function ProfileButton() {
 	const [isHovered, setIsHovered] = useState(false);
-	const [username, setUsername] = useState(null);
-
-	useEffect(() => {
-		const token = localStorage.getItem("token");
-		// console.log("Token from localStorage:", token); // Debug the token value
-
-		// Only decode if token exists and is a string
-		if (token && typeof token === "string" && token.trim().length > 0) {
-			try {
-				const decodedToken = decode(token);
-				setUsername(decodedToken.UserName);
-				// console.log("Decoded Token:", decodedToken);
-			} catch (error) {
-				console.error("Error decoding token:", error);
-			}
-		} else {
-			console.log("No valid token found in localStorage");
-		}
-	}, []);
+	const { username } = useAuth();
 
 	return (
 		<div
