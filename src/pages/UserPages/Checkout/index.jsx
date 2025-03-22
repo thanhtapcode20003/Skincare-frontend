@@ -92,22 +92,17 @@ function Checkout() {
 		console.log("click");
 		try {
 			if (paymentMethod === "vnpay") {
-				// For VNPAY, use the payment API
-				console.log("vnpay");
-
 				const response = await paymentVnPay(order.orderId);
 				console.log(response);
 
 				if (response.status === 200 && response.data.paymentUrl) {
-					// Redirect to VNPAY payment gateway
 					window.location.href = response.data.paymentUrl;
 				} else {
-					// Handle error (redirect to failure page)
 					console.error("Failed to create VNPAY payment", response);
 					navigate(
 						`/payment/result?status=failed&amount=${
 							order.totalAmount + 10000
-						}&orderId=${order.orderId || "25032153111"}`
+						}&orderId=${order.orderId || "orderIdNotFound"}`
 					);
 				}
 			} else {
@@ -117,7 +112,7 @@ function Checkout() {
 					navigate(
 						`/payment/result?status=success&amount=${
 							order.totalAmount + 10000
-						}&orderId=${order.orderId || "25032153111"}`
+						}&orderId=${order.orderId || "orderIdNotFound"}`
 					);
 				}, 1500);
 			}
@@ -128,7 +123,7 @@ function Checkout() {
 			navigate(
 				`/payment/result?status=failed&amount=${
 					order.totalAmount + 10000
-				}&orderId=${order.orderId || "25032153111"}`
+				}&orderId=${order.orderId || "orderIdNotFound"}`
 			);
 		}
 	};

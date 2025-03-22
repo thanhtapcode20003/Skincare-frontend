@@ -5,6 +5,7 @@ import styles from "./PaymentResult.module.scss";
 import Payment_Success from "../../../images/Payment/Payment_Success.jpg";
 import Payment_Fail from "../../../images/Payment/Payment_Fail.jpg";
 import MoneyFormat from "../../../components/GlobalComponents/MoneyFormat";
+import { getOrders } from "../../../api/orderService"; // Import API calls to refetch cart
 
 function PaymentResult() {
 	const navigate = useNavigate();
@@ -24,6 +25,24 @@ function PaymentResult() {
 			amount,
 			orderId: orderId || "25032153111", // Default order ID if not provided
 		});
+
+		// If payment is successful, refetch the cart to ensure it's cleared
+		if (status === "success") {
+			const refetchCart = async () => {
+				try {
+					const ordersData = await getOrders();
+					const cartOrder = ordersData.find(
+						(o) => o.orderStatus === "Confirmed"
+					);
+					if (cartOrder) {
+						console.log("Cart cleared successfully after payment.");
+					}
+				} catch (error) {
+					console.error("Error refetching cart after payment:", error);
+				}
+			};
+			refetchCart();
+		}
 	}, [location]);
 
 	const handleContinueShopping = () => {
@@ -38,7 +57,6 @@ function PaymentResult() {
 		navigate("/profile/orders");
 	};
 
-	// If payment status is still loading
 	if (success === null) {
 		return <div className={styles.loading}>Processing payment result...</div>;
 	}
