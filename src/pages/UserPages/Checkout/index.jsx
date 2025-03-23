@@ -5,6 +5,7 @@ import {
 	getOrders,
 	getOrderDetails,
 	paymentVnPay,
+	paymentCOD,
 } from "../../../api/orderService";
 import { getProductById } from "../../../api/productService";
 import MoneyFormat from "../../../components/GlobalComponents/MoneyFormat";
@@ -89,9 +90,9 @@ function Checkout() {
 
 	const handlePlaceOrder = async () => {
 		setIsProcessing(true);
-		console.log("click");
 		try {
 			if (paymentMethod === "vnpay") {
+				console.log("vnpay");
 				const response = await paymentVnPay(order.orderId);
 				console.log(response);
 
@@ -105,21 +106,33 @@ function Checkout() {
 						}&orderId=${order.orderId || "orderIdNotFound"}`
 					);
 				}
-			} else {
-				// For COD, always successful
-				setTimeout(() => {
+			} else if (paymentMethod === "payOnDelivery") {
+				console.log("cod");
+				const response = await paymentCOD(order.orderId);
+				console.log(response);
+
+				if (response.status === 200) {
+					setTimeout(() => {
+						setIsProcessing(false);
+						navigate(
+							`/payment/result?status=success&amount=${
+								order.totalAmount + 10000
+							}&orderId=${order.orderId || "orderIdNotFound"}`
+						);
+					}, 2000);
+				} else {
+					console.error("Failed to process COD payment", response);
 					setIsProcessing(false);
 					navigate(
-						`/payment/result?status=success&amount=${
+						`/payment/result?status=failed&amount=${
 							order.totalAmount + 10000
 						}&orderId=${order.orderId || "orderIdNotFound"}`
 					);
-				}, 1500);
+				}
 			}
 		} catch (error) {
 			console.error("Payment error:", error);
 			setIsProcessing(false);
-			// Navigate to error page
 			navigate(
 				`/payment/result?status=failed&amount=${
 					order.totalAmount + 10000

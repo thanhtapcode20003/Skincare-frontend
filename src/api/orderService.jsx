@@ -62,3 +62,14 @@ export const paymentVnPay = async (orderId) => {
 		return error.response;
 	}
 };
+
+export const paymentCOD = async (orderId) => {
+	try {
+		const response = await axiosClient.post(
+			`orders/${orderId}/create-cod-payment`
+		);
+		return response;
+	} catch (error) {
+		return error.response;
+	}
+};

@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 // import { decode } from "../../../../../utils/axiosClient";
+import { useAuth } from "../../../../../utils/useAuth";
 
 import Logo from "./Logo";
 import Search from "./Search";
@@ -16,10 +17,59 @@ function Header() {
 	const [isAuthenticated, setIsAuthenticated] = useState(
 		!!localStorage.getItem("token")
 	);
+	const { logout } = useAuth();
+	const TIMEOUT_DURATION = 600000; // 1h
+	const inactivityTimerRef = useRef(null);
+
+	// Function to reset the timer
+	const resetInactivityTimer = useCallback(() => {
+		if (isAuthenticated) {
+			// Clear any existing timer
+			clearTimeout(inactivityTimerRef.current);
+
+			// Set a new timer
+			inactivityTimerRef.current = setTimeout(() => {
+				// Remove token and update authentication state
+				localStorage.removeItem("token");
+				setIsAuthenticated(false);
+				logout();
+				console.log("Session expired due to inactivity");
+			}, TIMEOUT_DURATION);
+		}
+	}, [isAuthenticated, logout]);
+
+	// Set up event listeners for user activity
+	useEffect(() => {
+		// Events that indicate user activity
+		const activityEvents = [
+			"mousedown",
+			"mousemove",
+			"keypress",
+			"scroll",
+			"touchstart",
+		];
+
+		// Add event listeners for each activity event
+		activityEvents.forEach((event) => {
+			document.addEventListener(event, resetInactivityTimer);
+		});
+
+		// Initial setup of the inactivity timer
+		resetInactivityTimer();
+
+		// Cleanup event listeners on component unmount
+		return () => {
+			activityEvents.forEach((event) => {
+				document.removeEventListener(event, resetInactivityTimer);
+			});
+			clearTimeout(inactivityTimerRef.current);
+		};
+	}, [resetInactivityTimer]);
 
 	useEffect(() => {
 		if (localStorage.getItem("token")) {
 			setIsAuthModalOpen(false);
+			setIsAuthenticated(true);
 		}
 	}, []);
 
@@ -32,6 +82,7 @@ function Header() {
 		localStorage.setItem("token", token);
 		setIsAuthenticated(true);
 		setIsAuthModalOpen(false);
+		resetInactivityTimer(); // Reset the timer when user logs in
 	};
 
 	const handleRegisterSuccess = () => {
