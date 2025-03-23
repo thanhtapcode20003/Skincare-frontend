@@ -222,7 +222,12 @@ function Cart() {
 						<p className={styles.emptyCartMessage}>
 							YOUR CART IS CURRENTLY EMPTY.
 						</p>
-						<button className={styles.returnToShopBtn}>Return to Shop</button>
+						<button
+							className={styles.returnToShopBtn}
+							onClick={() => navigate("/")}
+						>
+							Return to Shop
+						</button>
 					</div>
 				) : (
 					<>
