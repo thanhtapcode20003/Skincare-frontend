@@ -5,45 +5,87 @@ import styles from "./PaymentResult.module.scss";
 import Payment_Success from "../../../images/Payment/Payment_Success.jpg";
 import Payment_Fail from "../../../images/Payment/Payment_Fail.jpg";
 import MoneyFormat from "../../../components/GlobalComponents/MoneyFormat";
-import { getOrders } from "../../../api/orderService"; // Import API calls to refetch cart
+import { useCart } from "../../../context/CartContext";
 
 function PaymentResult() {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [success, setSuccess] = useState(null);
 	const [orderDetails, setOrderDetails] = useState(null);
+	const { updateCartCount } = useCart();
 
 	useEffect(() => {
 		// Get payment status from URL params
 		const params = new URLSearchParams(location.search);
-		const status = params.get("status");
-		const amount = parseInt(params.get("amount") || "0");
-		const orderId = params.get("orderId");
 
-		setSuccess(status === "success");
+		// Log all URL parameters
+		console.log("All URL Parameters:", Object.fromEntries(params));
+
+		// Check for direct status param (from internal redirect)
+		let status = params.get("status");
+		let amount = parseInt(params.get("amount") || "0");
+		let orderId = params.get("orderId");
+
+		// Check for VNPAY response params
+		const vnp_ResponseCode = params.get("vnp_ResponseCode");
+		const vnp_Amount = params.get("vnp_Amount");
+		const vnp_TxnRef = params.get("vnp_TxnRef");
+
+		// Create payment log object
+		const paymentLog = {
+			timestamp: new Date().toISOString(),
+			originalStatus: status,
+			originalAmount: amount,
+			originalOrderId: orderId,
+			vnpay_params: {
+				responseCode: vnp_ResponseCode,
+				amount: vnp_Amount,
+				transactionRef: vnp_TxnRef,
+			},
+			url: window.location.href,
+		};
+
+		// Log to console
+		console.log("Payment Result Log:", paymentLog);
+
+		// Save to localStorage
+		const previousLogs = JSON.parse(
+			localStorage.getItem("payment_logs") || "[]"
+		);
+		previousLogs.push(paymentLog);
+		localStorage.setItem("payment_logs", JSON.stringify(previousLogs));
+
+		// If VNPAY params exist, use them
+		if (vnp_ResponseCode) {
+			// VNPAY success codes are "00" or "0"
+			status =
+				vnp_ResponseCode === "00" || vnp_ResponseCode === "0"
+					? "success"
+					: "failed";
+		}
+
+		if (vnp_Amount) {
+			// VNPAY amount is in VND * 100
+			amount = parseInt(vnp_Amount) / 100;
+		}
+
+		if (vnp_TxnRef) {
+			orderId = vnp_TxnRef;
+		}
+
+		const isSuccess = status === "success";
+		setSuccess(isSuccess);
+
+		// If payment was successful, update cart count
+		if (isSuccess) {
+			updateCartCount();
+		}
+
 		setOrderDetails({
 			amount,
-			orderId: orderId || "25032153111", // Default order ID if not provided
+			orderId: orderId || "OrderIdNotFound",
 		});
-
-		// If payment is successful, refetch the cart to ensure it's cleared
-		if (status === "success") {
-			const refetchCart = async () => {
-				try {
-					const ordersData = await getOrders();
-					const cartOrder = ordersData.find(
-						(o) => o.orderStatus === "Confirmed"
-					);
-					if (cartOrder) {
-						console.log("Cart cleared successfully after payment.");
-					}
-				} catch (error) {
-					console.error("Error refetching cart after payment:", error);
-				}
-			};
-			refetchCart();
-		}
-	}, [location]);
+	}, [location, updateCartCount]);
 
 	const handleContinueShopping = () => {
 		navigate("/");
@@ -56,6 +98,12 @@ function PaymentResult() {
 	const handleViewOrder = () => {
 		navigate("/profile/orders");
 	};
+
+	// Add function to view payment logs
+	// const viewPaymentLogs = () => {
+	// 	const logs = localStorage.getItem("payment_logs");
+	// 	console.log("All Payment Logs:", JSON.parse(logs));
+	// };
 
 	if (success === null) {
 		return <div className={styles.loading}>Processing payment result...</div>;

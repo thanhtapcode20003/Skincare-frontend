@@ -19,6 +19,7 @@ import { RadioButton } from "primereact/radiobutton";
 import { Stepper } from "primereact/stepper";
 import { StepperPanel } from "primereact/stepperpanel";
 import { Skeleton } from "primereact/skeleton";
+import { useCart } from "../../../context/CartContext";
 
 function Checkout() {
 	const navigate = useNavigate();
@@ -30,6 +31,7 @@ function Checkout() {
 	const [isProcessing, setIsProcessing] = useState(false);
 	const stepperRef = useRef(null);
 	const { username, phoneNumber, address } = useAuth();
+	const { updateCartCount } = useCart();
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
@@ -112,6 +114,8 @@ function Checkout() {
 				console.log(response);
 
 				if (response.status === 200) {
+					updateCartCount();
+
 					setTimeout(() => {
 						setIsProcessing(false);
 						navigate(
