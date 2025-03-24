@@ -28,7 +28,7 @@ function Profile() {
 					<Button
 						label="Edit Profile"
 						className={styles.actionButton}
-						onClick={() => {}}
+						onClick={() => navigate("/profile/edit")}
 					/>
 				</div>
 

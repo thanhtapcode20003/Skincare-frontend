@@ -6,6 +6,7 @@ import AdminLayout from "../components/Layout/AdminLayout";
 // User Pages
 import Home from "../pages/UserPages/Home";
 import Profile from "../pages/UserPages/Profile";
+import EditProfile from "../pages/UserPages/Profile/EditProfile";
 import Blog from "../pages/UserPages/Blog";
 import ProductDetail from "../pages/UserPages/ProductDetail";
 import Cart from "../pages/UserPages/Cart";
@@ -46,6 +47,11 @@ const routes = [
 	// User Routes
 	{ path: "/", component: Home, layout: HomeLayout },
 	{ path: "/profile", component: Profile, layout: ProfileLayout },
+	{
+		path: "/profile/edit",
+		component: EditProfile,
+		layout: ProfileLayout,
+	},
 	{ path: "/blog", component: Blog },
 	{ path: "/:categoryId/:productId", component: ProductDetail },
 	{ path: "/cart", component: Cart },

@@ -105,7 +105,7 @@ function Login({ onLoginSuccess, onSignUpClick, onClose }) {
 				if (mappedRole === "Manager") {
 					navigate("/home/user");
 				} else if (mappedRole === "Staff") {
-					navigate("/product");
+					navigate("/home/product");
 				}
 				setIsSubmitting(false);
 			} else {

@@ -5,6 +5,7 @@ import { decode } from "./axiosClient";
 export const useAuth = () => {
 	const [userId, setUserId] = useState(null);
 	const [username, setUsername] = useState(null);
+	const [email, setEmail] = useState(null);
 	const [phoneNumber, setPhoneNumber] = useState(null);
 	const [address, setAddress] = useState(null);
 	const [role, setRole] = useState(null);
@@ -18,10 +19,15 @@ export const useAuth = () => {
 		if (token && typeof token === "string" && token.trim().length > 0) {
 			try {
 				const decodedToken = decode(token);
-				setUsername(decodedToken.UserName || decodedToken["UserName"]);
-				setUserId(decodedToken.UserId || decodedToken["UserId"]);
-				setPhoneNumber(decodedToken.PhoneNumber || decodedToken["PhoneNumber"]);
-				setAddress(decodedToken.Address || decodedToken["Address"]);
+
+				setUserId(decodedToken.UserId || decodedToken["UserId"] || null);
+				setUsername(decodedToken.UserName || decodedToken["UserName"] || null);
+				setEmail(decodedToken.Email || decodedToken["email"] || null);
+				setPhoneNumber(
+					decodedToken.PhoneNumber || decodedToken["phoneNumber"] || null
+				);
+				setAddress(decodedToken.Address || decodedToken["address"] || null);
+
 				// Extract the role from the token
 				const roleClaim =
 					decodedToken[
@@ -35,10 +41,24 @@ export const useAuth = () => {
 				// console.log("Decoded Token:", decodedToken);
 			} catch (error) {
 				console.error("Error decoding token:", error);
+				setUserId(null);
+				setUsername(null);
+				setEmail(null);
+				setPhoneNumber(null);
+				setAddress(null);
+				setRole(null);
+
 				setIsAuthenticated(false);
 			}
 		} else {
 			console.log("No valid token found in localStorage");
+			setUserId(null);
+			setUsername(null);
+			setEmail(null);
+			setPhoneNumber(null);
+			setAddress(null);
+			setRole(null);
+
 			setIsAuthenticated(false);
 		}
 		setLoading(false);
@@ -46,16 +66,22 @@ export const useAuth = () => {
 
 	const logout = () => {
 		localStorage.removeItem("token");
-		window.location = "/";
+		setUserId(null);
 		setUsername(null);
+		setEmail(null);
+		setPhoneNumber(null);
+		setAddress(null);
 		setRole(null);
+
 		setIsAuthenticated(false);
 		setLoading(false);
+		window.location = "/";
 	};
 
 	return {
 		userId,
 		username,
+		email,
 		phoneNumber,
 		address,
 		role,
