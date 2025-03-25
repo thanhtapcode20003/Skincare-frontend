@@ -1,0 +1,34 @@
+.ratingFeedbackContainer {
+	margin-top: 1.25rem; /* mt-5 */
+	background-color: white;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-md */
+	border-radius: 0.5rem; /* rounded-lg */
+	padding: 1rem; /* p-4 */
+
+	h2 {
+		font-size: 1.5rem; /* text-2xl */
+		font-weight: 700; /* font-bold */
+		margin-bottom: 1rem; /* mb-4 */
+		color: var(--clr-text);
+	}
+
+	h3 {
+		font-size: 1.125rem; /* text-lg */
+		font-weight: 600; /* font-semibold */
+		margin-bottom: 0.5rem; /* mb-2 */
+		color: var(--clr-text);
+	}
+
+	p {
+		font-size: 1rem;
+		color: var(--clr-text);
+
+		@media (max-width: 768px) {
+			font-size: 0.8rem;
+		}
+
+		@media (max-width: 480px) {
+			font-size: 0.6rem;
+		}
+	}
+}

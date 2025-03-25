@@ -25,6 +25,7 @@
 		color: #6b7280;
 		margin-bottom: 20px;
 		border-radius: 4px;
+		padding: 8px 10px;
 
 		a {
 			color: #6b7280;
@@ -66,11 +67,12 @@
 		border-radius: 50px;
 		margin-left: 1rem;
 		cursor: pointer;
-		transition: background-color 0.3s ease, filter 0.3s ease; // Smooth transition for filter
+		transition: background-color 0.3s ease, filter 0.3s ease;
 		&:hover {
 			filter: brightness(1.3);
 		}
 	}
+
 	h1 {
 		font-size: 1.6rem;
 		font-weight: 600;

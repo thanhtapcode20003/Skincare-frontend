@@ -188,7 +188,12 @@ function Checkout() {
 								<div className={styles.section}>
 									<p>
 										<strong>{username}</strong> - {phoneNumber}
-										<button className={styles.changeBtn}>Change</button>
+										<button
+											className={styles.changeBtn}
+											onClick={() => navigate("/profile/edit")}
+										>
+											Change
+										</button>
 									</p>
 									<p>{address}</p>
 								</div>

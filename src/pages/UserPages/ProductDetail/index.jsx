@@ -13,6 +13,7 @@ import MoneyFormat from "../../../components/GlobalComponents/MoneyFormat";
 import { useParams, Link as RouterLink } from "react-router-dom";
 import { addToCart } from "../../../api/orderService";
 import { useCart } from "../../../context/CartContext";
+import RatingFeedback from "./RatingFeedback";
 
 const ProductDetail = () => {
 	const { productId } = useParams();
@@ -23,6 +24,7 @@ const ProductDetail = () => {
 	const [error, setError] = useState(null);
 	const [cartLoading, setCartLoading] = useState(false);
 	const { updateCartCount } = useCart();
+	const [ratingsFeedback, setRatingsFeedback] = useState([]); // Moved from RatingFeedback
 
 	useEffect(() => {
 		const fetchProduct = async () => {
@@ -41,32 +43,42 @@ const ProductDetail = () => {
 	}, [productId]);
 
 	const renderSkeleton = () => (
-		<div className="flex flex-row mt-2 bg-white shadow-md rounded-lg p-4">
-			{/* Image Skeleton */}
-			<div className="md:w-5/12 w-full">
-				<Skeleton width="100%" height="400px" className="rounded-lg" />
+		<div>
+			<div className="flex flex-row mt-2 bg-white shadow-md rounded-lg p-4">
+				{/* Image Skeleton */}
+				<div className="md:w-5/12 w-full">
+					<Skeleton width="100%" height="400px" className="rounded-lg" />
+				</div>
+				{/* Info Skeleton */}
+				<div className="md:w-7/12 w-full px-5">
+					{/* Product Name */}
+					<Skeleton width="80%" height="2rem" className="mb-2" />
+					{/* Rating */}
+					<Skeleton width="150px" height="1rem" className="mb-3" />
+					{/* Price and Stock */}
+					<div className="mt-3 flex flex-row items-center gap-10">
+						<Skeleton width="100px" height="1.5rem" />
+						<Skeleton width="80px" height="1rem" />
+					</div>
+					{/* Quantity and Add to Cart */}
+					<div className="mt-3 flex flex-row items-center gap-10">
+						<Skeleton width="100px" height="40px" />
+						<Skeleton width="150px" height="40px" />
+					</div>
+					{/* Description */}
+					<div className="mt-5">
+						<Skeleton width="100%" height="1rem" className="mb-2" />
+						<Skeleton width="100%" height="1rem" className="mb-2" />
+						<Skeleton width="80%" height="1rem" />
+					</div>
+				</div>
 			</div>
-			{/* Info Skeleton */}
-			<div className="md:w-7/12 w-full px-5">
-				{/* Product Name */}
-				<Skeleton width="80%" height="2rem" className="mb-2" />
-				{/* Rating */}
-				<Skeleton width="150px" height="1rem" className="mb-3" />
-				{/* Price and Stock */}
-				<div className="mt-3 flex flex-row items-center gap-10">
-					<Skeleton width="100px" height="1.5rem" />
-					<Skeleton width="80px" height="1rem" />
-				</div>
-				{/* Quantity and Add to Cart */}
-				<div className="mt-3 flex flex-row items-center gap-10">
-					<Skeleton width="100px" height="40px" />
+			<div className="my-6">
+				<Skeleton width="200px" height="1.5rem" className="mb-2" />
+				<div className="flex flex-col gap-3">
+					<Skeleton width="150px" height="1rem" className="mb-2" />
+					<Skeleton width="100%" height="80px" className="mb-2" />
 					<Skeleton width="150px" height="40px" />
-				</div>
-				{/* Description */}
-				<div className="mt-5">
-					<Skeleton width="100%" height="1rem" className="mb-2" />
-					<Skeleton width="100%" height="1rem" className="mb-2" />
-					<Skeleton width="80%" height="1rem" />
 				</div>
 			</div>
 		</div>
@@ -88,8 +100,6 @@ const ProductDetail = () => {
 		return <div className={styles.container}>Product not found.</div>;
 	}
 
-	console.log(product);
-
 	// Handle Add to Cart
 	const handleAddToCart = async () => {
 		if (!product || cartLoading) return;
@@ -106,17 +116,14 @@ const ProductDetail = () => {
 			const response = await addToCart(cartData);
 
 			if (response.status === 200) {
-				console.log("Product added to cart successfully:", response);
 				toast.current.show({
 					severity: "success",
 					summary: "Successful",
 					detail: "Product added to cart successfully",
 					life: 2000,
 				});
-				// Update cart count after successful addition
 				updateCartCount();
 			} else {
-				console.error("Failed to add to cart:", response);
 				toast.current.show({
 					severity: "error",
 					summary: "Error",
@@ -170,8 +177,7 @@ const ProductDetail = () => {
 							size="small"
 							readOnly
 						/>
-						<span>0 ratings</span>
-						{/* Hardcoded value */}
+						<span>{ratingsFeedback.length} ratings</span>
 					</div>
 					<div className="mt-3 flex flex-row items-center gap-10">
 						<span className={styles.productPrice}>
@@ -198,6 +204,13 @@ const ProductDetail = () => {
 					</div>
 				</div>
 			</div>
+
+			{/* Rating and Feedback Section */}
+			<RatingFeedback
+				productId={productId}
+				ratingsFeedback={ratingsFeedback}
+				setRatingsFeedback={setRatingsFeedback}
+			/>
 		</div>
 	);
 };
