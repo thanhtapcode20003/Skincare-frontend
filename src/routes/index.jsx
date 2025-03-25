@@ -8,6 +8,7 @@ import Home from "../pages/UserPages/Home";
 import Profile from "../pages/UserPages/Profile";
 import EditProfile from "../pages/UserPages/Profile/EditProfile";
 import Blog from "../pages/UserPages/Blog";
+import About from "../components/Layout/components/UserComponents/About";
 import ProductDetail from "../pages/UserPages/ProductDetail";
 import Cart from "../pages/UserPages/Cart";
 import Checkout from "../pages/UserPages/Checkout";
@@ -53,6 +54,7 @@ const routes = [
 		layout: ProfileLayout,
 	},
 	{ path: "/blog", component: Blog },
+	{ path: "/about", component: About },
 	{ path: "/:categoryId/:productId", component: ProductDetail },
 	{ path: "/cart", component: Cart },
 	{ path: "/cart/checkout", component: Checkout },

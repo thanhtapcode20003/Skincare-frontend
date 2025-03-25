@@ -11,8 +11,9 @@ function Footer() {
 						</div>
 
 						<p className="mt-4 max-w-xs text-white">
-							Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse non
-							cupiditate quae nam molestias.
+							Discover the best products with honest reviews and ratings. We
+							help you make informed decisions with trusted feedback from real
+							users.
 						</p>
 
 						<ul className="mt-8 flex gap-6">

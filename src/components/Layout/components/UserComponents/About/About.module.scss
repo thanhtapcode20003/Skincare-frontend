@@ -1,0 +1,19 @@
+.aboutContainer {
+	:global {
+		.p-card {
+			transition: transform 0.3s ease;
+
+			&:hover {
+				transform: translateY(-5px);
+			}
+		}
+
+		.pi {
+			transition: color 0.3s ease;
+
+			&:hover {
+				color: var(--primary-color);
+			}
+		}
+	}
+}

@@ -114,7 +114,7 @@ function Container() {
 							</span>
 							<span className="text-lg font-medium">
 								<p>
-									<Link to="/">Cleanser</Link>
+									<Link to="/CAT001">Cleanser</Link>
 								</p>
 							</span>
 						</li>
@@ -124,7 +124,7 @@ function Container() {
 								<FaBottleDroplet />
 							</span>
 							<span className="text-lg font-medium">
-								<Link to="/">Serum</Link>
+								<Link to="/CAT006">Serum</Link>
 							</span>
 						</li>
 						<li className={styles.navbarItem}>
@@ -132,7 +132,7 @@ function Container() {
 								<LuContact />
 							</span>
 							<span className="text-lg font-medium">
-								<Link to="/">Contact</Link>
+								<Link to="/about">About</Link>
 							</span>
 						</li>
 					</ul>
